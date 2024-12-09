@@ -1,3 +1,4 @@
+import json
 from django import template
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, HttpResponseRedirect
@@ -18,6 +19,16 @@ def pages(request):
     context = {}
     # All resource paths end in .html.
     # Pick out the html file name from the url. And load that template.
+    if request.method == 'POST':
+        print(request.content_type)
+        if request.content_type == 'application/json':
+            body_data = request.body.decode('utf-8')
+            payload = json.loads(body_data)
+            print(payload)
+        elif request.content_type == 'application/x-www-form-urlencoded':
+            print(request.POST)
+            body_data = request.POST.get('payload')
+            print(body_data)
     try:
 
         load_template = request.path.split('/')[-1]
