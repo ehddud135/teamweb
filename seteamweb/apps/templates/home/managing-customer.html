@@ -1,7 +1,7 @@
 {% extends "layouts/base.html" %}
 
 {% block title %} Managing-Cutstomer {% endblock %} 
-
+{% load static %}
 <!-- Specific Page CSS goes HERE  -->
 {% block stylesheets %}{% endblock stylesheets %}
 
@@ -28,16 +28,16 @@
                                 <div class="text-center text-md-center mb-4 mt-md-0">
                                     <h1 class="mb-0 h4">고객사 등록</h1>
                                 </div>
-                                <form action="/customer-append" class="mt-4" method="POST">
+                                <form id="appendForm" action="/customer-append" class="mt-4" method="POST">
                                     {% csrf_token %}
                                     <div class="mb-4">
-                                        <label for="manager-name">Name</label>
-                                        <input type="text" name="manager-name" class="form-control" id="manager-name">
+                                        <label for="customer-name">Customer Name</label>
+                                        <input type="text" name="customer-name" class="form-control" id="customer-name">
                                     </div>
                                     <div class="mb-4">
-                                        <label for="manager-email">Email address</label>
-                                        <input type="email" name="manager-email" class="form-control" id="manager-email" aria-describedby="emailHelp">
-                                        <small id="emailHelp" class="form-text text-muted">Stealin E-mail 입력</small>
+                                        <label for="customer-manager">Manager</label>
+                                        <input type="text" name="customer-manager" class="form-control" id="customer-manager" aria-describedby="textHelp">
+                                        <small id="textHelp" class="form-text text-muted">고객사 담당자 이름 입력</small>
                                     </div>
                                     <div class="modal-footer d-flex justify-content-center pt-3 pb-0">
                                         <button type="submit" class="btn btn-gray-800">Append</button>
@@ -70,63 +70,15 @@
         </div>
     </div>
 </div>
-<script>
-    async function fetchAndRenderData() {
-        // API 호출
-        const response = await fetch('/manager-list-api');
-        const data = await response.json();
 
-        // 테이블에 데이터 추가
-        const tableBody = document.getElementById('table-body');
-        tableBody.innerHTML = '';  // 기존 데이터를 초기화
-
-        data.forEach(item => {
-            const row = `
-                <tr>
-                    <td>${item.id}</td>
-                    <td>${item.name}</td>
-                    <td>${item.email}</td>
-                    <td>
-                        <div class="btn-group">
-                            <button class="btn btn-link text-dark dropdown-toggle dropdown-toggle-split m-0 p-0" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="icon icon-sm">
-                                    <span class="fas fa-ellipsis-h icon-dark"></span>
-                                </span>
-                                <span class="visually-hidden">Toggle Dropdown</span>
-                            </button>
-                            <div class="dropdown-menu py-0">
-                                <a class="dropdown-item rounded-top" href="#"><span class="fas fa-eye me-2"></span>View Details</a>
-                                <a class="dropdown-item" href="#"><span class="fas fa-edit me-2"></span>Edit</a>
-                                <a class="dropdown-item text-danger rounded-bottom" href="#"><span class="fas fa-trash-alt me-2"></span>Remove</a>
-                            </div>
-                        </div>
-                    </td>
-                    <td>${new Date(item.created_at).toLocaleDateString()}</td>
-                    <td>
-                    
-                        <button class="btn btn-danger" hx-delete="/licenses/46bccba2-a8ed-4d13-9f95-912a3fafd23e/?product=&amp;site=" hx-target="#main" hx-trigger="confirmed" _="on click
-                                call Swal.fire({title: 'Confirm', text:'삭제 하시겠습니까?'})
-                            if result.isConfirmed trigger confirmed">
-                            Delete
-                        </button>
-                    </td>
-                </tr>
-            `;
-            tableBody.innerHTML += row;
-        });
-    }
-
-    // 페이지 로드 시 데이터 가져오기
-    window.onload = fetchAndRenderData;
-</script>
 <div class="card card-body border-0 shadow table-wrapper table-responsive">
     <table class="table table-hover">
         <thead>
             <tr>
                 <th class="border-gray-200">#</th>
                 <th class="border-gray-200">Name</th>						
-                <th class="border-gray-200">E-Mail</th>
-                <th class="border-gray-200">담당 고객사 수</th>
+                <th class="border-gray-200">담당자</th>
+                <th class="border-gray-200">패키지 수</th>
                 <th class="border-gray-200">등록일</th>
                 <th class="border-gray-200">Delete</th>
             </tr>
@@ -135,35 +87,19 @@
     </table>
     <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
         <nav aria-label="Page navigation example">
-            <ul class="pagination mb-0">
-                <li class="page-item">
-                    <a class="page-link" href="Previous">Previous</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">1</a>
-                </li>
-                <li class="page-item active">
-                    <a class="page-link" href="#">2</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">3</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">4</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">5</a>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="#">Next</a>
-                </li>
+            <ul class="pagination mb-0" id="pagination">
             </ul>
         </nav>
-        <div class="fw-normal small mt-4 mt-lg-0">Showing <b>5</b> out of <b>25</b> entries</div>
+        <div class="fw-normal small mt-4 mt-lg-0" id="pagination-info">
+        </div>
     </div>
 </div>
 
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
-{% block javascripts %}{% endblock javascripts %}
+{% block javascripts %}
+<script src="{% static 'assets/vendor/sweetalert2/dist/sweetalert2.all.min.js'%}"></script>
+<script src="{% static 'assets/js/append.js' %}"></script>
+<script src="{% static 'assets/js/customer_list.js' %}"></script>
+{% endblock javascripts %}

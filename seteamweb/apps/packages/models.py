@@ -6,7 +6,7 @@ from ..customer.models import Customer
 
 class Packages(models.Model):
     name = models.CharField(max_length=100)
-    platform = models.CharField(max_length=10)  # 'Android' or 'iOS'
+    platform = models.CharField(max_length=25)  # 'Android' or 'iOS'
     license_expire_date = models.DateField(blank=True, null=True)
     customer = models.ForeignKey(Customer, to_field="name", on_delete=models.CASCADE)
     created_at = models.DateField(auto_now_add=True)
