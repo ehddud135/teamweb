@@ -8,5 +8,6 @@ from apps.manager import views
 
 urlpatterns = [
     path("append", views.manager_append, name="manager_append"),
-    path("list-api", views.manager_list_api, name="manager_list_api")
+    path("list-api", views.manager_list_api, name="manager_list_api"),
+    path("delete/<str:item_name>", views.manager_delete, name="manager_delete")
 ]
