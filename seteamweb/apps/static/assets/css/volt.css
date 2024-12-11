@@ -1024,7 +1024,9 @@ thead,
 tbody,
 tfoot,
 tr,
-td,
+td{
+  vertical-align:middle;
+}
 th {
   border-color: inherit;
   border-style: solid;
