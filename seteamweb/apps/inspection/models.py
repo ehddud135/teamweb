@@ -48,7 +48,11 @@ class InspectionRecord(models.Model):
 
 
 class InspectionSchedule(models.Model):
+    Period_list = [
+        ('monthly', 'Monthly'), ('quarter', 'Quarter'), ('half', 'Half')
+    ]
     name = models.ForeignKey(Customer, to_field="name", on_delete=models.CASCADE)
+    Period = models.CharField(max_length=25, choices=Period_list, default='monthly')
     January = models.BooleanField(default=False)
     February = models.BooleanField(default=False)
     March = models.BooleanField(default=False)

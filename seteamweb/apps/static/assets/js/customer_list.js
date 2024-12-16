@@ -30,16 +30,8 @@ async function fetchAndRenderData() {
                     <td>${item.package_count}</td>
                     <td>${new Date(item.created_at).toLocaleDateString()}</td>
                     <td>
-                        <div class="btn-group">
-                            <button class="btn btn-danger dropdown-toggle dropdown-toggle-split m-0 p-2" data-bs-toggle="dropdown" aria-haspopup="true">
-                                Modify
-                            </button>
-                            <div class="dropdown-menu py-0">
-                                <a class="dropdown-item rounded-top" href="#"><span class="fas fa-eye me-2"></span>View Details</a>
-                                <a class="dropdown-item" href="#"><span class="fas fa-edit me-2"></span>Edit</a>
-                                <a class="dropdown-item text-danger rounded-bottom delete-btn" data-delete-url="/customer-delete/${item.name}" href="#"><span class="fas fa-trash-alt me-2"></span>Remove</a>
-                            </div>
-                        </div>
+                        <button class="btn btn-danger delete-btn" data-delete-url="/manager-delete/${item.name}">Delete</button>
+                        <button class="btn btn-danger modify-btn" data-name="${item.name}">Modify</button>
                     </td>
                 </tr>
             `;

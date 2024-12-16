@@ -40,7 +40,6 @@ def customer_list_api(request):
         try:
             customer = Customer.objects.get(name=item.get('name'))
             package_count = Packages.objects.filter(customer_id=customer).count()
-            print(package_count)
             item['package_count'] = package_count
         except Exception as e:
             print(e)

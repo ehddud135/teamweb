@@ -23,5 +23,6 @@ urlpatterns = [
     path("manager-", include('apps.manager.urls')),
     path("customer-", include('apps.customer.urls')),
     path("package-", include('apps.packages.urls')),
+    path("inspection-", include('apps.inspection.urls')),
     path("", include("apps.home.urls"))             # UI Kits Html files
 ]
