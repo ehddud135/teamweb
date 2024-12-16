@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from .models import Manager
+from ..customer.models import Customer
 
 # Create your views here.
 
@@ -33,6 +34,13 @@ def manager_append(request):
 
 def manager_list_api(request):
     items = Manager.objects.values('name', 'email', 'created_at')  # 필요한 필드만 추출
+    for item in items:
+        try:
+            manager = Manager.objects.get(name=item.get('name'))
+            custoemr_count = Customer.objects.filter(manager_id=manager).count()
+            item['customer_count'] = custoemr_count
+        except Exception as e:
+            print(e)
     return JsonResponse(list(items), safe=False)
 
 
