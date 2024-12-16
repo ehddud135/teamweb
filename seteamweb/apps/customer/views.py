@@ -3,6 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from .models import Customer, Manager
+from ..packages.models import Packages
 
 # Create your views here.
 
@@ -35,6 +36,15 @@ def customer_append(request):
 
 def customer_list_api(request):
     items = Customer.objects.values('name', 'manager', 'created_at')  # 필요한 필드만 추출
+    for item in items:
+        try:
+            customer = Customer.objects.get(name=item.get('name'))
+            package_count = Packages.objects.filter(customer_id=customer).count()
+            print(package_count)
+            item['package_count'] = package_count
+        except Exception as e:
+            print(e)
+
     return JsonResponse(list(items), safe=False)
 
 

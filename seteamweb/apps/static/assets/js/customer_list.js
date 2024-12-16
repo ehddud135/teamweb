@@ -27,7 +27,7 @@ async function fetchAndRenderData() {
                     <td>${item_id}</td>
                     <td>${item.name}</td>
                     <td>${item.manager}</td>
-                    <td>1</td>
+                    <td>${item.package_count}</td>
                     <td>${new Date(item.created_at).toLocaleDateString()}</td>
                     <td>
                         <div class="btn-group">
