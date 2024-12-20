@@ -2,9 +2,10 @@ from datetime import datetime
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
-from .models import Customer
-from ..manager.models import Manager
+from ..customer.models import Customer
 from ..packages.models import Packages
+from .models import InspectionSchedule
+from ..utils.utils import edit_inspection_schedule
 
 # Create your views here.
 
@@ -67,6 +68,15 @@ def inspection_schedule_edit(request):
         if request.method == 'POST':
             if request.content_type == 'multipart/form-data':
                 print(request.POST)
+                customer_name = request.POST.get('modify-customer-name')
+                month_list = request.POST.getlist('months')
+                customer = Customer.objects.get(name=customer_name)
+                schedule, is_create = InspectionSchedule.objects.get_or_create(name=customer)
+                if is_create == True:
+                    print("새 스케쥴 생성")
+                print(month_list)
+                print(schedule)
+                edit_inspection_schedule(schedule, month_list)
 
                 return JsonResponse({'status': 'success', "message": "Success"}, status=200)
             else:
@@ -74,4 +84,4 @@ def inspection_schedule_edit(request):
 
     except Exception as e:
         print(e)
-    return print("TEST")
+        return JsonResponse({"error": "Please check your email and name"}, status=405)
