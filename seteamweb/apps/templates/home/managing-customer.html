@@ -107,11 +107,12 @@
                     <form id="modifyForm" action="/inspection-schedule-modify" class="mt-4" method="POST">
                         {% csrf_token %}
                         <div class="mb-1">
-                            <label id="modify-customer-name" for="modify-customer-name">Customer Name : </label>
+                            <label id="modify-customer-name-label" for="modify-customer-name-label">Customer Name : </label>
+                            <input type="hidden" name="modify-customer-name" id="modify-customer-name" value="">
                         </div>
                         <div class="mb-4">
                             <label class="my-1 me-2" for="inspection-period">정기 점검 주기</label>
-                            <select class="form-select" id="inspection-period" aria-label="Default select example">
+                            <select class="form-select" name="inspection-period"id="inspection-period" aria-label="Default select example">
                                 <option value="monthly">Monthly</option>
                                 <option value="quarter">Quarter</option>
                                 <option value="half">Half</option>
@@ -124,43 +125,43 @@
                             <div class="col-lg-3 col-md-6">
                                 <!-- Checkboxes -->
                                 <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" value="" id="January">1월</input>
+                                    <input class="form-check-input" type="checkbox" name="months" value="January" id="January">1월</input>
                                 </div>
                                 <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" value="" id="February">2월</input>
+                                    <input class="form-check-input" type="checkbox" name="months" value="February" id="February">2월</input>
                                 </div>
                                 <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" value="" id="March">3월</input>
+                                    <input class="form-check-input" type="checkbox" name="months" value="March" id="March">3월</input>
                                 </div>
                                 <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" value="" id="April">4월</input>
+                                    <input class="form-check-input" type="checkbox" name="months" value="April" id="April">4월</input>
                                 </div>
                                 <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" value="" id="May">5월</input>
+                                    <input class="form-check-input" type="checkbox" name="months" value="May" id="May">5월</input>
                                 </div>
                                 <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" value="" id="June">6월</input>
+                                    <input class="form-check-input" type="checkbox" name="months" value="June" id="June">6월</input>
                                 </div>
                             </div>
                             <div class="col-lg-3 col-md-6">
                                 <!-- Checkboxes -->
                                 <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" value="" id="July">7월</input>
+                                    <input class="form-check-input" type="checkbox" name="months" value="July" id="July">7월</input>
                                 </div>
                                 <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" value="" id="August">8월</input>
+                                    <input class="form-check-input" type="checkbox" name="months" value="August" id="August">8월</input>
                                 </div>
                                 <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" value="" id="September">9월</input>
+                                    <input class="form-check-input" type="checkbox" name="months" value="September" id="September">9월</input>
                                 </div>
                                 <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" value="" id="October">10월</input>
+                                    <input class="form-check-input" type="checkbox" name="months" value="October" id="October">10월</input>
                                 </div>
                                 <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" value="" id="November">11월</input>
+                                    <input class="form-check-input" type="checkbox" name="months" value="November" id="November">11월</input>
                                 </div>
                                 <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" value="" id="December">12월</input>
+                                    <input class="form-check-input" type="checkbox" name="months" value="December" id="December">12월</input>
                                 </div>
                             </div>
                         </div>
