@@ -37,8 +37,9 @@ class iOSInspectResult(models.Model):
 
 
 class InspectionRecord(models.Model):
-    package = models.ForeignKey(Packages, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     inspection_date = models.DateField()
+    result = models.TextField()
     details = models.TextField()
     created_at = models.DateField(auto_now_add=True)
 
