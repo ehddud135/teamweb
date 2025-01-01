@@ -10,9 +10,9 @@ def convert_datetime(date_str):
         return "Invalid date format"
 
 
-def edit_inspection_schedule(customer, month_list):
+def edit_inspection_schedule(customer, month_list, inspect_period):
     reset_list = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
-    print("reset schedule")
+    setattr(customer, "Period", inspect_period)
     for j in reset_list:
         setattr(customer, j, False)
 

@@ -1,3 +1,31 @@
+
+
+document.addEventListener('DOMContentLoaded', () => {
+
+    flatpickr("#inspection-month-picker", {
+        dateFormat: "Y-m",  // 년-월 형식
+        plugins: [
+            new monthSelectPlugin({
+                shorthand: true,  // 월 이름을 간단히 표시
+                dateFormat: "Y-m", // 결과 형식
+                altFormat: "F Y",  // 화면에 표시될 형식 (예: February 2025)
+            })
+        ]
+    });
+    // const month_picker = document.getElementById("inspection-month-picker")
+    // console.log(month_picker)
+    // const datepicker = new Datepicker(month_picker, {
+    //     format: 'mm/yyyy',
+    //     autohide: true,
+    //     startView: 1,
+    //     minViewMode: 1,
+    //     pickLevel: 1   
+    // });
+
+    // month_picker.value = '01/2024';
+});
+
+
 async function fetchAndRenderData() {
     // API 호출
     const monthly_response = await fetch('/inspection-list-api/monthly');
