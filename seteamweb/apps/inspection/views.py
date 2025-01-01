@@ -9,44 +9,22 @@ from ..utils.utils import edit_inspection_schedule
 
 # Create your views here.
 
-
-def customer_append(request):
-    current_time = datetime.now().date()
-    context = {}
-    print("method = " + request.method)
-    print("content_type = " + request.content_type)
-    try:
-        if request.method == 'POST':
-            if request.content_type == 'multipart/form-data':
-                customer_name = request.POST.get("customer-name")
-                customer_manager = request.POST.get("customer-manager")
-                if customer_name and customer_manager:
-                    print("customer_name = " + customer_name)
-                    print("customer_manager = " + customer_manager)
-                    print("current_time = " + str(current_time))
-                    manager = Manager.objects.get(name=customer_manager)
-                    Customer.objects.create(name=customer_name, manager=manager)
-                    print("정상 등록 완료")
-                    return JsonResponse({'status': 'success', "message": "Success"}, status=200)
-                else:
-                    return JsonResponse({"error": "Please check your email and name"}, status=405)
-        return HttpResponse({"error": "Invalid request method"}, status=405)
-    except:
-        html_template = loader.get_template('home/page-500.html')
-        return HttpResponse(html_template.render(context, request))
-
-
-def customer_list_api(request):
-    items = Customer.objects.values('name', 'manager', 'created_at')  # 필요한 필드만 추출
+def inspect_schedule_list_api(_, schedule):
+    print(schedule)
+    items = InspectionSchedule.objects.filter(Period=schedule).values("name")  # 필요한 필드만 추출
     for item in items:
         try:
             customer = Customer.objects.get(name=item.get('name'))
             package_count = Packages.objects.filter(customer_id=customer).count()
             item['package_count'] = package_count
+            item['created_at'] = customer.created_at
+            item['manager'] = customer.manager.name
         except Exception as e:
             print(e)
 
     return JsonResponse(list(items), safe=False)
+
+
 
 
 def customer_delete(request, item_name):
@@ -70,13 +48,13 @@ def inspection_schedule_edit(request):
                 print(request.POST)
                 customer_name = request.POST.get('modify-customer-name')
                 month_list = request.POST.getlist('months')
+                inspect_period = request.POST.get('inspection-period')
+                print(inspect_period)
                 customer = Customer.objects.get(name=customer_name)
                 schedule, is_create = InspectionSchedule.objects.get_or_create(name=customer)
                 if is_create == True:
                     print("새 스케쥴 생성")
-                print(month_list)
-                print(schedule)
-                edit_inspection_schedule(schedule, month_list)
+                edit_inspection_schedule(schedule, month_list, inspect_period)
 
                 return JsonResponse({'status': 'success', "message": "Success"}, status=200)
             else:

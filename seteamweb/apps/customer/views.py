@@ -34,8 +34,9 @@ def customer_append(request):
         return HttpResponse(html_template.render(context, request))
 
 
-def customer_list_api(request):
+def customer_list_api(_):
     items = Customer.objects.values('name', 'manager', 'created_at')  # 필요한 필드만 추출
+    print(items)
     for item in items:
         try:
             customer = Customer.objects.get(name=item.get('name'))
