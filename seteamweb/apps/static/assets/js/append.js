@@ -12,8 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
         form.addEventListener('submit', async function (e) {
             e.preventDefault();
             const formData = new FormData(form);
-            console.log(document.getElementById('appendForm'))
-            
+        
 
             try {
                 const response = await fetch(form.action, {
@@ -24,7 +23,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     body: formData
                 });
                 const data = await response.json();
-                console.log(data)
 
                 if (response.ok) {
                     swalWithBootstrapButtons.fire({
@@ -32,15 +30,15 @@ document.addEventListener('DOMContentLoaded', function () {
                         title: 'Success alert',
                         text: 'Your work has been saved',
                         showConfirmButton: true,
-                        timer: 3000
+                        timer: 1500
                     }).then(() => {
                         // SweetAlert 종료 후 모달 닫기
-                        const modal = bootstrap.Modal.getInstance(document.getElementById('modal-form'));
+                        const modal = bootstrap.Modal.getInstance(document.getElementById('append-modal-form'));
+                        form.reset();
                         if (modal) {
                             modal.hide();
                         }
                     });
-                    console.log('Success:', data);
                 } else {
                     swalWithBootstrapButtons.fire(
                         'Warning alert',

@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf.urls.static import static
+from core import settings
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,4 +27,4 @@ urlpatterns = [
     path("package-", include('apps.packages.urls')),
     path("inspection-", include('apps.inspection.urls')),
     path("", include("apps.home.urls"))             # UI Kits Html files
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

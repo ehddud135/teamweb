@@ -20,7 +20,7 @@ async function fetchAndRenderData() {
         let item_id = (currentPage - 1) * itemsPerPage;
         
 
-        data.forEach(item => {
+        pageData.forEach(item => {
             item_id++;
             const row = `
                 <tr>
@@ -29,6 +29,7 @@ async function fetchAndRenderData() {
                     <td>${item.manager}</td>
                     <td>${item.package_count}</td>
                     <td>${new Date(item.created_at).toLocaleDateString()}</td>
+                    <td>${item.inspect_schedule}</td>
                     <td>
                         <button class="btn btn-danger delete-btn" data-delete-url="/manager-delete/${item.name}">Delete</button>
                         <button class="btn btn-danger modify-btn" data-name="${item.name}">Modify</button>
