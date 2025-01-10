@@ -1,5 +1,6 @@
 from datetime import datetime
-from ..inspection.models import InspectionSchedule
+from django.core.exceptions import ValidationError
+import re
 
 
 def convert_datetime(date_str):
@@ -20,3 +21,35 @@ def edit_inspection_schedule(customer, month_list, inspect_period):
         setattr(customer, i, True)
 
     customer.save()
+
+def convertmonth(month_full_string):
+    year = str(datetime.today().year)
+    months = {
+        "January": '01',
+        "February": '02',
+        "March": '03',
+        "April": '04',
+        "May": '05',
+        "June": '06',
+        "July": '07',
+        "August": '08',
+        "September": '09',
+        "October": '10',
+        "November": '11',
+        "December": '12',
+    }
+    return year + "-" + months[month_full_string]
+
+def validate_year_month(value):
+    if not re.match(r'^\d{4}-(0[1-9]|1[0-2])$', value):
+        raise ValidationError('%s 는 올바른 형식이 아닙니다.' % value)
+    
+    
+def convert_to_format(date_string):
+    import re
+    match = re.match(r'(\d{4})년\s(\d{1,2})월', date_string)
+    if match:
+        year = match.group(1)
+        month = int(match.group(2))
+        return f"{year}-{month:02d}"
+    return None

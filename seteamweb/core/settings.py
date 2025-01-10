@@ -14,7 +14,10 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+print(BASE_DIR)
 CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MEDIA_URL = '/report_save_path/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'report_save_path')
 
 
 # Quick-start development settings - unsuitable for production

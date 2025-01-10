@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
 from .models import Customer, Manager
 from ..packages.models import Packages
+from ..inspection.models import InspectionSchedule
 
 # Create your views here.
 
@@ -19,12 +20,8 @@ def customer_append(request):
                 customer_name = request.POST.get("customer-name")
                 customer_manager = request.POST.get("customer-manager")
                 if customer_name and customer_manager:
-                    print("customer_name = " + customer_name)
-                    print("customer_manager = " + customer_manager)
-                    print("current_time = " + str(current_time))
                     manager = Manager.objects.get(name=customer_manager)
                     Customer.objects.create(name=customer_name, manager=manager)
-                    print("정상 등록 완료")
                     return JsonResponse({'status': 'success', "message": "Success"}, status=200)
                 else:
                     return JsonResponse({"error": "Please check your email and name"}, status=405)
@@ -36,12 +33,20 @@ def customer_append(request):
 
 def customer_list_api(_):
     items = Customer.objects.values('name', 'manager', 'created_at')  # 필요한 필드만 추출
-    print(items)
+    period_mapping = {
+        'monthly': '월',
+        'quarter': '분기',
+        'half': '반기',
+        'undecided' : '미정'
+    }
     for item in items:
         try:
             customer = Customer.objects.get(name=item.get('name'))
+            inspect_schedule, is_create = InspectionSchedule.objects.get_or_create(name=customer)
+            inspect_schedule = period_mapping.get(inspect_schedule.Period, "미정")
             package_count = Packages.objects.filter(customer_id=customer).count()
             item['package_count'] = package_count
+            item['inspect_schedule'] = inspect_schedule
         except Exception as e:
             print(e)
 
@@ -49,7 +54,6 @@ def customer_list_api(_):
 
 
 def customer_delete(request, item_name):
-    print(request)
     context = {}
     try:
         if request.method == "DELETE":

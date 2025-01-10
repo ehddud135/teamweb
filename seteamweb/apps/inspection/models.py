@@ -1,6 +1,10 @@
 from django.db import models
+from django.core.exceptions import ValidationError
 from ..packages.models import Packages
 from ..customer.models import Customer
+from ..utils.utils import validate_year_month
+import uuid
+
 
 # Create your models here.
 
@@ -37,23 +41,26 @@ class iOSInspectResult(models.Model):
 
 
 class InspectionRecord(models.Model):
+    result_list = [('incomplete', 'Incomplete'), ('complete', 'Complete')]
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
-    inspection_date = models.DateField()
-    result = models.TextField()
-    details = models.TextField()
+    inspection_month = models.CharField(max_length=7, validators=[validate_year_month])
+    inspection_date = models.DateField(null=True)
+    result = models.CharField(max_length=15, choices=result_list, default='incomplete')
+    details = models.TextField(null=True)
     created_at = models.DateField(auto_now_add=True)
 
     class Meta:
         managed = True
         db_table = 'InspectionRecord'
+        unique_together = ['customer', 'inspection_month']
 
 
 class InspectionSchedule(models.Model):
     Period_list = [
-        ('monthly', 'Monthly'), ('quarter', 'Quarter'), ('half', 'Half')
+        ('monthly', 'Monthly'), ('quarter', 'Quarter'), ('half', 'Half'),('undecided', 'Undecided')
     ]
     name = models.ForeignKey(Customer, to_field="name", on_delete=models.CASCADE)
-    Period = models.CharField(max_length=25, choices=Period_list, default='monthly')
+    Period = models.CharField(max_length=25, choices=Period_list, default='undecided')
     January = models.BooleanField(default=False)
     February = models.BooleanField(default=False)
     March = models.BooleanField(default=False)
@@ -70,3 +77,19 @@ class InspectionSchedule(models.Model):
     class Meta:
         managed = True
         db_table = 'InspectionSchedule'
+
+class InspectionResultFile(models.Model):
+    inspectrecord = models.ForeignKey(InspectionRecord, on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    file = models.FileField(upload_to='')
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+    
+    def save(self, *args, **kwargs):
+        if self.file:
+            ext = self.file.name.split('.')[-1]
+            new_name = f"{uuid.uuid4().hex}.{ext}"
+            self.file.name = new_name
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title

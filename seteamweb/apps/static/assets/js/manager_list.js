@@ -18,7 +18,6 @@ async function fetchAndRenderData() {
         const tableBody = document.getElementById('table-body');
         tableBody.innerHTML = '';  // 기존 데이터를 초기화
         let item_id = (currentPage - 1) * itemsPerPage;
-        console.log(data)
         
 
         data.forEach(item => {

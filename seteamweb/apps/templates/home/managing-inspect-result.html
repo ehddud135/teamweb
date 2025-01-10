@@ -10,8 +10,8 @@
 
   <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
       <div id="Month" class="d-block mb-4 mb-md-0">
-          <h2 class="h4">월별 정기 점검 결과</h2>
-          <p class="mb-0">Your web analytics dashboard template.</p>
+          <h2 id="inspection-month" class="h4">월 정기 점검 결과</h2>
+          <p class="mb-0">해당 월 정기 점검 대상 고객사</p>
       </div>
       <div class="btn-toolbar mb-2 mb-md-0 me-4"></div>
       <div class="mb-3">
@@ -20,7 +20,7 @@
             <span class="input-group-text">
                 <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
             </span>
-            <input id="inspection-month-picker" type="text" required="">                                               
+            <input class="form-control" id="inspection-month-picker" type="text" required="">                                               
         </div>
     </div>
   </div>
@@ -30,11 +30,13 @@
         <h3 class="h4">월 점검</h3>
         <thead class="thead-light">
             <tr>
-                <th class="border-gray-200 rounded-start">Name</th>						
-                <th class="border-gray-200">담당자</th>
-                <th class="border-gray-200">패키지 수</th>
-                <th class="border-gray-200">등록일</th>
-                <th class="border-gray-200 rounded-end">점검 결과 등록</th>
+                <th class="border-gray-200 rounded-start" width="100">#</th>
+                <th class="border-gray-200" width="400">Name</th>					
+                <th class="border-gray-200" width="200">담당자</th>
+                <th class="border-gray-200" width="200">점검 결과</th>
+                <th class="border-gray-200" width="200">점검 일자</th>
+                <th class="border-gray-200" width="200">점검 결과 등록</th>
+                <th class="border-gray-200 rounded-end" width="300">확인서 보기 / 다운로드</th>
             </tr>
         </thead>
         <tbody id="monthly-table-body"></tbody>
@@ -45,11 +47,13 @@
         <h3 class="h4">분기 점검</h3>
         <thead class="thead-light">
             <tr>
-                <th class="border-gray-200 rounded-start">Name</th>						
-                <th class="border-gray-200">담당자</th>
-                <th class="border-gray-200">패키지 수</th>
-                <th class="border-gray-200">등록일</th>
-                <th class="border-gray-200 rounded-end">점검 결과 등록</th>
+                <th class="border-gray-200 rounded-start" width="100">#</th>
+                <th class="border-gray-200" width="400">Name</th>					
+                <th class="border-gray-200" width="200">담당자</th>
+                <th class="border-gray-200" width="200">점검 결과</th>
+                <th class="border-gray-200" width="200">점검 일자</th>
+                <th class="border-gray-200" width="200">점검 결과 등록</th>
+                <th class="border-gray-200 rounded-end" width="300">확인서 보기 / 다운로드</th>
             </tr>
         </thead>
         <tbody id="quarter-table-body"></tbody>
@@ -60,16 +64,66 @@
         <h3 class="h4">반기 점검</h3>
         <thead class="thead-light">
             <tr>
-                <th class="border-gray-200 rounded-start">Name</th>						
-                <th class="border-gray-200">담당자</th>
-                <th class="border-gray-200">패키지 수</th>
-                <th class="border-gray-200">등록일</th>
-                <th class="border-gray-200 rounded-end">점검 결과 등록</th>
+                <th class="border-gray-200 rounded-start" width="100">#</th>
+                <th class="border-gray-200" width="400">Name</th>					
+                <th class="border-gray-200" width="200">담당자</th>
+                <th class="border-gray-200" width="200">점검 결과</th>
+                <th class="border-gray-200" width="200">점검 일자</th>
+                <th class="border-gray-200" width="200">점검 결과 등록</th>
+                <th class="border-gray-200 rounded-end" width="300">확인서 보기 / 다운로드</th>
             </tr>
         </thead>
         <tbody id="half-table-body"></tbody>
     </table>
 </div>
+
+
+<div class="modal fade" id="inspect-result-modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-form" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-0">
+                <div class="card p-3 p-lg-4">
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="text-center text-md-center mb-2 mt-md-0">
+                        <h1 class="mb-0 h4">정기 점검 결과 등록</h1>
+                    </div>
+                    <form id="resultAppendForm" action="/inspection-result-append" class="mt-4" method="POST">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-3">
+                            <label id="customer-name-label" for="customer-name">고객사 명 : </label>
+                            <input type="hidden" name="customer-name" id="customer-name" value="">
+                            <label id="inspect-month-label" for="inspect-month">점검 월 : </label>
+                            <input type="hidden" name="inspect-month" id="inspect-month" value="">
+                        </div>
+                        <div class="mb-3">
+                            <label for="inspection_date">점검일</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                                </span>
+                                <input data-datepicker="" class="form-control datepicker-input" name="inspection_date" id="inspection_date" type="text" placeholder="dd/mm/yyyy" required="">                                               
+                            </div>
+                        </div>
+                        <div class="my-4">
+                            <label for="inspect_significant">특이사항</label>
+                            <textarea class="form-control" name="inspect_significant" id="inspect_significant" rows="4"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="inspection_result_file" class="form-label">정기점검 확인서 업로드</label>
+                            <input class="form-control" type="file" name="inspection_result_file" id="inspection_result_file">
+                        </div>
+                        <div class="modal-footer d-flex justify-content-center pt-3 pb-0">
+                            <button type="submit" class="btn btn-gray-800">Append</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 
 {% endblock content %}
 
@@ -77,4 +131,6 @@
 {% block javascripts %}
 <script src="{% static 'assets/vendor/sweetalert2/sweetalert2.all.min.js'%}"></script>
 <script src="{% static 'assets/js/inspect_result_by_month.js' %}"></script>
+<script src="{% static 'assets/js/inspect_result_append.js' %}"></script>
+<script src="{% static 'assets/js/inspect_report_view_download.js' %}"></script>
 {% endblock javascripts %}
