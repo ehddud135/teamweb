@@ -2,6 +2,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from ..packages.models import Packages
 from ..customer.models import Customer
+from ..devices.models import Devices
 from ..utils.utils import validate_year_month
 import uuid
 
@@ -11,7 +12,7 @@ import uuid
 
 class AndroidInspectResult(models.Model):
     package = models.ForeignKey(Packages, on_delete=models.CASCADE)
-    device_info = models.CharField(max_length=30, blank=True, null=True)
+    device_info = models.ForeignKey(Devices, on_delete=models.SET_NULL, null=True)
     rooting_test = models.BooleanField(default=False)
     rooting = models.BooleanField(default=False)
     integrity = models.BooleanField(default=False)
@@ -27,12 +28,13 @@ class AndroidInspectResult(models.Model):
 
 class iOSInspectResult(models.Model):
     package = models.ForeignKey(Packages, on_delete=models.CASCADE)
-    device_info = models.CharField(max_length=30, blank=True, null=True)
+    device_info = models.ForeignKey(Devices, on_delete=models.SET_NULL, null=True)
     jailbreak_test = models.BooleanField(default=False)
     jailbreak = models.BooleanField(default=False)
     integrity = models.BooleanField(default=False)
     string_encrypt = models.BooleanField(default=False)
     symbol_del = models.BooleanField(default=False)
+    library_version = models.CharField(max_length=30, default="Unknown")
     created_at = models.DateField(auto_now_add=True)
 
     class Meta:
@@ -57,7 +59,7 @@ class InspectionRecord(models.Model):
 
 class InspectionSchedule(models.Model):
     Period_list = [
-        ('monthly', 'Monthly'), ('quarter', 'Quarter'), ('half', 'Half'),('undecided', 'Undecided')
+        ('monthly', 'Monthly'), ('quarter', 'Quarter'), ('half', 'Half'), ('undecided', 'Undecided')
     ]
     name = models.ForeignKey(Customer, to_field="name", on_delete=models.CASCADE)
     Period = models.CharField(max_length=25, choices=Period_list, default='undecided')
@@ -78,12 +80,13 @@ class InspectionSchedule(models.Model):
         managed = True
         db_table = 'InspectionSchedule'
 
+
 class InspectionResultFile(models.Model):
     inspectrecord = models.ForeignKey(InspectionRecord, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     file = models.FileField(upload_to='')
     uploaded_at = models.DateTimeField(auto_now_add=True)
-    
+
     def save(self, *args, **kwargs):
         if self.file:
             ext = self.file.name.split('.')[-1]

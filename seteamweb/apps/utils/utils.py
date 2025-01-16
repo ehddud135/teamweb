@@ -1,6 +1,8 @@
+
+import re
+import os
 from datetime import datetime
 from django.core.exceptions import ValidationError
-import re
 
 
 def convert_datetime(date_str):
@@ -22,6 +24,7 @@ def edit_inspection_schedule(customer, month_list, inspect_period):
 
     customer.save()
 
+
 def convertmonth(month_full_string):
     year = str(datetime.today().year)
     months = {
@@ -40,11 +43,12 @@ def convertmonth(month_full_string):
     }
     return year + "-" + months[month_full_string]
 
+
 def validate_year_month(value):
     if not re.match(r'^\d{4}-(0[1-9]|1[0-2])$', value):
         raise ValidationError('%s 는 올바른 형식이 아닙니다.' % value)
-    
-    
+
+
 def convert_to_format(date_string):
     import re
     match = re.match(r'(\d{4})년\s(\d{1,2})월', date_string)
