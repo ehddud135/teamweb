@@ -37,7 +37,7 @@ def customer_list_api(_):
         'monthly': '월',
         'quarter': '분기',
         'half': '반기',
-        'undecided' : '미정'
+        'undecided': '미정'
     }
     for item in items:
         try:
@@ -50,6 +50,11 @@ def customer_list_api(_):
         except Exception as e:
             print(e)
 
+    return JsonResponse(list(items), safe=False)
+
+
+def customer_name_list(request):
+    items = Customer.objects.values('name')
     return JsonResponse(list(items), safe=False)
 
 

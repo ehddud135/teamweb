@@ -1,0 +1,121 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Managing-Inspect-Result {% endblock %} 
+{% load static %}
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+    <div id="customer" class="d-block mb-4 mb-md-0">
+        <h2 id="inspection-customer" class="h4"> 정기 점검 결과</h2>
+        <p class="mb-0">고객사 앱별 점검 결과</p>
+    </div>
+    <div class="mb-3">
+        <label for="inspection-customer-picker">고객사</label>
+        <div class="input-group">
+            <select class="form-select" id="inspection-customer-picker" aria-label="Default select example">
+                <option selected="">Choose Customer</option>
+            </select>                                           
+        </div>
+    </div>
+</div>
+
+<div class="card card-body border-0 shadow table-wrapper table-responsive">
+    <table class="table table-hover">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
+            <div class="d-block mb-4 mb-md-0">
+                <h3 class="h4">앱 점검 결과</h3>
+            </div>
+            <div class="d-block mb-4 mb-md-0">
+                <button id="inspection_result_append_btn"type="button" class="btn btn-block btn-gray-800 mb-3" data-bs-toggle="modal" data-bs-target="#inspect-result-modal-form">
+                    점검 결과 등록
+                </button>
+            </div>
+        </div>
+        <thead class="thead-light">
+            <tr>
+                <th class="border-gray-200 rounded-start" width="200">점검 일</th>				
+                <th class="border-gray-200" width="200">패키지 이름</th>
+                <th class="border-gray-200" width="200">OS</th>
+                <th class="border-gray-200" width="200">앱 이름</th>	
+                <th class="border-gray-200" width="200">앱 버전</th>
+                <th class="border-gray-200" width="200">점검 단말기</th>
+                <th class="border-gray-200" width="200">Rooting Test /<br>JBJB Test</th>
+                <th class="border-gray-200" width="200">위변조</th>
+                <th class="border-gray-200" width="200">에뮬레이터 /<br>문자열 암호화</th>
+                <th class="border-gray-200" width="200">난독화 /<br>심볼 제거</th>
+                <th class="border-gray-200" width="200">디컴파일 방지 /<br>IXP Version</th>
+                <th class="border-gray-200 rounded-end" width="200">특이사항</th>
+            </tr>
+        </thead>
+        <tbody id="table-body-by-customer"></tbody>
+    </table>
+</div>
+
+
+<div class="modal fade" id="inspect-result-modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-form" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body p-0">
+                <div class="card p-3 p-lg-4">
+                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <div class="text-center text-md-center mb-2 mt-md-0">
+                        <h1 class="mb-0 h4">정기 점검 결과 등록</h1>
+                    </div>
+                    <form id="resultAppendForm" action="/inspection-result-by-app-append" class="mt-4" method="POST">
+                        {% csrf_token %}
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-3">
+                            <label id="customer-name-label" for="customer-name">고객사 명 : </label>
+                            <input type="hidden" name="customer-name" id="customer-name" value="">
+                        </div>
+                        <div class="mb-2">
+                            <label for="inspection_date">점검일</label>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                                </span>
+                                <input data-datepicker="" class="form-control datepicker-input" name="inspection_date" id="inspection_date" type="text" placeholder="dd/mm/yyyy" required="">                                               
+                            </div>
+                        </div>
+                        <div class="mb-2">
+                            <label class="my-1 me-2" for="platform">Platform</label>
+                            <select class="form-select" name="platform" id="platform" aria-label="Default select example">
+                                <option selected value="platform">choose platform</option>
+                                <option value="android">Android</option>
+                                <option value="iOS">iOS</option>
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <label class="my-1 me-2" for="package_name">Package Name</label>
+                            <select class="form-select" name="package_name" id="package_name" aria-label="Default select example">
+                                <option selected="">Select Pakcage</option>
+                            </select>
+                        </div>
+                        <div class="my-4">
+                            <label for="inspect_significant">특이사항</label>
+                            <textarea class="form-control" name="inspect_significant" id="inspect_significant" rows="4"></textarea>
+                        </div>
+                        <div class="modal-footer d-flex justify-content-center pt-3 pb-0">
+                            <button type="submit" class="btn btn-gray-800">Append</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script src="{% static 'assets/vendor/sweetalert2/sweetalert2.all.min.js'%}"></script>
+<script src="{% static 'assets/js/inspect_result_by_customer.js' %}"></script>
+<script src="{% static 'assets/js/inspect_result_by_app_append.js' %}"></script>
+{% endblock javascripts %}
