@@ -11,6 +11,7 @@ import uuid
 
 
 class AndroidInspectResult(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True)
     package = models.ForeignKey(Packages, on_delete=models.CASCADE)
     device_info = models.ForeignKey(Devices, on_delete=models.SET_NULL, null=True)
     rooting_test = models.BooleanField(default=False)
@@ -27,6 +28,7 @@ class AndroidInspectResult(models.Model):
 
 
 class iOSInspectResult(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True)
     package = models.ForeignKey(Packages, on_delete=models.CASCADE)
     device_info = models.ForeignKey(Devices, on_delete=models.SET_NULL, null=True)
     jailbreak_test = models.BooleanField(default=False)

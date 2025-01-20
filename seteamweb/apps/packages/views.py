@@ -36,6 +36,13 @@ def package_list_api(request):
     return JsonResponse(list(items), safe=False)
 
 
+def package_list_by_customer(request, customer_name, platform):
+    print(request)
+    items = Packages.objects.filter(customer=customer_name, platform=platform).values('name')
+    print(items)
+    return JsonResponse(list(items), safe=False)
+
+
 def package_delete(request, item_name, item_platform):
     print(request)
     context = {}
