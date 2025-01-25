@@ -102,6 +102,7 @@ def inspection_result_by_app_append(request):
     try:
         if request.method == 'POST':
             if request.content_type == 'multipart/form-data':
+                print("inspection append by app")
                 print(request.POST)
                 # customer_name = Customer.objects.get(name=request.POST.get('customer-name'))
                 # inspection_month = convert_to_format(request.POST.get('inspect-month'))
