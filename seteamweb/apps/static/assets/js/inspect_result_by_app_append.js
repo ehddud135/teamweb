@@ -20,6 +20,16 @@ document.addEventListener('DOMContentLoaded', function (){
         if (form) {
             if (typeof customer_name === 'undefined') {
                 console.log('customer_name is not defined');
+                swalWithBootstrapButtons.fire(
+                    'Warning alert',
+                    '고객사를 선택해주세요.',
+                    'warning'
+                ).then(() => {
+                    if (modal) {
+                        modal.hide();
+                        modal_form.querySelector('#resultAppendForm').reset();
+                    }
+                });
                 // 원하는 처리를 추가하세요
             } else {
                 document.getElementById("customer-name-label").textContent = `고객사 명 : ${customer_name}`;

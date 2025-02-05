@@ -13,7 +13,10 @@ import uuid
 class AndroidInspectResult(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True)
     package = models.ForeignKey(Packages, on_delete=models.CASCADE)
-    device_info = models.ForeignKey(Devices, on_delete=models.SET_NULL, null=True)
+    rooting_device_info = models.ForeignKey(Devices, related_name='aos_rooting_device', on_delete=models.SET_NULL, null=True)
+    normal_device_info = models.ForeignKey(Devices, related_name='aos_normal_device', on_delete=models.SET_NULL, null=True)
+    app_name = models.CharField(null=True, default="Unknown", max_length=30)
+    app_version = models.CharField(null=True, default="Unknown", max_length=30)
     rooting_test = models.BooleanField(default=False)
     rooting = models.BooleanField(default=False)
     integrity = models.BooleanField(default=False)
@@ -30,7 +33,10 @@ class AndroidInspectResult(models.Model):
 class iOSInspectResult(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, null=True)
     package = models.ForeignKey(Packages, on_delete=models.CASCADE)
-    device_info = models.ForeignKey(Devices, on_delete=models.SET_NULL, null=True)
+    rooting_device_info = models.ForeignKey(Devices, related_name='ios_rooting_device', on_delete=models.SET_NULL, null=True)
+    normal_device_info = models.ForeignKey(Devices, related_name='ios_normal_device', on_delete=models.SET_NULL, null=True)
+    app_name = models.CharField(null=True, default="Unknown", max_length=30)
+    app_version = models.CharField(null=True, default="Unknown", max_length=30)
     jailbreak_test = models.BooleanField(default=False)
     jailbreak = models.BooleanField(default=False)
     integrity = models.BooleanField(default=False)
