@@ -19,7 +19,7 @@ async function fetchAndRenderData() {
         tableBody.innerHTML = '';  // 기존 데이터를 초기화
         let item_id = (currentPage - 1) * itemsPerPage;
         
-        data.forEach(item => {
+        pageData.forEach(item => {
             item_id++;
             const row = `
                 <tr>

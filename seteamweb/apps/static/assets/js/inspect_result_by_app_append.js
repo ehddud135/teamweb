@@ -7,38 +7,36 @@ const swalWithBootstrapButtons = Swal.mixin({
 });
 
 document.addEventListener('DOMContentLoaded', function (){
+    // console.log(document)
     const modal_form = document.getElementById('inspect-result-modal-form')
     const modal = new bootstrap.Modal(modal_form)
     const form = document.getElementById('resultAppendForm');
-    const btn = document.getElementById('inspection_result_append_btn')
     const customerPicker = document.getElementById('inspection-customer-picker');
+    const package_name = document.getElementById('package_name');
     customerPicker.addEventListener('change', (event) => {
         customer_name = event.target.value
     });
 
     document.querySelectorAll('.open-modal').forEach(btn =>{
+        // console.log(btn)
         btn.addEventListener('click', function(){
             platform = this.getAttribute('data-target')
-            console.log(platform)
+            // console.log(platform)
             if (form) {
                 if (typeof customer_name === 'undefined') {
                     swalWithBootstrapButtons.fire(
                         'Warning alert',
                         '고객사를 선택해주세요.',
                         'warning'
-                    ).then(() => {
-                        if (modal) {
-                            modal.hide();
-                            modal_form.querySelector('#resultAppendForm').reset();
-                        }
-                    });
-                    // 원하는 처리를 추가하세요
+                    );
                 } else {
                     document.getElementById("customer-name-label").textContent = `고객사 명 : ${customer_name}`;
                     document.getElementById("select-platform-label").textContent = `OS : ${platform}`
+                    document.getElementById("select-platform").value = platform
                     document.getElementById("customer-name").value = customer_name
                     loadPakcageListByCustomer(customer_name, package_name, platform)
-                    createCheckBoxes(checkBoxes, platform);
+                    createCheckBoxes(platform);
+                    // console.log(checkBoxes)
                     modal.show();
                 }
             } else {
@@ -46,8 +44,8 @@ document.addEventListener('DOMContentLoaded', function (){
             }
         });
     });
-    const checkBoxes = document.querySelector('#option-checkboxes');
-    const package_name = document.getElementById('package_name');
+    
+
 
     form.addEventListener('submit', async function (e) {
         e.preventDefault();
@@ -61,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function (){
                 body: formData
             });
             const data = await response.json();
-            console.log(data)
+            // console.log(data)
 
             if (response.ok) {
                 swalWithBootstrapButtons.fire({
@@ -84,6 +82,7 @@ document.addEventListener('DOMContentLoaded', function (){
                     data['error'],
                     'warning'
                 )
+                modal_form.querySelector('#resultAppendForm').reset();
                 console.error('Error:', response.statusText);
             }
         } catch (err) {
@@ -109,7 +108,19 @@ async function loadPakcageListByCustomer(name, package_name, platform){
     }
 }
 
-function createCheckBoxes(checkBoxes, os){
+function createCheckBoxes(os){
+    const checkBoxes = document.getElementById('option-checkboxes');
+    const ixp = document.getElementById('ios-library-version');
+    if (ixp.firstChild){
+        while (ixp.firstChild){
+            ixp.removeChild(ixp.firstChild);
+        }
+    }
+    if(checkBoxes){
+        while (checkBoxes.firstChild) {
+            checkBoxes.removeChild(checkBoxes.firstChild);
+        }
+    }
     if (os === 'iOS'){
         options = ['jailbreak_test', 'jailbreak', 'integrity', 'string_encrypt', 'symbol_del']
     }else if (os === 'android'){
@@ -120,14 +131,34 @@ function createCheckBoxes(checkBoxes, os){
         const div = document.createElement('div');
         div.className = "form-check mb-2";
         const checkbox = document.createElement('input');
+        const label = document.createElement('label');
+        label.className = "form-check-label";
+        label.textContent = option;
+        label.htmlFor = option;
         checkbox.className = "form-check-input";
         checkbox.type = 'checkbox';
         checkbox.id = option;
         checkbox.value = option;
-        checkbox.name = "option";
+        checkbox.name = "options";
         checkbox.checked = false;
         checkbox.textContent = option
         div.appendChild(checkbox);
+        div.appendChild(label);
         checkBoxes.appendChild(div);
     });
+
+    if (os === 'iOS'){
+        const label = document.createElement('label');
+        const input = document.createElement('input');
+        label.className = "my-1 me-2";
+        label.htmlFor = "ios-library-version";
+        label.textContent = "iOS Library Version";
+        input.className = "form-control";
+        input.type = 'text';
+        input.id = "ios-library-version";
+        input.name = "ios-library-version";
+        input.placeholder = "iOS Library Version";
+        ixp.appendChild(label);
+        ixp.appendChild(input);                        
+    }
 }
