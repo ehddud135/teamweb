@@ -30,10 +30,10 @@
                 <h3 class="h4">앱 점검 결과</h3>
             </div>
             <div class="d-block mb-4 mb-md-0">
-                <button id="inspection_result_append_btn"type="button" class="btn btn-block btn-gray-800 mb-3" data-bs-toggle="modal" data-bs-target="#inspect-result-modal-form">
+                <button id="inspection_result_append_btn" type="button" data-target="android" class="btn btn-block btn-gray-800 mb-3 open-modal">
                     Android 등록
                 </button>
-                <button id="inspection_result_append_btn"type="button" class="btn btn-block btn-gray-800 mb-3" data-bs-toggle="modal" data-bs-target="#inspect-result-modal-form">
+                <button id="inspection_result_append_btn" type="button" data-target="iOS" class="btn btn-block btn-gray-800 mb-3 open-modal">
                     iOS 등록
                 </button>
             </div>
@@ -66,13 +66,17 @@
                 <div class="card p-3 p-lg-4">
                     <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
                     <div class="text-center text-md-center mb-2 mt-md-0">
-                        <h1 class="mb-0 h4">정기 점검 결과 등록</h1>
+                        <h1 class="mb-2 h4">정기 점검 결과 등록</h1>
                     </div>
                     <form id="resultAppendForm" action="/inspection-result-by-app-append" class="mt-4" method="POST">
                         {% csrf_token %}
-                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-3">
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-1">
                             <label id="customer-name-label" for="customer-name">고객사 명 : </label>
                             <input type="hidden" name="customer-name" id="customer-name" value="">
+                        </div>
+                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-1">
+                            <label id="select-platform-label" for="select-platform">OS : </label>
+                            <input type="hidden" name="select-platform" id="select-platform" value="">
                         </div>
                         <div class="mb-2">
                             <label for="inspection_date">점검일</label>
@@ -82,14 +86,6 @@
                                 </span>
                                 <input data-datepicker="" class="form-control datepicker-input" name="inspection_date" id="inspection_date" type="text" placeholder="dd/mm/yyyy" required="">                                               
                             </div>
-                        </div>
-                        <div class="mb-2">
-                            <label class="my-1 me-2" for="platform">Platform</label>
-                            <select class="form-select" name="platform" id="platform" aria-label="Default select example">
-                                <option selected value="platform">choose platform</option>
-                                <option value="android">Android</option>
-                                <option value="iOS">iOS</option>
-                            </select>
                         </div>
                         <div class="mb-4">
                             <label class="my-1 me-2" for="package_name">Package Name</label>

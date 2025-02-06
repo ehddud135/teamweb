@@ -16,36 +16,38 @@ document.addEventListener('DOMContentLoaded', function (){
         customer_name = event.target.value
     });
 
-    btn.addEventListener('click', function (event) {
-        if (form) {
-            if (typeof customer_name === 'undefined') {
-                console.log('customer_name is not defined');
-                swalWithBootstrapButtons.fire(
-                    'Warning alert',
-                    '고객사를 선택해주세요.',
-                    'warning'
-                ).then(() => {
-                    if (modal) {
-                        modal.hide();
-                        modal_form.querySelector('#resultAppendForm').reset();
-                    }
-                });
-                // 원하는 처리를 추가하세요
+    document.querySelectorAll('.open-modal').forEach(btn =>{
+        btn.addEventListener('click', function(){
+            platform = this.getAttribute('data-target')
+            console.log(platform)
+            if (form) {
+                if (typeof customer_name === 'undefined') {
+                    swalWithBootstrapButtons.fire(
+                        'Warning alert',
+                        '고객사를 선택해주세요.',
+                        'warning'
+                    ).then(() => {
+                        if (modal) {
+                            modal.hide();
+                            modal_form.querySelector('#resultAppendForm').reset();
+                        }
+                    });
+                    // 원하는 처리를 추가하세요
+                } else {
+                    document.getElementById("customer-name-label").textContent = `고객사 명 : ${customer_name}`;
+                    document.getElementById("select-platform-label").textContent = `OS : ${platform}`
+                    document.getElementById("customer-name").value = customer_name
+                    loadPakcageListByCustomer(customer_name, package_name, platform)
+                    createCheckBoxes(checkBoxes, platform);
+                    modal.show();
+                }
             } else {
-                document.getElementById("customer-name-label").textContent = `고객사 명 : ${customer_name}`;
-                document.getElementById("customer-name").value = customer_name
+                console.error('Form not found!');
             }
-        } else {
-            console.error('Form not found!');
-        }
+        });
     });
     const checkBoxes = document.querySelector('#option-checkboxes');
     const package_name = document.getElementById('package_name');
-    const platforms = document.getElementById('platform');
-    platforms.addEventListener('change', (event) =>{
-        loadPakcageListByCustomer(customer_name, package_name, event.target.value)
-        createCheckBoxes(checkBoxes, event.target.value);
-    });
 
     form.addEventListener('submit', async function (e) {
         e.preventDefault();
