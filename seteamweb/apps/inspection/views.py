@@ -8,7 +8,7 @@ from ..customer.models import Customer
 from ..packages.models import Packages
 from .models import InspectionSchedule, InspectionRecord, InspectionResultFile, AndroidInspectResult, iOSInspectResult
 from .forms import FileUploadForm
-from ..utils.utils import edit_inspection_schedule, convertmonth, convert_to_format, convert_datetime
+from ..utils.utils import edit_inspection_schedule, convertmonth, convert_to_format, convert_datetime, edit_inspection_options
 import json
 import os
 
@@ -103,21 +103,21 @@ def inspection_result_by_app_append(request):
         if request.method == 'POST':
             if request.content_type == 'multipart/form-data':
                 print(request.POST)
+                platform = request.POST.get('select-platform')
+                inspection_date = convert_datetime(request.POST.get('inspection_date'))
                 customer = Customer.objects.get(name=request.POST.get('customer-name'))
-                package = Packages.objects.get(name=request.POST.get('package-name'))
-                # customer_name = Customer.objects.get(name=request.POST.get('customer-name'))
-                # inspection_month = convert_to_format(request.POST.get('inspect-month'))
-                # customer = InspectionRecord.objects.get(customer=customer_name, inspection_month=inspection_month)
-                # customer.result = 'complete'
-                # customer.inspection_date = convert_datetime(request.POST.get('inspection_date'))
-                # customer.details = request.POST.get('inspect_significant')
-                # customer.save()
-                # report_title = f"{request.POST.get('title')}.pdf"
-                # report_file = request.FILES.get('inspection_result_file')
-                # insepction_report, is_create = InspectionResultFile.objects.get_or_create(inspectrecord=customer)
-                # insepction_report.title = report_title
-                # insepction_report.file = report_file
-                # insepction_report.save()
+                package = Packages.objects.get(name=request.POST.get('package_name'), platform=platform)
+                if platform == 'android':
+                    result_by_package, is_create = AndroidInspectResult.objects.get_or_create(customer=customer, package=package, inspection_date=inspection_date)
+                else:
+                    result_by_package, is_create = iOSInspectResult.objects.get_or_create(customer=customer, package=package, inspection_date=inspection_date)
+                    result_by_package.library_version = request.POST.get('ios-library-version')
+                print(is_create)
+                result_by_package.app_name = request.POST.get('app_name')
+                result_by_package.app_version = request.POST.get('app_version')
+                result_by_package.significant = request.POST.get('inspect_significant')
+                edit_inspection_options(result_by_package, request.POST.getlist('options'), platform)
+                result_by_package.save()
                 return JsonResponse({'status': 'success', "message": "Success"}, status=200)
             else:
                 return JsonResponse({"error": "Please check your email and name"}, status=405)
@@ -146,20 +146,21 @@ def inspection_report_view_or_download(request, view_or_download):
 
 def inspect_result_by_customer(_, customer_name):
     customer = Customer.objects.get(name=customer_name)
-    aos_items = AndroidInspectResult.objects.filter(customer=customer)
-    ios_items = iOSInspectResult.objects.filter(customer=customer)  # 필요한 필드만 추출
-    # month_int = convertmonth(month)
-    # for item in items:
-    #     try:
-    #         customer = Customer.objects.get(name=item.get('name'))
-    #         inspect_record, is_create = InspectionRecord.objects.get_or_create(customer=customer, inspection_month=month_int)
-    #         item['inspect_result'] = results[inspect_record.result]
-    #         if inspect_record.inspection_date == None:
-    #             item['inspection_date'] = "점검 전"
-    #         else:
-    #             item['inspection_date'] = inspect_record.inspection_date
-    #         item['manager'] = customer.manager.name
-    #     except Exception as e:
-    #         print(e)
+    aos_items = AndroidInspectResult.objects.filter(customer=customer).values()
+    ios_items = iOSInspectResult.objects.filter(customer=customer).values()
+    for item in aos_items:
+        item['platform'] = 'Android'
+        item['package_name'] = Packages.objects.get(id=item['package_id']).name
+    for item in ios_items:
+        item['platform'] = 'iOS'
+        item['package_name'] = Packages.objects.get(id=item['package_id']).name
+    items = list(aos_items) + list(ios_items)
+    items = sorted(items, key=lambda x: x.get('inspection_date') or '', reverse=True)
+    return JsonResponse(list(items), safe=False)
 
-    return JsonResponse(list(aos_items), safe=False)
+
+def inspect_significant_by_result(reqeust):
+
+    # customer = Customer.objects.get(name=customer_name)
+    # return JsonResponse(list(inspection_records), safe=False)
+    return print("test")

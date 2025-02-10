@@ -25,6 +25,21 @@ def edit_inspection_schedule(customer, month_list, inspect_period):
     customer.save()
 
 
+def edit_inspection_options(result, options_list, platform):
+    ios_option_list = ['jailbreak_test', 'jailbreak', 'integrity', 'string_encrypt', 'symbol_del']
+    android_option_list = ['rooting_test', 'rooting', 'integrity', 'emulator', 'obfuscate', 'decompile']
+    if platform == 'iOS':
+        for i in ios_option_list:
+            setattr(result, i, False)
+        for i in options_list:
+            setattr(result, i, True)
+    else:
+        for i in android_option_list:
+            setattr(result, i, False)
+        for i in options_list:
+            setattr(result, i, True)
+
+
 def convertmonth(month_full_string):
     year = str(datetime.today().year)
     months = {

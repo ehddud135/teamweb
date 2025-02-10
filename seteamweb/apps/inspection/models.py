@@ -21,6 +21,8 @@ class AndroidInspectResult(models.Model):
     emulator = models.BooleanField(default=False)
     obfuscate = models.BooleanField(default=False)
     decompile = models.BooleanField(default=False)
+    inspection_date = models.DateField(null=True)
+    significant = models.TextField(null=True)
     created_at = models.DateField(auto_now_add=True)
 
     class Meta:
@@ -39,6 +41,8 @@ class iOSInspectResult(models.Model):
     string_encrypt = models.BooleanField(default=False)
     symbol_del = models.BooleanField(default=False)
     library_version = models.CharField(max_length=30, default="Unknown")
+    inspection_date = models.DateField(null=True)
+    significant = models.TextField(null=True)
     created_at = models.DateField(auto_now_add=True)
 
     class Meta:
