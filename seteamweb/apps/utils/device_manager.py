@@ -1,16 +1,15 @@
 import os
-from dotenv import load_dotenv
 from jira import JIRA
+from decouple import config
 
 
 class DeviceManagement:
-    load_dotenv()
 
     def __init__(self):
-        self.jira = JIRA(server=os.environ.get('server'), basic_auth=(os.environ.get('basic_auth_user'), os.environ.get('basic_auth_token')),)
+        self.jira = JIRA(server=config('server'), basic_auth=(config('basic_auth_user'), config('basic_auth_token')),)
         self.jql = 'project = DEVICE AND issuetype = "단말기 등록" ORDER BY created ASC'
         # self.jql = 'project = DEVICE AND issuetype = "대여 신청" AND status="대여중" ORDER BY due DESC'
-        self.jira_base_url = os.environ.get('jira_base_url')
+        self.jira_base_url = config('jira_base_url')
 
     def get_rental_devices(self):
         got = 100
