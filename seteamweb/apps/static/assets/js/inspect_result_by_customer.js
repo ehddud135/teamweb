@@ -37,21 +37,20 @@ async function fetchAndRenderData(customer_name) {
         tableBody.innerHTML = '';  // 기존 데이터를 초기화
 
         pageData.forEach(item => {
+            options = optionsByPlatform(item.platform, item)
+            if (item.significant) {
+                options += `<td>
+                                <button class="btn btn-info pdf-view-btn" data-name="${item.name}" pdf-view-url="/inspection-report/view">View</button>
+                            </td>`;
+            }
             const row = `
                 <tr>
                     <td>${new Date(item.inspection_date).toLocaleDateString()}</td>
-                    <td>${item.name}</td>
-                    <td>${item.name}</td>
-                    <td>${item.name}</td>
-                    <td>${item.name}</td>
-                    <td>${item.name}</td>
-                    <td>${item.name}</td>
-                    <td>${item.manager}</td>
-                    <td>${item.inspect_result}</td>
-                    <td>${new Date(item.inspection_date).toLocaleDateString()}</td>
-                    <td>
-                        <button class="btn btn-info pdf-view-btn" data-name="${item.name}" pdf-view-url="/inspection-report/view">View</button>
-                    </td>
+                    <td>${item.package_name}</td>
+                    <td>${item.platform}</td>
+                    <td>${item.app_name}</td>
+                    <td>${item.app_version}</td>
+                    ${options}
                 </tr>
             `;
             tableBody.innerHTML += row;
@@ -61,4 +60,27 @@ async function fetchAndRenderData(customer_name) {
     let data_response = await fetch(`/inspection-result-by-customer/${customer_name}`)
     let data = await data_response.json();
     renderTable(data)
+}
+
+function optionsByPlatform(platform, item){
+    const booleanToSymbol = (value) => value ? 'O' : 'X';
+    let options = '';
+    if (platform === 'Android') {
+        options = `
+            <td>${booleanToSymbol(item.rooting)}</td>
+            <td>${booleanToSymbol(item.integrity)}</td>
+            <td>${booleanToSymbol(item.emulator)}</td>
+            <td>${booleanToSymbol(item.obfuscate)}</td>
+            <td>${booleanToSymbol(item.decompile)}</td>
+        `;
+    } else if (platform === 'iOS') {
+        options = `
+            <td>${booleanToSymbol(item.jailbreak)}</td>
+            <td>${booleanToSymbol(item.integrity)}</td>
+            <td>${booleanToSymbol(item.string_encrypt)}</td>
+            <td>${booleanToSymbol(item.symbol_del)}</td>
+            <td>${item.library_version}</td>
+        `;
+    }
+    return options
 }

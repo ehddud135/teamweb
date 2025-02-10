@@ -45,8 +45,7 @@
                 <th class="border-gray-200" width="200">OS</th>
                 <th class="border-gray-200" width="200">앱 이름</th>	
                 <th class="border-gray-200" width="200">앱 버전</th>
-                <th class="border-gray-200" width="200">점검 단말기</th>
-                <th class="border-gray-200" width="200">Rooting Test /<br>JBJB Test</th>
+                <th class="border-gray-200" width="200">Rooting /<br>JailBreak</th>
                 <th class="border-gray-200" width="200">위변조</th>
                 <th class="border-gray-200" width="200">에뮬레이터 /<br>문자열 암호화</th>
                 <th class="border-gray-200" width="200">난독화 /<br>심볼 제거</th>
@@ -73,8 +72,6 @@
                         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-1">
                             <label id="customer-name-label" for="customer-name">고객사 명 : </label>
                             <input type="hidden" name="customer-name" id="customer-name" value="">
-                        </div>
-                        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-1">
                             <label id="select-platform-label" for="select-platform">OS : </label>
                             <input type="hidden" name="select-platform" id="select-platform" value="">
                         </div>
@@ -87,11 +84,19 @@
                                 <input data-datepicker="" class="form-control datepicker-input" name="inspection_date" id="inspection_date" type="text" placeholder="dd/mm/yyyy" required="">                                               
                             </div>
                         </div>
-                        <div class="mb-4">
+                        <div class="mb-1">
                             <label class="my-1 me-2" for="package_name">Package Name</label>
                             <select class="form-select" name="package_name" id="package_name" aria-label="Default select example">
                                 <option selected="">Select Pakcage</option>
                             </select>
+                        </div>
+                        <div class="mb-1">
+                            <label class="my-1 me-2" for="app_name">App Name</label>
+                            <input type="text" class="form-control" name="app_name" id="app_name">
+                        </div>
+                        <div class="mb-4">
+                            <label class="my-1 me-2" for="app_version">App Version</label>
+                            <input type="text" class="form-control" name="app_version" id="app_version">
                         </div>
                         <div class="row mb-0">
                             <div class="mb-2">
