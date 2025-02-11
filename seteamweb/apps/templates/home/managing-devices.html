@@ -1,0 +1,53 @@
+{% extends "layouts/base.html" %}
+{% load static %}
+{% block title %} Managing-Manager {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
+    <div class="d-block mb-4 mb-md-0">
+        <h2 class="h4">Devices</h2>
+        <p class="mb-0">Device 정보 확인</p>
+    </div>
+    <div class="btn-toolbar mb-2 mb-md-0 me-4">
+        <select class="form-select width-150" id="platform" aria-label="Default select example">
+            <option selected="android">Android</option>
+            <option value="iOS">iOS</option>
+        </select>
+    </div>
+</div>
+  
+<div class="card card-body border-0 shadow table-wrapper table-responsive">
+    <table class="table table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th class="border-gray-200 rounded-start">Device-Number</th>
+                <th class="border-gray-200">Name</th>						
+                <th class="border-gray-200">Version</th>
+                <th class="border-gray-200">Architecture</th>
+                <th class="border-gray-200 rounded-end">rooting</th>
+            </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+    </table>
+    <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination mb-0" id="pagination">
+            </ul>
+        </nav>
+        <div class="fw-normal small mt-4 mt-lg-0" id="pagination-info">
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script src="{% static 'assets/vendor/sweetalert2/sweetalert2.all.min.js'%}"></script>
+<script src="{% static 'assets/js/devices_list_by_os.js' %}"></script>
+{% endblock javascripts %}
