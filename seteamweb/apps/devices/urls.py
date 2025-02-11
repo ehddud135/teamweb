@@ -7,5 +7,5 @@ from django.urls import path, re_path
 from apps.devices import views
 
 urlpatterns = [
-    path("list-api", views.devices_list_api, name="devices_list_api")
+    path("list-api/<str:os>", views.devices_list_api, name="devices_list_api")
 ]

@@ -55,16 +55,16 @@ async function fetchAndRenderData() {
         for (let i = 1; i <= totalPages; i++) {
             const pageButton = `
             <li class = "page-item ${i === currentPage ? 'active' : ''}" >
-            < a class = "page-link" href = "#" data-page = "${i}" >${i} < /a >
-            < / li > `
+            <a class = "page-link" href = "#" data-page = "${i}" >${i} </a>
+            </li> `
             pagination.innerHTML += pageButton
         }
 
         // "Next" 버튼
         const nextButton = `
         <li class = "page-item ${currentPage === totalPages ? 'disabled' : ''}" >
-        < a class = "page-link" href = "#" data-page = "${currentPage + 1}" > Next < /a >
-        < / li > `
+        <a class = "page-link" href = "#" data-page = "${currentPage + 1}" > Next </a>
+        </li> `
         pagination.innerHTML += nextButton
     }
 
@@ -73,7 +73,7 @@ async function fetchAndRenderData() {
         const start = (currentPage - 1) * itemsPerPage + 1
         const end = Math.min(currentPage * itemsPerPage, data.length)
         const paginationInfo = document.getElementById('pagination-info')
-        paginationInfo.innerHTML = `Showing < b >${start} < /b > to < b >${end} < /b > out of < b >${data.length} < /b > entries`
+        paginationInfo.innerHTML = `Showing <b>${start} </b> to <b>${end} </b > out of <b>${data.length} </b> entries`
     }
 
     // 페이지 변경 핸들러
