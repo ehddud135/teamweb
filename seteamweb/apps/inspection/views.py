@@ -159,8 +159,23 @@ def inspect_result_by_customer(_, customer_name):
     return JsonResponse(list(items), safe=False)
 
 
-def inspect_significant_by_result(reqeust):
+def inspect_significant_by_result(request):
+    try:
+        if request.method == 'POST':
+            data = json.loads(request.body)
+            # {'package_name': 'com.finnq.f1', 'inspection_date': '2025-02-24', 'customer_name': '핀크', 'platform': 'iOS'}
+            print(data)
+            customer = Customer.objects.get(name=data.get('customer_name'))
+            package = Packages.objects.get(name=data.get('package_name'), platform=data.get('platform'))
+            if data.get('platform') == 'Android':
+                item = AndroidInspectResult.objects.get(customer=customer, package=package, inspection_date=data.get('inspection_date'))
+            elif data.get('platform') == 'iOS':
+                item = iOSInspectResult.objects.get(customer=customer, package=package, inspection_date=data.get('inspection_date'))
+            else:
+                return JsonResponse({"error": "Please check Platform"}, status=405)
+            return JsonResponse({"significant": item.significant}, status=200)
+        else:
+            return JsonResponse({"error": "Please check Method"}, status=405)
 
-    # customer = Customer.objects.get(name=customer_name)
-    # return JsonResponse(list(inspection_records), safe=False)
-    return print("test")
+    except Exception as e:
+        return JsonResponse({"error": e}, status=405)
