@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'apps.inspection',
     'apps.manager',
     'apps.packages',
-    'apps.devices'
+    'apps.devices',
+    'core'
 ]
 
 MIDDLEWARE = [
