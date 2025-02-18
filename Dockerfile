@@ -18,4 +18,4 @@ RUN pip install --upgrade pip && pip install -r requirements.txt
 COPY . /app/
 
 # 6. Run Django Server
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "teamweb.wsgi:application"]
+CMD ["gunicorn", "--chdir", "/app/seteamweb", "--bind", "0.0.0.0:8000", "core.wsgi:application"]
