@@ -29,11 +29,10 @@ class Command(BaseCommand):
 
                 for field_name, field in fields.items():
                     if field.get_internal_type() == "ForeignKey":
-                        print(field)
                         related_model = field.related_model
-                        print(related_model)
+                        print(f"🔍 ForeignKey Field: {field_name} -> {related_model.__name__}")
                         if related_model in data_dict and data_dict[related_model]:
-                            field_values[field_name] = lambda x: random.choice(data_dict[related_model])
+                            field_values[field_name] = lambda x, rm=related_model: random.choice(data_dict[rm])
                         else:
                             field_values[field_name] = None
 
@@ -45,6 +44,7 @@ class Command(BaseCommand):
                     elif field.get_internal_type() == "DateField":
                         field_values[field_name] = lambda x: datetime.now().date()
 
+                print(field_values.values())
                 # 랜덤 데이터 삽입
                 seeder.add_entity(model, 10, field_values)
                 self.stdout.write(self.style.SUCCESS(f"   ✅ Added 10 records to {model.__name__}"))
