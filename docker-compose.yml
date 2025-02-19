@@ -6,10 +6,6 @@ services:
     container_name: teamweb_db
     restart: always
     env_file: prod.env
-    environment:
-      POSTGRES_DB: teamweb
-      POSTGRES_USER: seteam
-      POSTGRES_PASSWORD: ***REDACTED***
     ports:
       - "5432:5432"
     volumes:
