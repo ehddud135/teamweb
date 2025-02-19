@@ -6,13 +6,12 @@ WORKDIR /app
 
 # 3. Install Required System Packages
 RUN apt-get update && apt-get install -y \
-    python3-dev \
     libpq-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # 4. Copy Dependency File and Install Packages
 COPY requirements.txt /app/
-RUN pip install --upgrade pip && pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # 5. Copy Project Files
 COPY . /app/
