@@ -83,6 +83,12 @@ TEMPLATES = [
     },
 ]
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:85",
+    "http://127.0.0.1",
+    "https://se.appsu.it"
+]
+
 WSGI_APPLICATION = 'core.wsgi.application'
 
 
