@@ -5,6 +5,7 @@ services:
     image: postgres:latest
     container_name: teamweb_db
     restart: always
+    env_file: prod.env
     environment:
       POSTGRES_DB: teamweb
       POSTGRES_USER: seteam
@@ -12,7 +13,7 @@ services:
     ports:
       - "5432:5432"
     volumes:
-      - ./postgres_data:/var/lib/postgresql/data
+      - postgres_data:/var/lib/postgresql/data
 
   web:
     build: .
@@ -20,11 +21,10 @@ services:
     restart: always
     depends_on:
       - db
-    environment:
-      - DB_NAME=teamweb
-      - DB_USER=seteam
-      - DB_PASSWORD=***REDACTED***
-      - DB_HOST=db
-      - DB_PORT=5432
+    env_file: prod.env
     ports:
       - "8000:8000"
+
+volumes:
+  postgres_data:
+    driver: local
