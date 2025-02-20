@@ -15,9 +15,7 @@ from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-print("base_dir = "+ str(BASE_DIR))
 CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-print("core_dir = "+ str(CORE_DIR))
 MEDIA_URL = '/report_save_path/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'report_save_path')
 
@@ -28,10 +26,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'report_save_path')
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('django_secret_key')
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
+DEBUG = os.getenv("DEBUG", True)
+print(type(DEBUG))
 ALLOWED_HOSTS = ['*']
-print(os.getenv("DB_USER"))
 
 
 # Application definition
@@ -98,22 +95,22 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-if DEBUG:
+if DEBUG==True:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-else:
+elif DEBUG=="False":
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            "NAME": os.getenv("DB_NAME"),
-            "USER": os.getenv("DB_USER"),
-            "PASSWORD": os.getenv("DB_PASSWORD"),
-            "HOST": os.getenv("DB_HOST"),
-            "PORT": os.getenv("DB_PORT"),
+            "NAME": os.getenv("POSTGRES_DB"),
+            "USER": os.getenv("POSTGRES_USER"),
+            "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
+            "HOST": os.getenv("POSTGRES_HOST"),
+            "PORT": os.getenv("POSTGRES_PORT"),
         }
     }
 

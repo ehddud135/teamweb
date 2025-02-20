@@ -269,3 +269,5 @@ pyrightconfig.json
 .pdf
 
 # End of https://www.toptal.com/developers/gitignore/api/python,django
+prod.env
+seteamweb/.env
