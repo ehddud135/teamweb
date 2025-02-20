@@ -17,3 +17,16 @@ POSTGRES_USER=your_user_name
 POSTGRES_PASSWORD=your_password
 POSTGRES_HOST=db
 POSTGRES_PORT=5432
+
+
+### 🛠 2. `teamweb/seteamweb/.env` 파일 생성
+
+아래 내용을 teamweb/seteamweb/.env 파일에 추가하세요.
+
+```env
+django_secret_key='your_django_secret_key'
+
+
+## 🚀 프로젝트 실행 방법
+
+### 1 프로젝트 클론
