@@ -2,6 +2,7 @@
 
 이 프로젝트는 Django 기반의 웹 애플리케이션이며, PostgreSQL을 사용합니다.
 
+
 ## 📌 환경 변수 설정
 
 프로젝트 실행을 위해 다음 환경 변수 파일을 설정해야 합니다.
@@ -26,6 +27,7 @@ POSTGRES_PORT=5432
 ```env
 django_secret_key='your_django_secret_key'
 ```
+
 
 ## 🚀 프로젝트 실행 방법
 
@@ -54,6 +56,7 @@ docker compose up --build -d
 # debug
 docker compose -f docker-compose-debug.yml up --build -d
 ```
+
 
 ## ⚠️ 추가 설정
 
