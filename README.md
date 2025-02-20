@@ -17,7 +17,7 @@ POSTGRES_USER=your_user_name
 POSTGRES_PASSWORD=your_password
 POSTGRES_HOST=db
 POSTGRES_PORT=5432
-
+```
 
 ### 🛠 2. `teamweb/seteamweb/.env` 파일 생성
 
@@ -25,8 +25,32 @@ POSTGRES_PORT=5432
 
 ```env
 django_secret_key='your_django_secret_key'
-
+```
 
 ## 🚀 프로젝트 실행 방법
 
-### 1 프로젝트 클론
+### 1. 프로젝트 클론
+
+다음 명령어를 사용하여 프로젝트를 클론하고 이동합니다.
+
+```bash
+git clone https://github.com/your-repository/teamweb.git
+cd teamweb
+```
+
+### 2. 환경 변수 파일 설정
+
+위에서 설명한 prod.env와 .env 파일을 생성합니다.
+
+
+### 3. Docker를 사용하여 실행
+
+Docker를 사용하는 경우 다음 명령어를 실행하세요.
+
+```bash
+# release
+docker compose up --build -d
+
+# debug
+docker compose -f docker-compose-debug.yml up --build -d
+```
