@@ -54,3 +54,15 @@ docker compose up --build -d
 # debug
 docker compose -f docker-compose-debug.yml up --build -d
 ```
+
+## ⚠️ 추가 설정
+
+### .gitignore 파일 업데이트
+
+환경 변수 파일이 Git에 업로드되지 않도록 .gitignore에 다음 항목을 추가하세요.
+
+```gitignore
+# 환경 변수 파일
+teamweb/prod.env
+teamweb/seteamweb/.env
+```
