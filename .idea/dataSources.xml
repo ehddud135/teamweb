@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="db" uuid="320990ce-e4bc-412f-adda-15f61882b616">
-      <driver-ref>sqlite.xerial</driver-ref>
+    <data-source source="LOCAL" name="teamweb@172.16.20.180" uuid="143d7727-3953-4079-87db-73589ba26a37">
+      <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
-      <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:C:\Users\HwangDongYeong\Documents\GitHub\seteamweb\seteamweb\db.sqlite3</jdbc-url>
+      <remarks>seteamweb</remarks>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://172.16.20.180:5432/teamweb</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="db_bak.sqlite3" uuid="056141b5-1f54-4197-9c20-deb44ae4ca79">
+    <data-source source="LOCAL" name="seteam_test" uuid="d544caf2-6939-4f64-9ecf-2a9a6406d53c">
       <driver-ref>sqlite.xerial</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
-      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/db_bak.sqlite3</jdbc-url>
+      <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/seteamweb/db.sqlite3</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
   </component>
