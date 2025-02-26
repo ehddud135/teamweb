@@ -36,7 +36,6 @@ def inspect_schedule_list_api(_, schedule, month):
 
 
 def customer_delete(request, item_name):
-    print(request)
     context = {}
     try:
         if request.method == "DELETE":
@@ -75,7 +74,6 @@ def inspection_result_append(request):
     try:
         if request.method == 'POST':
             if request.content_type == 'multipart/form-data':
-                print(request.POST)
                 customer_name = Customer.objects.get(name=request.POST.get('customer-name'))
                 inspection_month = convert_to_format(request.POST.get('inspect-month'))
                 customer = InspectionRecord.objects.get(customer=customer_name, inspection_month=inspection_month)
@@ -102,7 +100,6 @@ def inspection_result_by_app_append(request):
     try:
         if request.method == 'POST':
             if request.content_type == 'multipart/form-data':
-                print(request.POST)
                 platform = request.POST.get('select-platform')
                 inspection_date = convert_datetime(request.POST.get('inspection_date'))
                 customer = Customer.objects.get(name=request.POST.get('customer-name'))
@@ -112,7 +109,6 @@ def inspection_result_by_app_append(request):
                 else:
                     result_by_package, is_create = iOSInspectResult.objects.get_or_create(customer=customer, package=package, inspection_date=inspection_date)
                     result_by_package.library_version = request.POST.get('ios-library-version')
-                print(is_create)
                 result_by_package.app_name = request.POST.get('app_name')
                 result_by_package.app_version = request.POST.get('app_version')
                 result_by_package.significant = request.POST.get('inspect_significant')
@@ -130,7 +126,6 @@ def inspection_result_by_app_append(request):
 def inspection_report_view_or_download(request, view_or_download):
     try:
         if request.method == 'POST':
-            print(view_or_download)
             data = json.loads(request.body)
             inspection_month = convert_to_format(data['inspection_month'])
             customer = Customer.objects.get(name=data['customer_name'])
@@ -164,7 +159,6 @@ def inspect_significant_by_result(request):
         if request.method == 'POST':
             data = json.loads(request.body)
             # {'package_name': 'com.finnq.f1', 'inspection_date': '2025-02-24', 'customer_name': '핀크', 'platform': 'iOS'}
-            print(data)
             customer = Customer.objects.get(name=data.get('customer_name'))
             package = Packages.objects.get(name=data.get('package_name'), platform=data.get('platform'))
             if data.get('platform') == 'Android':

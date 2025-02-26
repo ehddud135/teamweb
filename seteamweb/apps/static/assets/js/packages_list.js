@@ -2,6 +2,7 @@ async function fetchAndRenderData() {
     // API 호출
     const response = await fetch('/package-list-api');
     const data = await response.json();
+    let filteredData = data;
     
     // 페이지네이션 설정
     const itemsPerPage = 10; // 한 페이지에 표시할 항목 수
@@ -10,7 +11,7 @@ async function fetchAndRenderData() {
     function getPaginatedData(page) {
         const start = (page - 1) * itemsPerPage;
         const end = start + itemsPerPage;
-        return data.slice(start, end);
+        return filteredData.slice(start, end);
     }
 
     function renderTable(pageData) {
@@ -42,7 +43,7 @@ async function fetchAndRenderData() {
     function renderPagination() {
         const pagination = document.getElementById('pagination');
         pagination.innerHTML = ''; // 기존 버튼 초기화
-        const totalPages = Math.ceil(data.length / itemsPerPage); // 총 페이지 수
+        const totalPages = Math.ceil(filteredData.length / itemsPerPage); // 총 페이지 수
 
         // "Previous" 버튼
         const prevButton = `
@@ -74,9 +75,9 @@ async function fetchAndRenderData() {
     // 페이지네이션 정보 업데이트
     function updatePaginationInfo() {
         const start = (currentPage - 1) * itemsPerPage + 1;
-        const end = Math.min(currentPage * itemsPerPage, data.length);
+        const end = Math.min(currentPage * itemsPerPage, filteredData.length);
         const paginationInfo = document.getElementById('pagination-info');
-        paginationInfo.innerHTML = `Showing <b>${start}</b> to <b>${end}</b> out of <b>${data.length}</b> entries`;
+        paginationInfo.innerHTML = `Showing <b>${start}</b> to <b>${end}</b> out of <b>${filteredData.length}</b> entries`;
     }
 
     // 페이지 변경 핸들러
@@ -101,6 +102,24 @@ async function fetchAndRenderData() {
             button.addEventListener('click', handlePageChange);
         });
     }
+
+    function handleSearch(event) {
+        const searchTerm = event.target.value.toLowerCase();
+        console.log(event.target.value)
+        filteredData = filteredData.filter(item => 
+            item.name.toLowerCase().includes(searchTerm) ||
+            item.customer.toLowerCase().includes(searchTerm)
+        );
+        currentPage = 1; // 검색 시 첫 페이지로 이동
+        updateTableAndPagination();
+    }
+
+    document.getElementById('search-input').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            handleSearch(event);
+        }
+    });
 
     // 초기 렌더링
     updateTableAndPagination();

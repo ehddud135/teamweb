@@ -15,6 +15,7 @@ def package_append(request):
             if request.content_type == 'multipart/form-data':
                 package_name_list = request.POST.get("package-name").splitlines()
                 for package_name in package_name_list:
+                    package_name = package_name.strip()
                     customer_name = request.POST.get("customer-name")
                     platform = request.POST.get("platform")
                     input_date = request.POST.get("license_expire_date")
@@ -43,14 +44,11 @@ def package_list_api(request):
 
 
 def package_list_by_customer(request, customer_name, platform):
-    print(request)
     items = Packages.objects.filter(customer=customer_name, platform=platform).values('name')
-    print(items)
     return JsonResponse(list(items), safe=False)
 
 
 def package_delete(request, item_name, item_platform):
-    print(request)
     context = {}
     try:
         if request.method == "DELETE":

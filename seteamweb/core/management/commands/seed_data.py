@@ -44,7 +44,6 @@ class Command(BaseCommand):
                     elif field.get_internal_type() == "DateField":
                         field_values[field_name] = lambda x: datetime.now().date()
 
-                print(field_values.values())
                 # 랜덤 데이터 삽입
                 seeder.add_entity(model, 10, field_values)
                 self.stdout.write(self.style.SUCCESS(f"   ✅ Added 10 records to {model.__name__}"))
