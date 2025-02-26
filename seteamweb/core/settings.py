@@ -27,7 +27,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'report_save_path')
 SECRET_KEY = config('django_secret_key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", True)
-print(type(DEBUG))
 ALLOWED_HOSTS = ['*']
 
 
@@ -95,14 +94,14 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-if DEBUG==True:
+if DEBUG == True:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-elif DEBUG=="False":
+elif DEBUG == "False":
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',

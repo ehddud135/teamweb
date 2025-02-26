@@ -12,8 +12,6 @@ from ..inspection.models import InspectionSchedule
 def customer_append(request):
     current_time = datetime.now().date()
     context = {}
-    print("method = " + request.method)
-    print("content_type = " + request.content_type)
     try:
         if request.method == 'POST':
             if request.content_type == 'multipart/form-data':
