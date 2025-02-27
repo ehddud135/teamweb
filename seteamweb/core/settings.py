@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'apps.manager',
     'apps.packages',
     'apps.devices',
+    'apps.contact',
     'core'
 ]
 
