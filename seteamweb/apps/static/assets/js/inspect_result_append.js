@@ -59,6 +59,8 @@ document.addEventListener('DOMContentLoaded', function (){
                         if (modal) {
                             modal.hide();
                         }
+                        console.log('Modal closed');
+                        form.reset();
                     });
                     console.log('Success:', data);
                 } else {
