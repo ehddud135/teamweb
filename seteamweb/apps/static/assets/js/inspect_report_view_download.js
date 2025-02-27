@@ -14,6 +14,11 @@ document.addEventListener('DOMContentLoaded', function (){
                 body: JSON.stringify({ "customer_name": customer_name, "inspection_month": inspection_month })
             }).then(response => {
                 if (!response.ok) {
+                    swalWithBootstrapButtons.fire(
+                        'Warning alert',
+                        data['error'],
+                        'warning'
+                    )
                     throw new Error('Failed to fetch the PDF');
                 }
                 return response.blob(); // 서버로부터 받은 파일 데이터를 Blob으로 변환

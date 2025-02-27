@@ -129,8 +129,8 @@ def inspection_report_view_or_download(request, view_or_download):
             data = json.loads(request.body)
             inspection_month = convert_to_format(data['inspection_month'])
             customer = Customer.objects.get(name=data['customer_name'])
-            customer = InspectionRecord.objects.get(customer=customer, inspection_month=inspection_month)
-            report = InspectionResultFile.objects.get(inspectrecord=customer)
+            record = InspectionRecord.objects.get(customer=customer, inspection_month=inspection_month)
+            report = InspectionResultFile.objects.get(inspectrecord=record)
             if os.path.exists(report.file.path):
                 return FileResponse(open(report.file.path, 'rb'), content_type='application/pdf')
             else:
