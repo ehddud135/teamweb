@@ -271,3 +271,5 @@ pyrightconfig.json
 # End of https://www.toptal.com/developers/gitignore/api/python,django
 prod.env
 seteamweb/.env
+
+report_save_path/
