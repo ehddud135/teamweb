@@ -272,4 +272,8 @@ pyrightconfig.json
 prod.env
 seteamweb/.env
 
+# Ignore the report save path
 report_save_path/
+
+# Ignore the credentials.json file
+./credentials.json
