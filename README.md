@@ -72,3 +72,15 @@ docker compose -f docker-compose-debug.yml up --build -d
 teamweb/prod.env
 teamweb/seteamweb/.env
 ```
+
+
+### mail send 기능 사용
+
+Gmail 기준으로 설명 진행 .env 파일에 하기 내용 추가
+```env
+# Google contact api 사용을 위한 credential.json 파일 추가
+# Gmail 사용을 위한 계정정보
+mail_id = ''
+mail_password = ''
+```
+

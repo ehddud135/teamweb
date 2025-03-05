@@ -276,4 +276,5 @@ seteamweb/.env
 report_save_path/
 
 # Ignore the credentials.json file
-./credentials.json
+credentials.json
+token.pickle
