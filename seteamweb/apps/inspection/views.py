@@ -159,10 +159,11 @@ def inspect_significant_by_result(request):
         if request.method == 'POST':
             data = json.loads(request.body)
             customer = Customer.objects.get(name=data.get('customer_name'))
-            package = Packages.objects.get(name=data.get('package_name'), platform=data.get('platform').lower())
-            if data.get('platform') == 'Android':
+            os = "android" if data.get('platform') == 'Android' else "iOS"
+            package = Packages.objects.get(name=data.get('package_name'), platform=os)
+            if os == 'android':
                 item = AndroidInspectResult.objects.get(customer=customer, package=package, inspection_date=data.get('inspection_date'))
-            elif data.get('platform') == 'iOS':
+            elif os == 'iOS':
                 item = iOSInspectResult.objects.get(customer=customer, package=package, inspection_date=data.get('inspection_date'))
             else:
                 return JsonResponse({"error": "Please check Platform"}, status=405)
