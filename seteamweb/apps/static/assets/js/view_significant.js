@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const data = await response.json();
             if (response.ok) {
-                document.getElementById('significantContent').textContent = data.significant;
+                document.getElementById('significantContent').innerText = data.significant;
                 modal.show();
             } else {
                 alert(`Error: ${data.error}`);

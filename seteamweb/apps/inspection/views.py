@@ -166,7 +166,7 @@ def inspect_significant_by_result(request):
                 item = iOSInspectResult.objects.get(customer=customer, package=package, inspection_date=data.get('inspection_date'))
             else:
                 return JsonResponse({"error": "Please check Platform"}, status=405)
-            return JsonResponse({"significant": item.significant}, status=200)
+            return JsonResponse({"significant": item.significant}, status=200, json_dumps_params={'ensure_ascii': False, "indent": 2})
         else:
             return JsonResponse({"error": "Please check Method"}, status=405)
 
