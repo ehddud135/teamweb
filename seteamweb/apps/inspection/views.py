@@ -158,16 +158,16 @@ def inspect_significant_by_result(request):
     try:
         if request.method == 'POST':
             data = json.loads(request.body)
-            # {'package_name': 'com.finnq.f1', 'inspection_date': '2025-02-24', 'customer_name': '핀크', 'platform': 'iOS'}
             customer = Customer.objects.get(name=data.get('customer_name'))
-            package = Packages.objects.get(name=data.get('package_name'), platform=data.get('platform'))
-            if data.get('platform') == 'Android':
+            os = "android" if data.get('platform') == 'Android' else "iOS"
+            package = Packages.objects.get(name=data.get('package_name'), platform=os)
+            if os == 'android':
                 item = AndroidInspectResult.objects.get(customer=customer, package=package, inspection_date=data.get('inspection_date'))
-            elif data.get('platform') == 'iOS':
+            elif os == 'iOS':
                 item = iOSInspectResult.objects.get(customer=customer, package=package, inspection_date=data.get('inspection_date'))
             else:
                 return JsonResponse({"error": "Please check Platform"}, status=405)
-            return JsonResponse({"significant": item.significant}, status=200)
+            return JsonResponse({"significant": item.significant}, status=200, json_dumps_params={'ensure_ascii': False, "indent": 2})
         else:
             return JsonResponse({"error": "Please check Method"}, status=405)
 
