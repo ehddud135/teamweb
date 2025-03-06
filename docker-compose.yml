@@ -20,7 +20,11 @@ services:
     env_file: prod.env
     ports:
       - "8000:8000"
+    volumes:
+      - report_file:/app/seteamweb/report_save_path
 
 volumes:
   postgres_data:
+    driver: local
+  report_file:
     driver: local
