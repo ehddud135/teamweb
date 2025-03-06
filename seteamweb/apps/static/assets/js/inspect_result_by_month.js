@@ -37,8 +37,8 @@ async function fetchAndRenderData(month) {
     picked_year = date[0]
     picked_month = date[1]
     month = convertToYYYYMM(picked_month)
-    picked_date = picked_year + "년 " + month
-    document.getElementById("inspection-month").textContent = `${picked_date}월 정기 점검 결과`;
+    picked_date = picked_year + "년 " + month + "월"
+    document.getElementById("inspection-month").textContent = `${picked_date} 정기 점검 결과`;
 
     function renderTable(pageData, id) {
         // 테이블에 데이터 추가
