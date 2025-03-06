@@ -35,19 +35,6 @@ def inspect_schedule_list_api(_, schedule, month):
     return JsonResponse(list(items), safe=False)
 
 
-def customer_delete(request, item_name):
-    context = {}
-    try:
-        if request.method == "DELETE":
-            item = get_object_or_404(Customer, name=item_name)
-            item.delete()
-            return HttpResponse(status=204)  # 성공, 내용 없음 응답
-        return HttpResponse("Invalid request method", status=400)
-    except:
-        html_template = loader.get_template('home/page-500.html')
-        return HttpResponse(html_template.render(context, request))
-
-
 def inspection_schedule_edit(request):
     try:
         if request.method == 'POST':
