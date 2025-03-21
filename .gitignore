@@ -278,3 +278,4 @@ report_save_path/
 # Ignore the credentials.json file
 credentials.json
 token.pickle
+*.txt
