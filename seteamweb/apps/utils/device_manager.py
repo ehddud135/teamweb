@@ -1,6 +1,6 @@
 import os
-from decouple import config
 from jira import JIRA
+from decouple import config
 
 
 class DeviceManagement:

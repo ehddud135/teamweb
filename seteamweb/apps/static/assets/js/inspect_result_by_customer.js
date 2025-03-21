@@ -40,7 +40,9 @@ async function fetchAndRenderData(customer_name) {
             options = optionsByPlatform(item.platform, item)
             if (item.significant) {
                 options += `<td>
-                                <button class="btn btn-info pdf-view-btn" data-name="${item.name}" pdf-view-url="/inspection-report/view">View</button>
+                                <button class="btn btn-info signifi-btn" url="/inspection-significant-per-app"
+                                data-package-name=${item.package_name} data-inspection-date=${item.inspection_date}
+                                data-customer-name=${customer_name} data-platform=${item.platform}>View</button>
                             </td>`;
             }
             const row = `

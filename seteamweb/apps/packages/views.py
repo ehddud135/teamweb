@@ -10,21 +10,28 @@ from apps.utils.utils import convert_datetime
 
 def package_append(request):
     context = {}
-    print(request.POST)
     try:
         if request.method == 'POST':
             if request.content_type == 'multipart/form-data':
-                package_name = request.POST.get("package-name")
-                customer_name = request.POST.get("customer-name")
-                platform = request.POST.get("platform")
-                input_date = request.POST.get("license_expire_date")
-                license_expire_date = convert_datetime(input_date)
-                if customer_name and package_name and platform:
+                package_name_list = request.POST.get("package-name").splitlines()
+                for package_name in package_name_list:
+                    package_name = package_name.strip()
+                    customer_name = request.POST.get("customer-name")
+                    platform = request.POST.get("platform")
+                    input_date = request.POST.get("license_expire_date")
+                    license_expire_date = convert_datetime(input_date)
                     customer = Customer.objects.get(name=customer_name)
-                    Packages.objects.create(name=package_name, customer=customer, license_expire_date=license_expire_date, platform=platform)
-                    return JsonResponse({'status': 'success', "message": "Success"}, status=200)
-                else:
-                    return JsonResponse({"error": "Please check your email and name"}, status=405)
+                    if Packages.objects.filter(name=package_name, platform=platform, customer=customer).exists():
+                        error_msg = f"Please check duplication package : {package_name}"
+                        return JsonResponse({"error": error_msg}, status=405)
+                    else:
+                        if customer_name and package_name and platform:
+                            Packages.objects.create(name=package_name, customer=customer, license_expire_date=license_expire_date, platform=platform)
+                        else:
+                            error_msg = f"Please check customer name and platform : {customer_name}, {platform}"
+                            return JsonResponse({"error": error_msg}, status=405)
+                return JsonResponse({'status': 'success', "message": "Success"}, status=200)
+
         return HttpResponse({"error": "Invalid request method"}, status=405)
     except:
         html_template = loader.get_template('home/page-500.html')
@@ -37,14 +44,11 @@ def package_list_api(request):
 
 
 def package_list_by_customer(request, customer_name, platform):
-    print(request)
     items = Packages.objects.filter(customer=customer_name, platform=platform).values('name')
-    print(items)
     return JsonResponse(list(items), safe=False)
 
 
 def package_delete(request, item_name, item_platform):
-    print(request)
     context = {}
     try:
         if request.method == "DELETE":

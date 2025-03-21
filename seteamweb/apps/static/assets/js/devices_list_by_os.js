@@ -1,112 +1,130 @@
+
 async function fetchAndRenderData() {
     // API 호출
-    const platform = document.getElementById('platform');
-    const response = await fetch(`/devices-list-api/${platform.value}`);
-    const data = await response.json();
-    
+    const platform = document.getElementById('platform')
+    const response = await fetch(`/devices-list-api/${platform.value}`)
+    const data = await response.json()
+    let filteredData = data;
+
     // 페이지네이션 설정
-    const itemsPerPage = 10; // 한 페이지에 표시할 항목 수
-    let currentPage = 1;
+    const itemsPerPage = 10
+    // 한 페이지에 표시할 항목 수
+    let currentPage = 1
 
     function getPaginatedData(page) {
-        const start = (page - 1) * itemsPerPage;
-        const end = start + itemsPerPage;
-        return data.slice(start, end);
+        const start = (page - 1) * itemsPerPage
+        const end = start + itemsPerPage
+        return filteredData.slice(start, end)
     }
 
     function renderTable(pageData) {
         // 테이블에 데이터 추가
-        const tableBody = document.getElementById('table-body');
-        tableBody.innerHTML = '';  // 기존 데이터를 초기화
-        
+        const tableBody = document.getElementById('table-body')
+        tableBody.innerHTML = ''
+        // 기존 데이터를 초기화
+
         pageData.forEach(item => {
-            rooting = item.rooting ? 'O' : 'X';
+            rooting = item.rooting ? 'O': 'X'
             const row = `
-                <tr>
-                    <td>${item.number}</td>
-                    <td>${item.name}</td>
-                    <td>${item.version}</td>
-                    <td>${item.architecture}</td>
-                    <td>${rooting}</td>
-                </tr>
-            `;
-            tableBody.innerHTML += row;
-        });
+            <tr>
+            <td>${item.number} </td>
+            <td>${item.name} </td>
+            <td>${item.version} </td>
+            <td>${item.architecture} </td>
+            <td>${rooting} </td>
+            </tr> `
+            tableBody.innerHTML += row
+        })
     }
 
     // 페이지네이션 버튼 렌더링
     function renderPagination() {
-        const pagination = document.getElementById('pagination');
-        pagination.innerHTML = ''; // 기존 버튼 초기화
-        const totalPages = Math.ceil(data.length / itemsPerPage); // 총 페이지 수
+        const pagination = document.getElementById('pagination')
+        pagination.innerHTML = ''
+        // 기존 버튼 초기화
+        const totalPages = Math.ceil(filteredData.length / itemsPerPage)
+        // 총 페이지 수
 
         // "Previous" 버튼
         const prevButton = `
-            <li class="page-item ${currentPage === 1 ? 'disabled' : ''}">
-                <a class="page-link" href="#" data-page="${currentPage - 1}">Previous</a>
-            </li>
-        `;
-        pagination.innerHTML += prevButton;
+        <li class = "page-item ${currentPage === 1 ? 'disabled' : ''}">
+        <a class = "page-link" href = "#" data-page = "${currentPage - 1}"> Previous </a>
+        </li> `
+        pagination.innerHTML += prevButton
 
         // 페이지 번호 버튼
         for (let i = 1; i <= totalPages; i++) {
             const pageButton = `
-                <li class="page-item ${i === currentPage ? 'active' : ''}">
-                    <a class="page-link" href="#" data-page="${i}">${i}</a>
-                </li>
-            `;
-            pagination.innerHTML += pageButton;
+            <li class = "page-item ${i === currentPage ? 'active' : ''}" >
+            <a class = "page-link" href = "#" data-page = "${i}" >${i} </a>
+            </li> `
+            pagination.innerHTML += pageButton
         }
 
         // "Next" 버튼
         const nextButton = `
-            <li class="page-item ${currentPage === totalPages ? 'disabled' : ''}">
-                <a class="page-link" href="#" data-page="${currentPage + 1}">Next</a>
-            </li>
-        `;
-        pagination.innerHTML += nextButton;
+        <li class = "page-item ${currentPage === totalPages ? 'disabled' : ''}" >
+        <a class = "page-link" href = "#" data-page = "${currentPage + 1}" > Next </a>
+        </li> `
+        pagination.innerHTML += nextButton
     }
 
     // 페이지네이션 정보 업데이트
     function updatePaginationInfo() {
-        const start = (currentPage - 1) * itemsPerPage + 1;
-        const end = Math.min(currentPage * itemsPerPage, data.length);
-        const paginationInfo = document.getElementById('pagination-info');
-        paginationInfo.innerHTML = `Showing <b>${start}</b> to <b>${end}</b> out of <b>${data.length}</b> entries`;
+        const start = (currentPage - 1) * itemsPerPage + 1
+        const end = Math.min(currentPage * itemsPerPage, filteredData.length)
+        const paginationInfo = document.getElementById('pagination-info')
+        paginationInfo.innerHTML = `Showing <b>${start} </b> to <b>${end} </b > out of <b>${data.length} </b> entries`
     }
 
     // 페이지 변경 핸들러
     function handlePageChange(event) {
-        event.preventDefault();
-        const page = parseInt(event.target.getAttribute('data-page'));
+        event.preventDefault()
+        const page = parseInt(event.target.getAttribute('data-page'))
         if (!isNaN(page)) {
-            currentPage = page;
-            updateTableAndPagination();
+            currentPage = page
+            updateTableAndPagination()
         }
     }
 
     // 테이블과 페이지네이션 갱신
     function updateTableAndPagination() {
-        const pageData = getPaginatedData(currentPage);
-        renderTable(pageData);
-        renderPagination();
-        updatePaginationInfo();
+
+        const pageData = getPaginatedData(currentPage)
+        renderTable(pageData)
+        renderPagination()
+        updatePaginationInfo()
 
         // 페이지네이션 버튼 클릭 이벤트 추가
         document.querySelectorAll('#pagination .page-link').forEach(button => {
-            button.addEventListener('click', handlePageChange);
-        });
+            button.addEventListener('click', handlePageChange)
+        })
     }
 
+    function handleSearch(event) {
+        const searchTerm = event.target.value.toLowerCase();
+        console.log(event.target.value)
+        filteredData = data.filter(item => 
+            item.name.toLowerCase().includes(searchTerm) ||
+            item.version.toLowerCase().includes(searchTerm)
+        );
+        currentPage = 1; // 검색 시 첫 페이지로 이동
+        updateTableAndPagination();
+    }
+
+    document.getElementById('search-input').addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            handleSearch(event);
+        }
+    });
+    
     // 초기 렌더링
-    updateTableAndPagination();   
+    updateTableAndPagination()
 }
 
 // 페이지 로드 시 데이터 가져오기
-window.onload = fetchAndRenderData;
+window.onload = fetchAndRenderData
 
 // 디바이스 리스트 OS 변경 시 데이터 가져오기
-document.getElementById('platform').addEventListener('change', fetchAndRenderData);
-
-
-
+document.getElementById('platform').addEventListener('change', fetchAndRenderData)
