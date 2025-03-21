@@ -89,6 +89,7 @@ async function fetchAndRenderData() {
 
     // 테이블과 페이지네이션 갱신
     function updateTableAndPagination() {
+
         const pageData = getPaginatedData(currentPage)
         renderTable(pageData)
         renderPagination()
