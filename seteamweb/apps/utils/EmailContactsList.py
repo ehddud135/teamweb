@@ -80,8 +80,3 @@ class EmailContactsList():
                     'Labels': ', '.join(label_names)
                 })
         return data
-
-
-em = EmailContactsList()
-df = pd.DataFrame(em.get_data())
-print(df)

@@ -11,13 +11,13 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-2">
     <div class="d-block mb-4 mb-md-0">
         <h2 class="h4">Customer E-Mail List</h2>
-        <p class="mb-0">솔루션별 공문 전달 용.</p>
+        <p class="mb-0">솔루션별 공문 전달 이메일 리스트</p>
     </div>
 </div>
-<div class="d-flex align-items-center">
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-3">
     <!-- Search form -->
     <form class="navbar-search form-inline" id="navbar-search-main">
-      <div class="input-group input-group-merge search-bar mb-3">
+      <div class="input-group input-group-merge search-bar">
           <span class="input-group-text" id="topbar-addon">
             <svg class="icon icon-xs" x-description="Heroicon name: solid/search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
               <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
@@ -27,19 +27,25 @@
       </div>
     </form>
     <!-- / Search form -->
+     <form action="/contact-list-update" method="POST">
+        {% csrf_token %}
+        {% if request.user.is_superuser %}
+            <button type="submit" class="btn btn-gray-800" action="/contatct-update-list">
+                Contatct List Update
+            </button>
+        {% endif %}
+     </form>
 </div>
 
 <div class="card card-body border-0 shadow table-wrapper table-responsive">
     <table class="table table-hover">
         <thead class="thead-light">
             <tr>
-                <th class="border-gray-200 rounded-start">#</th>
-                <th class="border-gray-200">Name</th>						
-                <th class="border-gray-200">담당자</th>
+                <th class="border-gray-200 rounded-start">Name</th>						
+                <th class="border-gray-200">E-Mail</th>
                 <th class="border-gray-200">패키지 수</th>
-                <th class="border-gray-200">등록일</th>
-                <th class="border-gray-200">점검 주기</th>
-                <th class="border-gray-200 rounded-end">삭제 / 수정</th>
+                <th class="border-gray-200">Organization</th>
+                <th class="border-gray-200">Labels</th>
             </tr>
         </thead>
         <tbody id="table-body"></tbody>
@@ -54,90 +60,10 @@
     </div>
 </div>
 
-<div class="modal fade" id="modify-modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-form" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-        <div class="modal-content">
-            <div class="modal-body p-0">
-                <div class="card p-3 p-lg-4">
-                    <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
-                    <div class="text-center text-md-center mb-4 mt-md-0">
-                        <h1 class="mb-0 h4">정기 점검 일정 변경</h1>
-                    </div>
-                    <form id="modifyForm" action="/inspection-schedule-modify" class="mt-4" method="POST">
-                        {% csrf_token %}
-                        <div class="mb-1">
-                            <label id="modify-customer-name-label" for="modify-customer-name-label">Customer Name : </label>
-                            <input type="hidden" name="modify-customer-name" id="modify-customer-name" value="">
-                        </div>
-                        <div class="mb-4">
-                            <label class="my-1 me-2" for="inspection-period">정기 점검 주기</label>
-                            <select class="form-select" name="inspection-period"id="inspection-period" aria-label="Default select example">
-                                <option value="monthly">Monthly</option>
-                                <option value="quarter">Quarter</option>
-                                <option value="half">Half</option>
-                            </select>
-                        </div>
-                        <div class = "row mb-4">
-                            <div class="mb-2">
-                                <span class="h6 fw-bold">정기 점검 진행 월</span>
-                            </div>
-                            <div class="col-lg-3 col-md-6">
-                                <!-- Checkboxes -->
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" name="months" value="January" id="January">1월</input>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" name="months" value="February" id="February">2월</input>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" name="months" value="March" id="March">3월</input>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" name="months" value="April" id="April">4월</input>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" name="months" value="May" id="May">5월</input>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" name="months" value="June" id="June">6월</input>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-6">
-                                <!-- Checkboxes -->
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" name="months" value="July" id="July">7월</input>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" name="months" value="August" id="August">8월</input>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" name="months" value="September" id="September">9월</input>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" name="months" value="October" id="October">10월</input>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" name="months" value="November" id="November">11월</input>
-                                </div>
-                                <div class="form-check mb-2">
-                                    <input class="form-check-input" type="checkbox" name="months" value="December" id="December">12월</input>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="modal-footer d-flex justify-content-center pt-3 pb-0">
-                            <button type="submit" class="btn btn-gray-800">Append</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 {% endblock content %}
 
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script src="{% static 'assets/vendor/sweetalert2/sweetalert2.all.min.js'%}"></script>
-<script src="{% static 'assets/js/customer_list.js' %}"></script>
+<script src="{% static 'assets/js/contact_email_list.js' %}"></script>
 {% endblock javascripts %}
