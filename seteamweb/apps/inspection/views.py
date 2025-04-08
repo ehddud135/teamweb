@@ -168,16 +168,10 @@ def inspect_significant_by_monthly_result(request):
     try:
         if request.method == 'POST':
             data = json.loads(request.body)
+            print(data)
             customer = Customer.objects.get(name=data.get('customer_name'))
-            os = "android" if data.get('platform') == 'Android' else "iOS"
-            package = Packages.objects.get(name=data.get('package_name'), platform=os)
-            if os == 'android':
-                item = AndroidInspectResult.objects.get(customer=customer, package=package, inspection_date=data.get('inspection_date'))
-            elif os == 'iOS':
-                item = iOSInspectResult.objects.get(customer=customer, package=package, inspection_date=data.get('inspection_date'))
-            else:
-                return JsonResponse({"error": "Please check Platform"}, status=405)
-            return JsonResponse({"significant": item.significant}, status=200, json_dumps_params={'ensure_ascii': False, "indent": 2})
+            item = InspectionRecord.objects.get(customer=customer, inspection_date=data.get('inspection_date'))
+            return JsonResponse({"significant": item.details}, status=200, json_dumps_params={'ensure_ascii': False, "indent": 2})
         else:
             return JsonResponse({"error": "Please check Method"}, status=405)
 

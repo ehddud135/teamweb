@@ -126,6 +126,24 @@
 </div>
 
 
+<!-- Modal Content -->
+<div class="modal fade" id="significantModal" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="h6 modal-title" id="significantModalLabel">특이사항</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="significantContent"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link text-gray-600 ms-auto" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 {% endblock content %}
@@ -136,4 +154,5 @@
 <script src="{% static 'assets/js/inspect_result_by_month.js' %}"></script>
 <script src="{% static 'assets/js/inspect_result_append.js' %}"></script>
 <script src="{% static 'assets/js/inspect_report_view_download.js' %}"></script>
+<script src="{% static 'assets/js/view_significant.js' %}"></script>
 {% endblock javascripts %}

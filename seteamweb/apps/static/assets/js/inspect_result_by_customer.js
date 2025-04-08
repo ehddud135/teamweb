@@ -33,7 +33,7 @@ async function fetchAndRenderData(customer_name) {
 
     function renderTable(pageData) {
         // 테이블에 데이터 추가
-        const tableBody = document.getElementById("table-body-by-customer");
+        const tableBody = document.getElementById("customer-table-body");
         tableBody.innerHTML = '';  // 기존 데이터를 초기화
 
         pageData.forEach(item => {
