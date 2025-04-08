@@ -32,9 +32,6 @@ document.addEventListener('DOMContentLoaded', function (){
         form.addEventListener('submit', async function (e) {
             e.preventDefault();
             const formData = new FormData(form);
-            for (const [key, value] of formData) {
-                console.log(`${key}: ${value}`);
-              }
             try {
                 const response = await fetch(form.action, {
                     method: form.method,
@@ -44,7 +41,6 @@ document.addEventListener('DOMContentLoaded', function (){
                     body: formData
                 });
                 const data = await response.json();
-                console.log(data)
 
                 if (response.ok) {
                     swalWithBootstrapButtons.fire({
@@ -60,7 +56,6 @@ document.addEventListener('DOMContentLoaded', function (){
                             modal.hide();
                         }
                     });
-                    console.log('Success:', data);
                 } else {
                     swalWithBootstrapButtons.fire(
                         'Warning alert',

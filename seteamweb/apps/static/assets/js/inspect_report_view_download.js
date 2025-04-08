@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function (){
             }).catch(error => console.error('Error fetching PDF:', error));
         }
         else if (event.target.classList.contains('download-btn')){
-            console.log("click download btn")
             const downloadUrl = event.target.getAttribute('pdf-download-url')
             const customer_name = event.target.getAttribute('data-name')
             let downalod_file_name = `${inspection_month}_${customer_name}_정기점검_확인서.pdf`

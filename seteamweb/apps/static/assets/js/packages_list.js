@@ -105,7 +105,6 @@ async function fetchAndRenderData() {
 
     function handleSearch(event) {
         const searchTerm = event.target.value.toLowerCase();
-        console.log(event.target.value)
         filteredData = filteredData.filter(item => 
             item.name.toLowerCase().includes(searchTerm) ||
             item.customer.toLowerCase().includes(searchTerm)

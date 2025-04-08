@@ -7,7 +7,6 @@ const swalWithBootstrapButtons = Swal.mixin({
 });
 
 document.addEventListener('DOMContentLoaded', function (){
-    // console.log(document)
     const modal_form = document.getElementById('inspect-result-modal-form')
     const modal = new bootstrap.Modal(modal_form)
     const form = document.getElementById('resultAppendForm');
@@ -18,10 +17,8 @@ document.addEventListener('DOMContentLoaded', function (){
     });
 
     document.querySelectorAll('.open-modal').forEach(btn =>{
-        // console.log(btn)
         btn.addEventListener('click', function(){
             platform = this.getAttribute('data-target')
-            // console.log(platform)
             if (form) {
                 if (typeof customer_name === 'undefined') {
                     swalWithBootstrapButtons.fire(
@@ -36,7 +33,6 @@ document.addEventListener('DOMContentLoaded', function (){
                     document.getElementById("customer-name").value = customer_name
                     loadPakcageListByCustomer(customer_name, package_name, platform)
                     createCheckBoxes(platform);
-                    // console.log(checkBoxes)
                     modal.show();
                 }
             } else {
@@ -59,7 +55,6 @@ document.addEventListener('DOMContentLoaded', function (){
                 body: formData
             });
             const data = await response.json();
-            // console.log(data)
 
             if (response.ok) {
                 swalWithBootstrapButtons.fire({
@@ -75,7 +70,6 @@ document.addEventListener('DOMContentLoaded', function (){
                         modal_form.querySelector('#resultAppendForm').reset();
                     }
                 });
-                console.log('Success:', data);
             } else {
                 swalWithBootstrapButtons.fire(
                     'Warning alert',

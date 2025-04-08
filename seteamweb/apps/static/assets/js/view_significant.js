@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 bodyData.platform = event.target.dataset.platform;
                 bodyData.package_name = event.target.dataset.packageName;
             };
-            console.log(bodyData)
             jsonData = JSON.stringify(bodyData)
             const modal = new bootstrap.Modal(document.getElementById('significantModal'))
             if (event.target.classList.contains('signifi-btn')) {

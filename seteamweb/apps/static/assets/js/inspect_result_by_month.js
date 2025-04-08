@@ -53,7 +53,6 @@ async function fetchAndRenderData(month) {
                 significatn_btn += `<button class="btn btn-info signifi-btn" url="/inspection-significant-per-monthly-result"
                                 data-inspection-date=${item.inspection_date} data-customer-name=${item.name}>View</button>`;
             }
-            console.log(item);
             const row = `
                 <tr>
                     <td>${item_id}</td>
