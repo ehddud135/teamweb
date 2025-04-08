@@ -29,6 +29,8 @@ def inspect_schedule_list_api(_, schedule, month):
             else:
                 item['inspection_date'] = inspect_record.inspection_date
             item['manager'] = customer.manager.name
+            item['inspect_significant'] = inspect_record.details
+            print(item)
         except Exception as e:
             print(e)
 
@@ -142,6 +144,27 @@ def inspect_result_by_customer(_, customer_name):
 
 
 def inspect_significant_by_result(request):
+    try:
+        if request.method == 'POST':
+            data = json.loads(request.body)
+            customer = Customer.objects.get(name=data.get('customer_name'))
+            os = "android" if data.get('platform') == 'Android' else "iOS"
+            package = Packages.objects.get(name=data.get('package_name'), platform=os)
+            if os == 'android':
+                item = AndroidInspectResult.objects.get(customer=customer, package=package, inspection_date=data.get('inspection_date'))
+            elif os == 'iOS':
+                item = iOSInspectResult.objects.get(customer=customer, package=package, inspection_date=data.get('inspection_date'))
+            else:
+                return JsonResponse({"error": "Please check Platform"}, status=405)
+            return JsonResponse({"significant": item.significant}, status=200, json_dumps_params={'ensure_ascii': False, "indent": 2})
+        else:
+            return JsonResponse({"error": "Please check Method"}, status=405)
+
+    except Exception as e:
+        return JsonResponse({"error": e}, status=405)
+
+
+def inspect_significant_by_monthly_result(request):
     try:
         if request.method == 'POST':
             data = json.loads(request.body)

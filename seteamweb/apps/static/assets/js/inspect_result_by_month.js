@@ -47,7 +47,13 @@ async function fetchAndRenderData(month) {
         let item_id = 0;
 
         pageData.forEach(item => {
+            significatn_btn = ``;
             item_id++;
+            if (item.inspect_significant) {
+                significatn_btn += `<button class="btn btn-info signifi-btn" url="/inspection-significant-per-monthly-result"
+                                data-inspection-date=${item.inspection_date} data-customer-name=${item.name}>View</button>`;
+            }
+            console.log(item);
             const row = `
                 <tr>
                     <td>${item_id}</td>
@@ -57,6 +63,9 @@ async function fetchAndRenderData(month) {
                     <td>${new Date(item.inspection_date).toLocaleDateString()}</td>
                     <td>
                         <button class="btn btn-outline-success append-btn" data-name="${item.name}">등 록</button>
+                    </td>
+                    <td>
+                    ${significatn_btn}
                     </td>
                     <td>
                         <button class="btn btn-info pdf-view-btn" data-name="${item.name}" pdf-view-url="/inspection-report/view">View</button>
