@@ -30,7 +30,6 @@ def inspect_schedule_list_api(_, schedule, month):
                 item['inspection_date'] = inspect_record.inspection_date
             item['manager'] = customer.manager.name
             item['inspect_significant'] = inspect_record.details
-            print(item)
         except Exception as e:
             print(e)
 
@@ -45,9 +44,7 @@ def inspection_schedule_edit(request):
                 month_list = request.POST.getlist('months')
                 inspect_period = request.POST.get('inspection-period')
                 customer = Customer.objects.get(name=customer_name)
-                schedule, is_create = InspectionSchedule.objects.get_or_create(name=customer)
-                if is_create == True:
-                    print("새 스케쥴 생성")
+                schedule, _is_create = InspectionSchedule.objects.get_or_create(name=customer)
                 edit_inspection_schedule(schedule, month_list, inspect_period)
 
                 return JsonResponse({'status': 'success', "message": "Success"}, status=200)
@@ -115,11 +112,15 @@ def inspection_result_by_app_append(request):
 def inspection_report_view_or_download(request, view_or_download):
     try:
         if request.method == 'POST':
+            print(view_or_download)
             data = json.loads(request.body)
             inspection_month = convert_to_format(data['inspection_month'])
             customer = Customer.objects.get(name=data['customer_name'])
+            print(inspection_month)
             record = InspectionRecord.objects.get(customer=customer, inspection_month=inspection_month)
+            print(record)
             report = InspectionResultFile.objects.get(inspectrecord=record)
+            print(report)
             if os.path.exists(report.file.path):
                 return FileResponse(open(report.file.path, 'rb'), content_type='application/pdf')
             else:

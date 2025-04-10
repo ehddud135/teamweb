@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function (){
-    const inspection_months = document.getElementById('inspection-month').textContent.split(' ');
-    const inspection_month = inspection_months[0] + " " + inspection_months[1]
     document.addEventListener('click', function (event) {
+        const inspection_months = document.getElementById('inspection-month').textContent.split(' ');
+        const inspection_month = inspection_months[0] + " " + inspection_months[1]
         if (event.target.classList.contains('pdf-view-btn')){
             const viewUrl = event.target.getAttribute('pdf-view-url')
             const customer_name = event.target.getAttribute('data-name')
