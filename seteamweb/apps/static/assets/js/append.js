@@ -12,8 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
         form.addEventListener('submit', async function (e) {
             e.preventDefault();
             const formData = new FormData(form);
-        
-
             try {
                 const response = await fetch(form.action, {
                     method: form.method,
@@ -23,7 +21,6 @@ document.addEventListener('DOMContentLoaded', function () {
                     body: formData
                 });
                 const data = await response.json();
-
                 if (response.ok) {
                     swalWithBootstrapButtons.fire({
                         icon: 'success',

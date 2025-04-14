@@ -69,10 +69,11 @@ def inspection_result_append(request):
                 customer.save()
                 report_title = f"{request.POST.get('title')}.pdf"
                 report_file = request.FILES.get('inspection_result_file')
-                insepction_report, is_create = InspectionResultFile.objects.get_or_create(inspectrecord=customer)
-                insepction_report.title = report_title
-                insepction_report.file = report_file
-                insepction_report.save()
+                if report_file:
+                    insepction_report, is_create = InspectionResultFile.objects.get_or_create(inspectrecord=customer)
+                    insepction_report.title = report_title
+                    insepction_report.file = report_file
+                    insepction_report.save()
                 return JsonResponse({'status': 'success', "message": "Success"}, status=200)
             else:
                 return JsonResponse({"error": "Please check your email and name"}, status=405)
@@ -112,15 +113,11 @@ def inspection_result_by_app_append(request):
 def inspection_report_view_or_download(request, view_or_download):
     try:
         if request.method == 'POST':
-            print(view_or_download)
             data = json.loads(request.body)
             inspection_month = convert_to_format(data['inspection_month'])
             customer = Customer.objects.get(name=data['customer_name'])
-            print(inspection_month)
             record = InspectionRecord.objects.get(customer=customer, inspection_month=inspection_month)
-            print(record)
             report = InspectionResultFile.objects.get(inspectrecord=record)
-            print(report)
             if os.path.exists(report.file.path):
                 return FileResponse(open(report.file.path, 'rb'), content_type='application/pdf')
             else:

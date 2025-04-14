@@ -27,6 +27,16 @@ document.addEventListener('DOMContentLoaded', function (){
                 document.getElementById("customer-name").value = customer_name
                 document.getElementById("inspect-month-label").textContent = `점검 월 : ${inspection_month}`;
                 document.getElementById("inspect-month").value = inspection_month
+                if (event.target.dataset.inspectResult !== "점검 전"){
+                    document.getElementById("inspection_date").value = event.target.dataset.date
+                    document.getElementById("inspect_significant").value = event.target.dataset.significant
+                    document.getElementById("inspection_result_file").required = false
+                }
+                else{
+                    document.getElementById("inspection_date").value = ""
+                    document.getElementById("inspect_significant").value = ""
+                    document.getElementById("inspection_result_file").required = true
+                }
                 modal.show();
             }
         })

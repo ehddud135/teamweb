@@ -7,6 +7,14 @@ function convertToYYYYMM(dateString) {
     return month
 }
 
+function formatDateToDMY(dateStr) {
+    const date = new Date(dateStr);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // 0-indexed
+    const year = date.getFullYear();
+    return `${month}/${day}/${year}`;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     let date = new Date;
     let year = date.getFullYear();
@@ -47,10 +55,11 @@ async function fetchAndRenderData(month) {
         let item_id = 0;
 
         pageData.forEach(item => {
-            significatn_btn = ``;
+            significant_btn = ``;
+            convert_date = formatDateToDMY(new Date(item.inspection_date).toLocaleDateString())
             item_id++;
             if (item.inspect_significant) {
-                significatn_btn += `<button class="btn btn-info signifi-btn" url="/inspection-significant-per-monthly-result"
+                significant_btn += `<button class="btn btn-info signifi-btn" url="/inspection-significant-per-monthly-result"
                                 data-inspection-date=${item.inspection_date} data-customer-name=${item.name}>View</button>`;
             }
             const row = `
@@ -61,10 +70,13 @@ async function fetchAndRenderData(month) {
                     <td>${item.inspect_result}</td>
                     <td>${new Date(item.inspection_date).toLocaleDateString()}</td>
                     <td>
-                        <button class="btn btn-outline-success append-btn" data-name="${item.name}">등 록</button>
+                        <button class="btn btn-outline-success append-btn" data-name="${item.name}" data-inspect-result="${item.inspect_result}"
+                            data-significant="${item.inspect_significant}" data-date="${convert_date}">
+                            등록 / 수정
+                        </button>
                     </td>
                     <td>
-                    ${significatn_btn}
+                    ${significant_btn}
                     </td>
                     <td>
                         <button class="btn btn-info pdf-view-btn" data-name="${item.name}" pdf-view-url="/inspection-report/view">View</button>
