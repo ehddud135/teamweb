@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
 async function fetchAndRenderData(customer_name) {
     // API 호출
     document.getElementById("inspection-customer").textContent = `${customer_name} 정기 점검 결과`;
-
+    
     function renderTable(pageData) {
         // 테이블에 데이터 추가
         const tableBody = document.getElementById("customer-table-body");
@@ -41,8 +41,8 @@ async function fetchAndRenderData(customer_name) {
             if (item.significant) {
                 options += `<td>
                                 <button class="btn btn-info signifi-btn" url="/inspection-significant-per-app"
-                                data-package-name=${item.package_name} data-inspection-date=${item.inspection_date}
-                                data-customer-name=${customer_name} data-platform=${item.platform}>View</button>
+                                data-package-name="${item.package_name}" data-inspection-date="${item.inspection_date}"
+                                data-customer-name="${customer_name}" data-platform="${item.platform}">View</button>
                             </td>`;
             }
             const row = `
