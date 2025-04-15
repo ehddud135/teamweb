@@ -10,8 +10,10 @@ document.addEventListener('DOMContentLoaded', function (){
     const modal_form = document.getElementById('inspect-result-modal-form')
     const modal = new bootstrap.Modal(modal_form)
     const form = document.getElementById('resultAppendForm');
+    form.action = "/inspect-result-by-app-append"
+    form.method = "POST"
     const customerPicker = document.getElementById('inspection-customer-picker');
-    const package_name = document.getElementById('package_name');
+    const select_packages = document.getElementById('select_packages');
     customerPicker.addEventListener('change', (event) => {
         customer_name = event.target.value
     });
@@ -20,6 +22,8 @@ document.addEventListener('DOMContentLoaded', function (){
         btn.addEventListener('click', function(){
             platform = this.getAttribute('data-target')
             if (form) {
+                console.log(form)
+                
                 if (typeof customer_name === 'undefined') {
                     swalWithBootstrapButtons.fire(
                         'Warning alert',
@@ -31,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function (){
                     document.getElementById("select-platform-label").textContent = `OS : ${platform}`
                     document.getElementById("select-platform").value = platform
                     document.getElementById("customer-name").value = customer_name
-                    loadPakcageListByCustomer(customer_name, package_name, platform)
+                    loadPakcageListByCustomer(customer_name, select_packages, platform)
                     createCheckBoxes(platform);
                     modal.show();
                 }
@@ -52,7 +56,7 @@ document.addEventListener('DOMContentLoaded', function (){
                 headers: {
                     'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
                 },
-                body: formData
+                body:  formData
             });
             const data = await response.json();
 
@@ -86,16 +90,16 @@ document.addEventListener('DOMContentLoaded', function (){
 
 })
 
-async function loadPakcageListByCustomer(name, package_name, platform){
+async function loadPakcageListByCustomer(name, select_package, platform){
     try {
         const response = await fetch(`/package-list-by-cusomter-api/${name}/${platform}`);
         const package_list = await response.json();
-        package_name.innerHTML = ''
+        select_package.innerHTML = ''
         package_list.forEach(package =>{
             const option = document.createElement('option');
             option.value = package.name;
             option.textContent = package.name;
-            package_name.appendChild(option);
+            select_package.appendChild(option);
         });
     } catch (e){
         console.log(e)

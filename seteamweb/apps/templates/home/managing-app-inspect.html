@@ -49,8 +49,9 @@
                 <th class="border-gray-200" width="200">위변조</th>
                 <th class="border-gray-200" width="200">에뮬레이터 /<br>문자열 암호화</th>
                 <th class="border-gray-200" width="200">난독화 /<br>심볼 제거</th>
-                <th class="border-gray-200" width="200">디컴파일 방지 /<br>IXP Version</th>
-                <th class="border-gray-200 rounded-end" width="200">특이사항</th>
+                <th class="border-gray-200" width="100">디컴파일 방지 /<br>IXP Version</th>
+                <th class="border-gray-200" width="100">특이사항</th>
+                <th class="border-gray-200 rounded-end" width="200">수정</th>
             </tr>
         </thead>
         <tbody id="customer-table-body"></tbody>
@@ -67,7 +68,7 @@
                     <div class="text-center text-md-center mb-2 mt-md-0">
                         <h1 class="mb-2 h4">정기 점검 결과 등록</h1>
                     </div>
-                    <form id="resultAppendForm" action="/inspection-result-by-app-append" class="mt-4" method="POST">
+                    <form id="resultAppendForm" class="mt-4">
                         {% csrf_token %}
                         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center mb-1">
                             <label id="customer-name-label" for="customer-name">고객사 명 : </label>
@@ -85,8 +86,8 @@
                             </div>
                         </div>
                         <div class="mb-1">
-                            <label class="my-1 me-2" for="package_name">Package Name</label>
-                            <select class="form-select" name="package_name" id="package_name" aria-label="Default select example">
+                            <label class="my-1 me-2" for="select_packages">Package Name</label>
+                            <select class="form-select" name="select_packages" id="select_packages" aria-label="Default select example">
                                 <option selected="">Select Pakcage</option>
                             </select>
                         </div>
@@ -147,5 +148,6 @@
 <script src="{% static 'assets/vendor/sweetalert2/sweetalert2.all.min.js'%}"></script>
 <script src="{% static 'assets/js/inspect_result_by_customer.js' %}"></script>
 <script src="{% static 'assets/js/inspect_result_by_app_append.js' %}"></script>
+{% comment %} <script src="{% static 'assets/js/inspect_result_by_app_modify.js' %}"></script> {% endcomment %}
 <script src="{% static 'assets/js/view_significant.js' %}"></script>
 {% endblock javascripts %}

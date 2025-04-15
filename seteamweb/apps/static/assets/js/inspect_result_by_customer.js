@@ -43,6 +43,15 @@ async function fetchAndRenderData(customer_name) {
                                 <button class="btn btn-info signifi-btn" url="/inspection-significant-per-app"
                                 data-package-name="${item.package_name}" data-inspection-date="${item.inspection_date}"
                                 data-customer-name="${customer_name}" data-platform="${item.platform}">View</button>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger modify-btn">Modify</button>
+                            </td>`;
+            }
+            else {
+                options += `<td></td>
+                            <td>
+                                <button class="btn btn-danger modify-btn">Modify</button>
                             </td>`;
             }
             const row = `
