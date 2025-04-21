@@ -12,6 +12,7 @@ urlpatterns = [
     path("schedule-modify", views.inspection_schedule_edit, name="inspection_schedule_edit"),
     path("result-append", views.inspection_result_append, name="inspection_result_append"),
     path("result-by-app-append", views.inspection_result_by_app_append, name="inspection_result_by_app_append"),
+    path("result-by-app-modify", views.inspection_result_by_app_modify, name="inspection_result_by_app_modify"),
     path("report/<str:view_or_download>", views.inspection_report_view_or_download, name="inspection_report_view"),
     path("significant-per-app", views.inspect_significant_by_result, name="inspect_significant_by_result"),
     path("significant-per-monthly-result", views.inspect_significant_by_monthly_result, name="inspect_significant_by_monthly_result")

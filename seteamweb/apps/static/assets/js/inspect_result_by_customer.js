@@ -1,77 +1,48 @@
-async function loadCustomerList(){
-    try {
-        const response = await fetch('/customer-name-list');
-        const customerList = await response.json();
-
-        const customerPicker = document.getElementById('inspection-customer-picker');
-        customerPicker.innerHTML = '<option selected>Choose Customer</option>';
-
-        customerList.forEach(customer => {
-            const option = document.createElement('option');
-            option.value = customer.name; // 고객 ID
-            option.textContent = customer.name; // 고객 이름
-            customerPicker.appendChild(option);
-        });
-    } catch (e){
-        console.log(e.message)
-    }
-}
-
+const modalElement = document.getElementById('inspect-result-modal-form');
+const formElement = modalElement.querySelector('#resultAppendForm');
+let customer_name = "";
+let initialFormHTML = '';
 
 document.addEventListener('DOMContentLoaded', () => {
     loadCustomerList()
+    cacheInitialFormState(formElement)
     const customerPicker = document.getElementById('inspection-customer-picker');
     customerPicker.addEventListener('change', (event) => {
-        fetchAndRenderData(event.target.value)
+        customer_name = event.target.value
+        fetchAndRenderData(customer_name)
     });
 });
+
+
+// Modal 종료 시 폼 초기화
+
+modalElement.addEventListener('hidden.bs.modal', ()=> {
+    restoreInitialFormState(formElement)
+    fetchAndRenderData(customer_name)
+})
+
+
+function cacheInitialFormState(formElement) {
+    initialFormHTML = formElement.innerHTML;
+}
+
+function restoreInitialFormState(formElement) {
+    formElement.innerHTML = initialFormHTML;
+    const dateInput = formElement.querySelector('#inspection_date');
+    if (dateInput) {
+        new Datepicker(dateInput, { format: 'mm/dd/yyyy' });
+    }
+}
 
 
 async function fetchAndRenderData(customer_name) {
     // API 호출
     document.getElementById("inspection-customer").textContent = `${customer_name} 정기 점검 결과`;
-    
-    function renderTable(pageData) {
-        // 테이블에 데이터 추가
-        const tableBody = document.getElementById("customer-table-body");
-        tableBody.innerHTML = '';  // 기존 데이터를 초기화
-
-        pageData.forEach(item => {
-            options = optionsByPlatform(item.platform, item)
-            if (item.significant) {
-                options += `<td>
-                                <button class="btn btn-info signifi-btn" url="/inspection-significant-per-app"
-                                data-package-name="${item.package_name}" data-inspection-date="${item.inspection_date}"
-                                data-customer-name="${customer_name}" data-platform="${item.platform}">View</button>
-                            </td>
-                            <td>
-                                <button class="btn btn-danger modify-btn">Modify</button>
-                            </td>`;
-            }
-            else {
-                options += `<td></td>
-                            <td>
-                                <button class="btn btn-danger modify-btn">Modify</button>
-                            </td>`;
-            }
-            const row = `
-                <tr>
-                    <td>${new Date(item.inspection_date).toLocaleDateString()}</td>
-                    <td>${item.package_name}</td>
-                    <td>${item.platform}</td>
-                    <td>${item.app_name}</td>
-                    <td>${item.app_version}</td>
-                    ${options}
-                </tr>
-            `;
-            tableBody.innerHTML += row;
-        });
-    }
-
     let data_response = await fetch(`/inspection-result-by-customer/${customer_name}`)
     let data = await data_response.json();
     renderTable(data)
 }
+
 
 function optionsByPlatform(platform, item){
     const booleanToSymbol = (value) => value ? 'O' : 'X';
@@ -94,4 +65,61 @@ function optionsByPlatform(platform, item){
         `;
     }
     return options
+}
+
+   
+function renderTable(pageData) {
+    // 테이블에 데이터 추가
+    const tableBody = document.getElementById("customer-table-body");
+    tableBody.innerHTML = '';  // 기존 데이터를 초기화
+
+    pageData.forEach(item => {
+        options = optionsByPlatform(item.platform, item)
+        if (item.significant) {
+            options += `<td>
+                            <button class="btn btn-info signifi-btn" url="/inspection-significant-per-app"
+                            data-package-name="${item.package_name}" data-inspection-date="${item.inspection_date}"
+                            data-customer-name="${customer_name}" data-platform="${item.platform}">View</button>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger modify-btn">Modify</button>
+                        </td>`;
+        }
+        else {
+            options += `<td></td>
+                        <td>
+                            <button class="btn btn-danger modify-btn">Modify</button>
+                        </td>`;
+        }
+        const row = `
+            <tr>
+                <td>${new Date(item.inspection_date).toLocaleDateString()}</td>
+                <td>${item.package_name}</td>
+                <td>${item.platform}</td>
+                <td>${item.app_name}</td>
+                <td>${item.app_version}</td>
+                ${options}
+            </tr>
+        `;
+        tableBody.innerHTML += row;
+    });
+}
+
+async function loadCustomerList(){
+    try {
+        const response = await fetch('/customer-name-list');
+        const customerList = await response.json();
+
+        const customerPicker = document.getElementById('inspection-customer-picker');
+        customerPicker.innerHTML = '<option selected>Choose Customer</option>';
+
+        customerList.forEach(customer => {
+            const option = document.createElement('option');
+            option.value = customer.name; // 고객 ID
+            option.textContent = customer.name; // 고객 이름
+            customerPicker.appendChild(option);
+        });
+    } catch (e){
+        console.log(e.message)
+    }
 }

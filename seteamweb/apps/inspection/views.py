@@ -85,13 +85,12 @@ def inspection_result_append(request):
 
 def inspection_result_by_app_append(request):
     try:
-        print(request.method)
         if request.method == 'POST':
             if request.content_type == 'multipart/form-data':
                 platform = request.POST.get('select-platform')
                 inspection_date = convert_datetime(request.POST.get('inspection_date'))
                 customer = Customer.objects.get(name=request.POST.get('customer-name'))
-                package = Packages.objects.get(name=request.POST.get('package_name'), platform=platform)
+                package = Packages.objects.get(name=request.POST.get('select_packages'), platform=platform)
                 if platform == 'android':
                     result_by_package, is_create = AndroidInspectResult.objects.get_or_create(customer=customer, package=package, inspection_date=inspection_date)
                 else:
@@ -114,15 +113,16 @@ def inspection_result_by_app_append(request):
 def inspection_result_by_app_modify(request):
     try:
         if request.method == 'POST':
+            print(request.POST)
             if request.content_type == 'multipart/form-data':
                 platform = request.POST.get('select-platform')
                 inspection_date = convert_datetime(request.POST.get('inspection_date'))
                 customer = Customer.objects.get(name=request.POST.get('customer-name'))
-                package = Packages.objects.get(name=request.POST.get('package_name'), platform=platform)
+                package = Packages.objects.get(name=request.POST.get('select_packages'), platform=platform)
                 if platform == 'android':
-                    result_by_package, is_create = AndroidInspectResult.objects.get_or_create(customer=customer, package=package, inspection_date=inspection_date)
+                    result_by_package = AndroidInspectResult.objects.get(customer=customer, package=package, inspection_date=inspection_date)
                 else:
-                    result_by_package, is_create = iOSInspectResult.objects.get_or_create(customer=customer, package=package, inspection_date=inspection_date)
+                    result_by_package = iOSInspectResult.objects.get(customer=customer, package=package, inspection_date=inspection_date)
                     result_by_package.library_version = request.POST.get('ios-library-version')
                 result_by_package.app_name = request.POST.get('app_name')
                 result_by_package.app_version = request.POST.get('app_version')

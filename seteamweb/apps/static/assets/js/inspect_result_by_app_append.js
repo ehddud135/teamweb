@@ -6,36 +6,36 @@ const swalWithBootstrapButtons = Swal.mixin({
     buttonsStyling: false
 });
 
+
 document.addEventListener('DOMContentLoaded', function (){
-    const modal_form = document.getElementById('inspect-result-modal-form')
-    const modal = new bootstrap.Modal(modal_form)
-    const form = document.getElementById('resultAppendForm');
-    form.action = "/inspect-result-by-app-append"
-    form.method = "POST"
     const customerPicker = document.getElementById('inspection-customer-picker');
-    const select_packages = document.getElementById('select_packages');
+    const modalElement = document.getElementById('inspect-result-modal-form')
+    let modal = new bootstrap.Modal(modalElement)
+    let customer_name = ""
     customerPicker.addEventListener('change', (event) => {
         customer_name = event.target.value
     });
 
     document.querySelectorAll('.open-modal').forEach(btn =>{
         btn.addEventListener('click', function(){
+            const formElement = modalElement.querySelector('#resultAppendForm');
+            const select_packages = formElement.querySelector('#select_packages');
             platform = this.getAttribute('data-target')
-            if (form) {
-                console.log(form)
-                
-                if (typeof customer_name === 'undefined') {
+            if (formElement) {
+                formElement.action = "/inspection-result-by-app-append"
+                formElement.method = "POST"
+                if (customer_name === "") {
                     swalWithBootstrapButtons.fire(
                         'Warning alert',
                         '고객사를 선택해주세요.',
                         'warning'
                     );
                 } else {
-                    document.getElementById("customer-name-label").textContent = `고객사 명 : ${customer_name}`;
-                    document.getElementById("select-platform-label").textContent = `OS : ${platform}`
-                    document.getElementById("select-platform").value = platform
-                    document.getElementById("customer-name").value = customer_name
-                    loadPakcageListByCustomer(customer_name, select_packages, platform)
+                    formElement.querySelector("#customer-name-label").textContent = `고객사 명 : ${customer_name}`;
+                    formElement.querySelector("#select-platform-label").textContent = `OS : ${platform}`
+                    formElement.querySelector("#select-platform").value = platform
+                    formElement.querySelector("#customer-name").value = customer_name
+                    loadPackageListByCustomer(customer_name, select_packages, platform)
                     createCheckBoxes(platform);
                     modal.show();
                 }
@@ -45,14 +45,14 @@ document.addEventListener('DOMContentLoaded', function (){
         });
     });
     
-
-
-    form.addEventListener('submit', async function (e) {
+    formElement.addEventListener('submit', async function (e) {
         e.preventDefault();
-        const formData = new FormData(form);
+        console.log(e.target)
+        modal = bootstrap.Modal.getInstance(formElement.closest('.modal'));
+        const formData = new FormData(formElement);
         try {
-            const response = await fetch(form.action, {
-                method: form.method,
+            const response = await fetch(formElement.action, {
+                method: formElement.method,
                 headers: {
                     'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
                 },
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function (){
                     // SweetAlert 종료 후 모달 닫기
                     if (modal) {
                         modal.hide();
-                        modal_form.querySelector('#resultAppendForm').reset();
+                        modalElement.querySelector('#resultAppendForm').reset();
                     }
                 });
             } else {
@@ -80,9 +80,10 @@ document.addEventListener('DOMContentLoaded', function (){
                     data['error'],
                     'warning'
                 )
-                modal_form.querySelector('#resultAppendForm').reset();
+                modalElement.querySelector('#resultAppendForm').reset();
                 console.error('Error:', response.statusText);
-            }
+            }   
+            
         } catch (err) {
             console.error('Network Error:', err);
         }
@@ -90,7 +91,7 @@ document.addEventListener('DOMContentLoaded', function (){
 
 })
 
-async function loadPakcageListByCustomer(name, select_package, platform){
+async function loadPackageListByCustomer(name, select_package, platform){
     try {
         const response = await fetch(`/package-list-by-cusomter-api/${name}/${platform}`);
         const package_list = await response.json();
@@ -119,12 +120,7 @@ function createCheckBoxes(os){
             checkBoxes.removeChild(checkBoxes.firstChild);
         }
     }
-    if (os === 'iOS'){
-        options = ['jailbreak_test', 'jailbreak', 'integrity', 'string_encrypt', 'symbol_del']
-    }else if (os === 'android'){
-        options = ['rooting_test', 'rooting', 'integrity', 'emulator', 'obfuscate', 'decompile']
-    }
-
+    options = getOptions(os)
     options.forEach(option => {
         const div = document.createElement('div');
         div.className = "form-check mb-2";
@@ -159,4 +155,13 @@ function createCheckBoxes(os){
         ixp.appendChild(label);
         ixp.appendChild(input);                        
     }
+}
+
+function getOptions(os){
+    if (os === 'iOS'){
+        options = ['jailbreak_test', 'jailbreak', 'integrity', 'string_encrypt', 'symbol_del']
+    }else if (os === 'android'){
+        options = ['rooting_test', 'rooting', 'integrity', 'emulator', 'obfuscate', 'decompile']
+    }
+    return options
 }
