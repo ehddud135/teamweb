@@ -16,5 +16,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 # 5. Copy Project Files
 COPY . /app/
 
+# 5.1 Set Environment Variables
+ENV PYTHONUNBUFFERED=1
+
 # 6. Run Django Server
 CMD ["gunicorn", "--chdir", "/app/seteamweb", "--bind", "0.0.0.0:8000", "core.wsgi:application"]
