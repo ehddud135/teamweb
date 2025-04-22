@@ -126,3 +126,9 @@ async function fetchAndRenderData() {
 
 // 페이지 로드 시 데이터 가져오기
 window.onload = fetchAndRenderData;
+
+const modalElement = document.getElementById('append-modal-form');
+
+modalElement.addEventListener('submit', ()=> {
+    fetchAndRenderData();
+})
