@@ -1,4 +1,5 @@
 from datetime import datetime
+import traceback
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, FileResponse, JsonResponse
@@ -113,7 +114,6 @@ def inspection_result_by_app_append(request):
 def inspection_result_by_app_modify(request):
     try:
         if request.method == 'POST':
-            print(request.POST)
             if request.content_type == 'multipart/form-data':
                 platform = request.POST.get('select-platform')
                 inspection_date = convert_datetime(request.POST.get('inspection_date'))
@@ -135,6 +135,7 @@ def inspection_result_by_app_modify(request):
 
     except Exception as e:
         print(e)
+        traceback.print_exc()
         return JsonResponse({"error": "Please check your email and name"}, status=405)
 
 

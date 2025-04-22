@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function (){
 
     document.querySelectorAll('.open-modal').forEach(btn =>{
         btn.addEventListener('click', function(){
-            const formElement = modalElement.querySelector('#resultAppendForm');
+            let formElement = modalElement.querySelector('#resultAppendForm');
             const select_packages = formElement.querySelector('#select_packages');
             platform = this.getAttribute('data-target')
             if (formElement) {

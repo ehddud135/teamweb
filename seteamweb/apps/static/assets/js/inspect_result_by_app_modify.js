@@ -36,11 +36,9 @@ document.addEventListener('DOMContentLoaded', function (){
                 invisibleBlock("inspection_date_group", formElement)
                 formElement.querySelector("#inspection_date_label").textContent = `점검일자 : ${select_data_dict.inspectionDate}`
                 formElement.querySelector("#inspection_date").value = convertToDMY(select_data_dict.inspectionDate)
-                invisibleBlock("select_packages", formElement)
                 loadPackageListByCustomer(customer_name, select_packages, platform)
-                formElement.querySelector("#select_packages").textContent = select_data_dict.packageName
-                formElement.querySelector("#select_packages").value = select_data_dict.packageName
                 formElement.querySelector("#select_packages_label").textContent = `Package Name : ${select_data_dict.packageName}`
+                selectToInput(formElement.querySelector("#select_packages"), select_data_dict.packageName)
                 formElement.querySelector("#app_name").value = select_data_dict.appName
                 formElement.querySelector("#app_version").value = select_data_dict.appVersion
                 createCheckBoxes(platform);
@@ -56,4 +54,13 @@ function invisibleBlock(block_id, formElement){
     block = formElement.querySelector(`#${block_id}`)
     block.style.position = 'absolute';
     block.style.left = '-9999px';
+}
+
+function selectToInput(selectElement, value){
+    const inputElement = document.createElement('input');
+    inputElement.type = 'hidden';
+    inputElement.id = selectElement.id;
+    inputElement.name = selectElement.name;
+    inputElement.value = value;
+    selectElement.parentNode.replaceChild(inputElement, selectElement);
 }
