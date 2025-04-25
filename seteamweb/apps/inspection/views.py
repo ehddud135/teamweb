@@ -1,4 +1,5 @@
 from datetime import datetime
+import traceback
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, FileResponse, JsonResponse
@@ -29,6 +30,7 @@ def inspect_schedule_list_api(_, schedule, month):
             else:
                 item['inspection_date'] = inspect_record.inspection_date
             item['manager'] = customer.manager.name
+            item['inspect_significant'] = inspect_record.details
         except Exception as e:
             print(e)
 
@@ -43,9 +45,7 @@ def inspection_schedule_edit(request):
                 month_list = request.POST.getlist('months')
                 inspect_period = request.POST.get('inspection-period')
                 customer = Customer.objects.get(name=customer_name)
-                schedule, is_create = InspectionSchedule.objects.get_or_create(name=customer)
-                if is_create == True:
-                    print("새 스케쥴 생성")
+                schedule, _is_create = InspectionSchedule.objects.get_or_create(name=customer)
                 edit_inspection_schedule(schedule, month_list, inspect_period)
 
                 return JsonResponse({'status': 'success', "message": "Success"}, status=200)
@@ -70,10 +70,11 @@ def inspection_result_append(request):
                 customer.save()
                 report_title = f"{request.POST.get('title')}.pdf"
                 report_file = request.FILES.get('inspection_result_file')
-                insepction_report, is_create = InspectionResultFile.objects.get_or_create(inspectrecord=customer)
-                insepction_report.title = report_title
-                insepction_report.file = report_file
-                insepction_report.save()
+                if report_file:
+                    insepction_report, is_create = InspectionResultFile.objects.get_or_create(inspectrecord=customer)
+                    insepction_report.title = report_title
+                    insepction_report.file = report_file
+                    insepction_report.save()
                 return JsonResponse({'status': 'success', "message": "Success"}, status=200)
             else:
                 return JsonResponse({"error": "Please check your email and name"}, status=405)
@@ -90,7 +91,7 @@ def inspection_result_by_app_append(request):
                 platform = request.POST.get('select-platform')
                 inspection_date = convert_datetime(request.POST.get('inspection_date'))
                 customer = Customer.objects.get(name=request.POST.get('customer-name'))
-                package = Packages.objects.get(name=request.POST.get('package_name'), platform=platform)
+                package = Packages.objects.get(name=request.POST.get('select_packages'), platform=platform)
                 if platform == 'android':
                     result_by_package, is_create = AndroidInspectResult.objects.get_or_create(customer=customer, package=package, inspection_date=inspection_date)
                 else:
@@ -107,6 +108,56 @@ def inspection_result_by_app_append(request):
 
     except Exception as e:
         print(e)
+        return JsonResponse({"error": "Please check your email and name"}, status=405)
+
+
+def inspection_result_by_app_modify(request):
+    try:
+        if request.method == 'POST':
+            if request.content_type == 'multipart/form-data':
+                platform = request.POST.get('select-platform')
+                inspection_date = convert_datetime(request.POST.get('inspection_date'))
+                customer = Customer.objects.get(name=request.POST.get('customer-name'))
+                package = Packages.objects.get(name=request.POST.get('select_packages'), platform=platform)
+                if platform == 'android':
+                    result_by_package = AndroidInspectResult.objects.get(customer=customer, package=package, inspection_date=inspection_date)
+                else:
+                    result_by_package = iOSInspectResult.objects.get(customer=customer, package=package, inspection_date=inspection_date)
+                    result_by_package.library_version = request.POST.get('ios-library-version')
+                result_by_package.app_name = request.POST.get('app_name')
+                result_by_package.app_version = request.POST.get('app_version')
+                result_by_package.significant = request.POST.get('inspect_significant')
+                edit_inspection_options(result_by_package, request.POST.getlist('options'), platform)
+                result_by_package.save()
+                return JsonResponse({'status': 'success', "message": "Success"}, status=200)
+            else:
+                return JsonResponse({"error": "Please check your email and name"}, status=405)
+
+    except Exception as e:
+        print(e)
+        traceback.print_exc()
+        return JsonResponse({"error": "Please check your email and name"}, status=405)
+
+
+def inspection_result_by_app_delete(request):
+    try:
+        if request.method == 'DELETE':
+            print(request.GET)
+            platform = request.GET.get('platform')
+            inspection_date = convert_datetime(request.GET.get('inspectionDate'))
+            customer = Customer.objects.get(name=request.GET.get('customerName'))
+            package = Packages.objects.get(name=request.GET.get('packageName'), platform=platform)
+            if platform == 'android':
+                result_by_package = AndroidInspectResult.objects.get(customer=customer, package=package, inspection_date=inspection_date)
+            else:
+                result_by_package = iOSInspectResult.objects.get(customer=customer, package=package, inspection_date=inspection_date)
+            result_by_package.delete()
+            return JsonResponse({'status': 'success', "message": "Success"}, status=200)
+        else:
+            return JsonResponse({"error": "Please check request method"}, status=405)
+    except Exception as e:
+        print(e)
+        traceback.print_exc()
         return JsonResponse({"error": "Please check your email and name"}, status=405)
 
 
@@ -155,6 +206,20 @@ def inspect_significant_by_result(request):
             else:
                 return JsonResponse({"error": "Please check Platform"}, status=405)
             return JsonResponse({"significant": item.significant}, status=200, json_dumps_params={'ensure_ascii': False, "indent": 2})
+        else:
+            return JsonResponse({"error": "Please check Method"}, status=405)
+
+    except Exception as e:
+        return JsonResponse({"error": e}, status=405)
+
+
+def inspect_significant_by_monthly_result(request):
+    try:
+        if request.method == 'POST':
+            data = json.loads(request.body)
+            customer = Customer.objects.get(name=data.get('customer_name'))
+            item = InspectionRecord.objects.get(customer=customer, inspection_date=data.get('inspection_date'))
+            return JsonResponse({"significant": item.details}, status=200, json_dumps_params={'ensure_ascii': False, "indent": 2})
         else:
             return JsonResponse({"error": "Please check Method"}, status=405)
 

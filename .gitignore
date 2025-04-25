@@ -266,7 +266,7 @@ poetry.toml
 pyrightconfig.json
 
 # report file
-.pdf
+*.pdf
 
 # End of https://www.toptal.com/developers/gitignore/api/python,django
 prod.env
@@ -278,4 +278,6 @@ report_save_path/
 # Ignore the credentials.json file
 credentials.json
 token.pickle
+*.pickle
+*.json
 *.txt

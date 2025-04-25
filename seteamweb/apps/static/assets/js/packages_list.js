@@ -105,7 +105,6 @@ async function fetchAndRenderData() {
 
     function handleSearch(event) {
         const searchTerm = event.target.value.toLowerCase();
-        console.log(event.target.value)
         filteredData = filteredData.filter(item => 
             item.name.toLowerCase().includes(searchTerm) ||
             item.customer.toLowerCase().includes(searchTerm)
@@ -127,3 +126,9 @@ async function fetchAndRenderData() {
 
 // 페이지 로드 시 데이터 가져오기
 window.onload = fetchAndRenderData;
+
+const modalElement = document.getElementById('append-modal-form');
+
+modalElement.addEventListener('submit', ()=> {
+    fetchAndRenderData();
+})

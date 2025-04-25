@@ -28,7 +28,6 @@ document.addEventListener('click', function (event) {
                         .then(response => {
                             if (response.ok) {
                                 Swal.fire('Deleted!', 'Your item has been deleted.', 'success');
-                                // DOM에서 버튼의 부모 요소(예: 테이블 행) 삭제
                                 button.closest('tr').remove();
                             } else {
                                 Swal.fire('Error!', 'Failed to delete the item.', 'error');

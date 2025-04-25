@@ -36,6 +36,7 @@
                 <th class="border-gray-200" width="200">점검 결과</th>
                 <th class="border-gray-200" width="200">점검 일자</th>
                 <th class="border-gray-200" width="200">점검 결과 등록</th>
+                <th class="border-gray-200" width="200">특이 사항</th>
                 <th class="border-gray-200 rounded-end" width="300">확인서 보기 / 다운로드</th>
             </tr>
         </thead>
@@ -53,6 +54,7 @@
                 <th class="border-gray-200" width="200">점검 결과</th>
                 <th class="border-gray-200" width="200">점검 일자</th>
                 <th class="border-gray-200" width="200">점검 결과 등록</th>
+                <th class="border-gray-200" width="200">특이 사항</th>
                 <th class="border-gray-200 rounded-end" width="300">확인서 보기 / 다운로드</th>
             </tr>
         </thead>
@@ -70,6 +72,7 @@
                 <th class="border-gray-200" width="200">점검 결과</th>
                 <th class="border-gray-200" width="200">점검 일자</th>
                 <th class="border-gray-200" width="200">점검 결과 등록</th>
+                <th class="border-gray-200" width="200">특이 사항</th>
                 <th class="border-gray-200 rounded-end" width="300">확인서 보기 / 다운로드</th>
             </tr>
         </thead>
@@ -110,7 +113,7 @@
                         </div>
                         <div class="mb-3">
                             <label for="inspection_result_file" class="form-label">정기점검 확인서 업로드</label>
-                            <input class="form-control" type="file" name="inspection_result_file" id="inspection_result_file" required>
+                            <input class="form-control" type="file" name="inspection_result_file" id="inspection_result_file">
                         </div>
                         <div class="modal-footer d-flex justify-content-center pt-3 pb-0">
                             <button type="submit" class="btn btn-gray-800">Append</button>
@@ -123,6 +126,24 @@
 </div>
 
 
+<!-- Modal Content -->
+<div class="modal fade" id="significantModal" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="h6 modal-title" id="significantModalLabel">특이사항</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="significantContent"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link text-gray-600 ms-auto" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 {% endblock content %}
@@ -133,4 +154,5 @@
 <script src="{% static 'assets/js/inspect_result_by_month.js' %}"></script>
 <script src="{% static 'assets/js/inspect_result_append.js' %}"></script>
 <script src="{% static 'assets/js/inspect_report_view_download.js' %}"></script>
+<script src="{% static 'assets/js/view_significant.js' %}"></script>
 {% endblock javascripts %}

@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function (){
-    const inspection_months = document.getElementById('inspection-month').textContent.split(' ');
-    const inspection_month = inspection_months[0] + " " + inspection_months[1]
     document.addEventListener('click', function (event) {
+        const inspection_months = document.getElementById('inspection-month').textContent.split(' ');
+        const inspection_month = inspection_months[0] + " " + inspection_months[1]
         if (event.target.classList.contains('pdf-view-btn')){
             const viewUrl = event.target.getAttribute('pdf-view-url')
             const customer_name = event.target.getAttribute('data-name')
@@ -28,7 +28,6 @@ document.addEventListener('DOMContentLoaded', function (){
             }).catch(error => console.error('Error fetching PDF:', error));
         }
         else if (event.target.classList.contains('download-btn')){
-            console.log("click download btn")
             const downloadUrl = event.target.getAttribute('pdf-download-url')
             const customer_name = event.target.getAttribute('data-name')
             let downalod_file_name = `${inspection_month}_${customer_name}_정기점검_확인서.pdf`
