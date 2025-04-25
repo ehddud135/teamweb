@@ -73,6 +73,7 @@ document.addEventListener('DOMContentLoaded', function (){
                             modal.hide();
                         }
                         form.reset();
+                        window.location.reload();
                     });
                 } else {
                     swalWithBootstrapButtons.fire(

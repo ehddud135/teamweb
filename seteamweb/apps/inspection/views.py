@@ -139,6 +139,28 @@ def inspection_result_by_app_modify(request):
         return JsonResponse({"error": "Please check your email and name"}, status=405)
 
 
+def inspection_result_by_app_delete(request):
+    try:
+        if request.method == 'DELETE':
+            print(request.GET)
+            platform = request.GET.get('platform')
+            inspection_date = convert_datetime(request.GET.get('inspectionDate'))
+            customer = Customer.objects.get(name=request.GET.get('customerName'))
+            package = Packages.objects.get(name=request.GET.get('packageName'), platform=platform)
+            if platform == 'android':
+                result_by_package = AndroidInspectResult.objects.get(customer=customer, package=package, inspection_date=inspection_date)
+            else:
+                result_by_package = iOSInspectResult.objects.get(customer=customer, package=package, inspection_date=inspection_date)
+            result_by_package.delete()
+            return JsonResponse({'status': 'success', "message": "Success"}, status=200)
+        else:
+            return JsonResponse({"error": "Please check request method"}, status=405)
+    except Exception as e:
+        print(e)
+        traceback.print_exc()
+        return JsonResponse({"error": "Please check your email and name"}, status=405)
+
+
 def inspection_report_view_or_download(request, view_or_download):
     try:
         if request.method == 'POST':

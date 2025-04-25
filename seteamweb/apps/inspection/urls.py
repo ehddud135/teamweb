@@ -15,6 +15,7 @@ urlpatterns = [
     path("result-by-app-modify", views.inspection_result_by_app_modify, name="inspection_result_by_app_modify"),
     path("report/<str:view_or_download>", views.inspection_report_view_or_download, name="inspection_report_view"),
     path("significant-per-app", views.inspect_significant_by_result, name="inspect_significant_by_result"),
-    path("significant-per-monthly-result", views.inspect_significant_by_monthly_result, name="inspect_significant_by_monthly_result")
+    path("significant-per-monthly-result", views.inspect_significant_by_monthly_result, name="inspect_significant_by_monthly_result"),
+    path("result-by-app-delete", views.inspection_result_by_app_delete, name="inspection_result_by_app_delete")
 
 ]
