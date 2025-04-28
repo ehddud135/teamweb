@@ -27,10 +27,10 @@
       </div>
     </form>
     <!-- / Search form -->
-     <form action="/contact-list-update" method="POST">
+     <form method="POST">
         {% csrf_token %}
         {% if request.user.is_superuser %}
-            <button type="submit" class="btn btn-gray-800" action="/contatct-update-list">
+            <button type="submit" class="btn btn-gray-800" action="/contact/list-update">
                 Contatct List Update
             </button>
         {% endif %}

@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', function (){
         document.addEventListener('click', function (event) {
             if (event.target.classList.contains('modify-btn')){
                 cells = event.target.closest('tr').querySelectorAll('td')
-                formElement.action = "/inspection-result-by-app-modify"
+                formElement.action = "/inspection/result-by-app-modify"
                 formElement.method = "POST"
                 const select_packages = formElement.querySelector('#select_packages');
                 const customer_name = customerPicker.value
@@ -76,7 +76,7 @@ function insertDeleteButton(formElement, platform, modal){
         const packageName = formElement.querySelector('#select_packages').value;
         const customerName = formElement.querySelector('#customer-name').value;
         const inspectionDate = formElement.querySelector('#inspection_date').value;
-        const url = `/inspection-result-by-app-delete?platform=${platform}&packageName=${packageName}&customerName=${customerName}&inspectionDate=${inspectionDate}`;
+        const url = `/inspection/result-by-app-delete?platform=${platform}&packageName=${packageName}&customerName=${customerName}&inspectionDate=${inspectionDate}`;
         Swal.fire({
             title: 'Confirm',
             text: '삭제 하시겠습니까?',
