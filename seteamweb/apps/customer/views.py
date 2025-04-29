@@ -11,15 +11,18 @@ from ..inspection.models import InspectionSchedule
 
 def customer_append(request):
     current_time = datetime.now().date()
+    inspection = False
     context = {}
     try:
         if request.method == 'POST':
             if request.content_type == 'multipart/form-data':
                 customer_name = request.POST.get("customer-name")
                 customer_manager = request.POST.get("customer-manager")
+                if request.POST.get("inspection"):
+                    inspection = True
                 if customer_name and customer_manager:
                     manager = Manager.objects.get(name=customer_manager)
-                    Customer.objects.create(name=customer_name, manager=manager)
+                    Customer.objects.create(name=customer_name, manager=manager, inspection=inspection)
                     return JsonResponse({'status': 'success', "message": "Success"}, status=200)
                 else:
                     return JsonResponse({"error": "Please check your email and name"}, status=405)
@@ -30,7 +33,7 @@ def customer_append(request):
 
 
 def customer_list_api(_):
-    items = Customer.objects.values('name', 'manager', 'created_at')  # 필요한 필드만 추출
+    items = Customer.objects.values('name', 'manager', 'created_at', 'inspection')  # 필요한 필드만 추출
     period_mapping = {
         'monthly': '월',
         'quarter': '분기',

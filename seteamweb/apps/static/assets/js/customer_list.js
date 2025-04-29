@@ -23,6 +23,7 @@ async function fetchAndRenderData() {
 
         pageData.forEach(item => {
             item_id++;
+            inspection = item.inspection ? 'O': 'X'
             const row = `
                 <tr>
                     <td>${item_id}</td>
@@ -30,6 +31,7 @@ async function fetchAndRenderData() {
                     <td>${item.manager}</td>
                     <td>${item.package_count}</td>
                     <td>${new Date(item.created_at).toLocaleDateString()}</td>
+                    <td>${inspection}</td>
                     <td>${item.inspect_schedule}</td>
                     <td>
                         <button class="btn btn-danger delete-btn" data-delete-url="/customer/delete/${item.name}">Delete</button>
@@ -128,3 +130,9 @@ async function fetchAndRenderData() {
 
 // 페이지 로드 시 데이터 가져오기
 window.onload = fetchAndRenderData;
+
+const modalElement = document.getElementById('append-modal-form');
+
+modalElement.addEventListener('submit', ()=> {
+    fetchAndRenderData();
+})
