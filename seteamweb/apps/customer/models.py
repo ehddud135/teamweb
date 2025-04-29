@@ -8,6 +8,7 @@ class Customer(models.Model):
     name = models.CharField(max_length=100, unique=True)
     manager = models.ForeignKey(Manager, to_field="name", on_delete=models.SET_NULL, null=True)
     created_at = models.DateField(auto_now_add=True)
+    inspection = models.BooleanField(default=True)
 
     class Meta:
         managed = True
