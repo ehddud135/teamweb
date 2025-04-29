@@ -38,7 +38,7 @@ function restoreInitialFormState(formElement) {
 async function fetchAndRenderData(customer_name) {
     // API 호출
     document.getElementById("inspection-customer").textContent = `${customer_name} 정기 점검 결과`;
-    let data_response = await fetch(`/inspection-result-by-customer/${customer_name}`)
+    let data_response = await fetch(`/inspection/result-by-customer/${customer_name}`)
     let data = await data_response.json();
     renderTable(data)
 }
@@ -77,7 +77,7 @@ function renderTable(pageData) {
         options = optionsByPlatform(item.platform, item)
         if (item.significant) {
             options += `<td>
-                            <button class="btn btn-info signifi-btn" url="/inspection-significant-per-app"
+                            <button class="btn btn-info signifi-btn" url="/inspection/significant-per-app"
                             data-package-name="${item.package_name}" data-inspection-date="${item.inspection_date}"
                             data-customer-name="${customer_name}" data-platform="${item.platform}">View</button>
                         </td>
@@ -107,7 +107,7 @@ function renderTable(pageData) {
 
 async function loadCustomerList(){
     try {
-        const response = await fetch('/customer-name-list');
+        const response = await fetch('/customer/name-list');
         const customerList = await response.json();
 
         const customerPicker = document.getElementById('inspection-customer-picker');

@@ -28,7 +28,7 @@
                             <div class="text-center text-md-center mb-4 mt-md-0">
                                 <h1 class="mb-0 h4">고객사 등록</h1>
                             </div>
-                            <form id="appendForm" action="/customer-append" class="mt-4" method="POST">
+                            <form id="appendForm" action="/customer/append" class="mt-4" method="POST">
                                 {% csrf_token %}
                                 <div class="mb-4">
                                     <label for="customer-name">Customer Name</label>
@@ -104,7 +104,7 @@
                     <div class="text-center text-md-center mb-4 mt-md-0">
                         <h1 class="mb-0 h4">정기 점검 일정 변경</h1>
                     </div>
-                    <form id="modifyForm" action="/inspection-schedule-modify" class="mt-4" method="POST">
+                    <form id="modifyForm" action="/inspection/schedule-modify" class="mt-4" method="POST">
                         {% csrf_token %}
                         <div class="mb-1">
                             <label id="modify-customer-name-label" for="modify-customer-name-label">Customer Name : </label>

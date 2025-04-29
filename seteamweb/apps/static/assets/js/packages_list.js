@@ -1,6 +1,6 @@
 async function fetchAndRenderData() {
     // API 호출
-    const response = await fetch('/package-list-api');
+    const response = await fetch('/package/list-api');
     const data = await response.json();
     let filteredData = data;
     
@@ -31,7 +31,7 @@ async function fetchAndRenderData() {
                     <td>${new Date(item.license_expire_date).toLocaleDateString()}</td>
                     <td>${new Date(item.created_at).toLocaleDateString()}</td>
                     <td>
-                        <button class="btn btn-danger delete-btn" data-delete-url="/package-delete/${item.name}/${item.platform}">Delete</button>
+                        <button class="btn btn-danger delete-btn" data-delete-url="/package/delete/${item.name}/${item.platform}">Delete</button>
                     </td>
                 </tr>
             `;

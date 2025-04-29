@@ -1,6 +1,6 @@
 async function fetchAndRenderData() {
     // API 호출
-    const response = await fetch('/customer-list-api');
+    const response = await fetch('/customer/list-api');
     const data = await response.json();
     let filteredData = data;
     
@@ -34,7 +34,7 @@ async function fetchAndRenderData() {
                     <td>${inspection}</td>
                     <td>${item.inspect_schedule}</td>
                     <td>
-                        <button class="btn btn-danger delete-btn" data-delete-url="/customer-delete/${item.name}">Delete</button>
+                        <button class="btn btn-danger delete-btn" data-delete-url="/customer/delete/${item.name}">Delete</button>
                         <button class="btn btn-danger modify-btn" data-name="${item.name}">Modify</button>
                     </td>
                 </tr>

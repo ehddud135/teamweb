@@ -59,7 +59,7 @@ async function fetchAndRenderData(month) {
             convert_date = convertToDMY(new Date(item.inspection_date).toLocaleDateString())
             item_id++;
             if (item.inspect_significant) {
-                significant_btn += `<button class="btn btn-info signifi-btn" url="/inspection-significant-per-monthly-result"
+                significant_btn += `<button class="btn btn-info signifi-btn" url="/inspection/significant-per-monthly-result"
                                 data-inspection-date="${item.inspection_date}" data-customer-name="${item.name}">View</button>`;
             }
             const row = `
@@ -79,8 +79,8 @@ async function fetchAndRenderData(month) {
                     ${significant_btn}
                     </td>
                     <td>
-                        <button class="btn btn-info pdf-view-btn" data-name="${item.name}" pdf-view-url="/inspection-report/view">View</button>
-                        <button class="btn btn-info download-btn" data-name="${item.name}" pdf-download-url="/inspection-report/download">Download</button>
+                        <button class="btn btn-info pdf-view-btn" data-name="${item.name}" pdf-view-url="/inspection/report/view">View</button>
+                        <button class="btn btn-info download-btn" data-name="${item.name}" pdf-download-url="/inspection/report/download">Download</button>
                     </td>
                 </tr>
             `;
@@ -91,7 +91,7 @@ async function fetchAndRenderData(month) {
     const period_list = ['monthly', 'quarter', 'half']
     
     for (let period of period_list){
-        let data_response = await fetch(`/inspection-list-api/${period}/${picked_month}`)
+        let data_response = await fetch(`/inspection/list-api/${period}/${picked_month}`)
         let data = await data_response.json();
         renderTable(data, `${period}-table-body`)
     }

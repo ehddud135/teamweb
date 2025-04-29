@@ -1,6 +1,6 @@
 async function fetchAndRenderData() {
     // API 호출
-    const response = await fetch('/manager-list-api');
+    const response = await fetch('/manager/list-api');
     const data = await response.json();
     
     // 페이지네이션 설정
@@ -30,7 +30,7 @@ async function fetchAndRenderData() {
                     <td>${item.customer_count}</td>
                     <td>${new Date(item.created_at).toLocaleDateString()}</td>
                     <td>
-                        <button class="btn btn-danger delete-btn" data-delete-url="/manager-delete/${item.name}">Delete</button>
+                        <button class="btn btn-danger delete-btn" data-delete-url="/manager/delete/${item.name}">Delete</button>
                     </td>
                 </tr>
             `;

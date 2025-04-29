@@ -2,7 +2,7 @@
 async function fetchAndRenderData() {
     // API 호출
     const platform = document.getElementById('platform')
-    const response = await fetch(`/devices-list-api/${platform.value}`)
+    const response = await fetch(`/devices/list-api/${platform.value}`)
     const data = await response.json()
     let filteredData = data;
 

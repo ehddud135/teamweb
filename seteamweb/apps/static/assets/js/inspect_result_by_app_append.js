@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function (){
             const select_packages = formElement.querySelector('#select_packages');
             platform = this.getAttribute('data-target')
             if (formElement) {
-                formElement.action = "/inspection-result-by-app-append"
+                formElement.action = "/inspection/result-by-app-append"
                 formElement.method = "POST"
                 if (customer_name === "") {
                     swalWithBootstrapButtons.fire(
@@ -93,7 +93,7 @@ document.addEventListener('DOMContentLoaded', function (){
 
 async function loadPackageListByCustomer(name, select_package, platform){
     try {
-        const response = await fetch(`/package-list-by-cusomter-api/${name}/${platform}`);
+        const response = await fetch(`/package/list-by-cusomter-api/${name}/${platform}`);
         const package_list = await response.json();
         select_package.innerHTML = ''
         package_list.forEach(package =>{
