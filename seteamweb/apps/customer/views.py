@@ -2,7 +2,7 @@ from datetime import datetime
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
-from .models import Customer, Manager
+from .models import Customer, Manager, InstallationRecord, InstallationCert
 from ..packages.models import Packages
 from ..inspection.models import InspectionSchedule
 
@@ -70,3 +70,38 @@ def customer_delete(request, item_name):
     except:
         html_template = loader.get_template('home/page-500.html')
         return HttpResponse(html_template.render(context, request))
+
+
+def record_list_api(request):
+    items = InstallationRecord.objects.values('customer', 'manager', 'installation_date', 'significant')  # 필요한 필드만 추출
+    for item in items:
+        try:
+            customer = Customer.objects.get(name=item.get('name'))
+            manager = Manager.objects.get(name=item.get('manager'))
+            item['customer_name'] = customer
+            item['manager_name'] = manager
+        except Exception as e:
+            print(e)
+
+    return JsonResponse(list(items), safe=False)
+
+
+def installation_record_append(request):
+    try:
+        if request.method == 'POST':
+            if request.content_type == 'multipart/form-data':
+                # customer_name = request.POST.get("customer-name")
+                # installation_date = request.POST.get("installation-date")
+                # significant = request.POST.get("significant")
+                # file = request.FILES.get("file")
+                # customer = Customer.objects.get(name=customer_name)
+                # InstallationRecord.objects.create(customer=customer, installation_date=installation_date, significant=significant)
+                # record = InstallationRecord.objects.get(customer=customer, installation_date=installation_date, significant=significant)
+                # InstallationCert.objects.create(record=record, title=file.name, file=file)
+                return JsonResponse({'status': 'success', "message": "Success"}, status=200)
+            else:
+                return JsonResponse({"error": "Please check your email and name"}, status=405)
+        return HttpResponse({"error": "Invalid request method"}, status=405)
+    except Exception as e:
+        print(e)
+        return JsonResponse({"error": "Please check Server Log"}, status=405)

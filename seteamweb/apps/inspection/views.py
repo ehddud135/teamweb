@@ -63,15 +63,15 @@ def inspection_result_append(request):
             if request.content_type == 'multipart/form-data':
                 customer_name = Customer.objects.get(name=request.POST.get('customer-name'))
                 inspection_month = convert_to_format(request.POST.get('inspect-month'))
-                customer = InspectionRecord.objects.get(customer=customer_name, inspection_month=inspection_month)
-                customer.result = 'complete'
-                customer.inspection_date = convert_datetime(request.POST.get('inspection_date'))
-                customer.details = request.POST.get('inspect_significant')
-                customer.save()
+                record = InspectionRecord.objects.get(customer=customer_name, inspection_month=inspection_month)
+                record.result = 'complete'
+                record.inspection_date = convert_datetime(request.POST.get('inspection_date'))
+                record.details = request.POST.get('inspect_significant')
+                record.save()
                 report_title = f"{request.POST.get('title')}.pdf"
                 report_file = request.FILES.get('inspection_result_file')
                 if report_file:
-                    insepction_report, is_create = InspectionResultFile.objects.get_or_create(inspectrecord=customer)
+                    insepction_report, is_create = InspectionResultFile.objects.get_or_create(inspectrecord=record)
                     insepction_report.title = report_title
                     insepction_report.file = report_file
                     insepction_report.save()

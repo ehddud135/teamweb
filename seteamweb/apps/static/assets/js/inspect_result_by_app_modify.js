@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', function (){
     const formElement =  modalElement.querySelector('#resultAppendForm');
 
     if (formElement) {
-        console.log(formElement)
         document.addEventListener('click', function (event) {
             if (event.target.classList.contains('modify-btn')){
                 cells = event.target.closest('tr').querySelectorAll('td')
