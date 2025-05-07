@@ -7,7 +7,6 @@
 
 {% block content %}
 
-
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
     <div id="customer" class="d-block mb-4 mb-md-0">
         <h2 id="inspection-customer" class="h4"> 정기 점검 결과</h2>
@@ -16,8 +15,8 @@
     <div class="mb-3">
         <label for="inspection-customer-picker">고객사</label>
         <div class="input-group">
-            <select id="inspection-customer-picker" aria-label="Default select example">
-                <option selected="">Choose Customer</option>
+            <select class="form-select" id="inspection-customer-picker" data-placeholder="Choose customer">
+                {% comment %} <option>Choose Customer</option> {% endcomment %}
             </select>                                           
         </div>
     </div>

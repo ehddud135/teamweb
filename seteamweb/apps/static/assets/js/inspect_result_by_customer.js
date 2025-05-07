@@ -1,4 +1,5 @@
 const modalElement = document.getElementById('inspect-result-modal-form');
+
 const formElement = modalElement.querySelector('#resultAppendForm');
 let customer_name = "";
 let initialFormHTML = '';
@@ -7,6 +8,13 @@ document.addEventListener('DOMContentLoaded', () => {
     loadCustomerList()
     cacheInitialFormState(formElement)
     const customerPicker = document.getElementById('inspection-customer-picker');
+    $('#inspection-customer-picker').select2({
+        theme: 'bootstrap-5',
+        width: '240',
+        placeholder: $( this ).data( 'placeholder' ),
+        dropdownCssClass: 'select2--small',
+        containerCssClass: 'select2--small',
+    });
     customerPicker.addEventListener('change', (event) => {
         customer_name = event.target.value
         fetchAndRenderData(customer_name)
@@ -111,7 +119,7 @@ async function loadCustomerList(){
         const customerList = await response.json();
 
         const customerPicker = document.getElementById('inspection-customer-picker');
-        customerPicker.innerHTML = '<option selected>Choose Customer</option>';
+        customerPicker.innerHTML = '<option></option>'; // 초기화
 
         customerList.forEach(customer => {
             const option = document.createElement('option');

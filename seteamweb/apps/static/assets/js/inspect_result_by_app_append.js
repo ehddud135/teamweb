@@ -9,10 +9,6 @@ const swalWithBootstrapButtons = Swal.mixin({
 
 document.addEventListener('DOMContentLoaded', function (){
     const customerPicker = document.getElementById('inspection-customer-picker');
-    $('#inspection-customer-picker').select2({
-        theme: 'bootstrap-5',
-        width: '100%'
-    });
     const modalElement = document.getElementById('inspect-result-modal-form')
     let modal = new bootstrap.Modal(modalElement)
     let customer_name = ""
