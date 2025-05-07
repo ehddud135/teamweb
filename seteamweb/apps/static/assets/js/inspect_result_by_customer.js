@@ -7,18 +7,18 @@ let initialFormHTML = '';
 document.addEventListener('DOMContentLoaded', () => {
     loadCustomerList()
     cacheInitialFormState(formElement)
-    const customerPicker = document.getElementById('inspection-customer-picker');
     $('#inspection-customer-picker').select2({
         theme: 'bootstrap-5',
         width: '240',
-        placeholder: $( this ).data( 'placeholder' ),
+        placeholder: $('#inspection-customer-picker').data('placeholder'),
         dropdownCssClass: 'select2--small',
         containerCssClass: 'select2--small',
     });
-    customerPicker.addEventListener('change', (event) => {
-        customer_name = event.target.value
+
+    $('#inspection-customer-picker').on('change', function() {
+        customer_name = $(this).val()
         fetchAndRenderData(customer_name)
-    });
+    })
 });
 
 
