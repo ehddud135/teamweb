@@ -1,17 +1,12 @@
-document.addEventListener('DOMContentLoaded', () => {
-    tbodyList = document.querySelectorAll('tbody[id$="-table-body"]')  
+function viewSignificant(bodyDataFormat, tableBody=null) {
+    tbodyList = document.querySelectorAll('tbody[id$="-table-body"]')
+    if (tableBody) {
+        tbodyList = tableBody
+    }
     tbodyList.forEach(tbody => {
         tbody.addEventListener('click', async function(event) {
             tbodyId = tbody.id
-            bodyData = {
-                inspection_date: event.target.dataset.inspectionDate,
-                customer_name: event.target.dataset.customerName
-            }
-
-            if (tbodyId == 'customer-table-body') {
-                bodyData.platform = event.target.dataset.platform;
-                bodyData.package_name = event.target.dataset.packageName;
-            };
+            bodyData = bodyDataFormat(event.target.dataset)
             jsonData = JSON.stringify(bodyData)
             const modal = new bootstrap.Modal(document.getElementById('significantModal'))
             if (event.target.classList.contains('signifi-btn')) {
@@ -35,4 +30,4 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
-});
+}

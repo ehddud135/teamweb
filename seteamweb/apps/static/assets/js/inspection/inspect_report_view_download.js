@@ -1,17 +1,15 @@
 document.addEventListener('DOMContentLoaded', function (){
     document.addEventListener('click', function (event) {
-        const inspection_months = document.getElementById('inspection-month').textContent.split(' ');
-        const inspection_month = inspection_months[0] + " " + inspection_months[1]
+        let url = event.target.getAttribute('pdf-url')
+        eventData = event.target.dataset
         if (event.target.classList.contains('pdf-view-btn')){
-            const viewUrl = event.target.getAttribute('pdf-view-url')
-            const customer_name = event.target.getAttribute('data-name')
-            fetch(viewUrl, {
+            fetch(url, {
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json',
                     'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
                 },
-                body: JSON.stringify({ "customer_name": customer_name, "inspection_month": inspection_month })
+                body: JSON.stringify({ "customer_name": eventData.name, "inspection_month": eventData.inspectionMonth })
             }).then(response => {
                 if (!response.ok) {
                     swalWithBootstrapButtons.fire(
@@ -28,17 +26,15 @@ document.addEventListener('DOMContentLoaded', function (){
             }).catch(error => console.error('Error fetching PDF:', error));
         }
         else if (event.target.classList.contains('download-btn')){
-            const downloadUrl = event.target.getAttribute('pdf-download-url')
-            const customer_name = event.target.getAttribute('data-name')
-            let downalod_file_name = `${inspection_month}_${customer_name}_정기점검_확인서.pdf`
+            let downalod_file_name = `${eventData.inspectionMonth}_${eventData.dataset.name}_정기점검_확인서.pdf`
 
-            fetch(downloadUrl, {
+            fetch(url, {
                 method: 'POST',
                 headers:{
                     'Content-Type': 'application/json',
                     'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
                 },
-                body: JSON.stringify({ "customer_name": customer_name, "inspection_month": inspection_month })
+                body: JSON.stringify({ "customer_name": eventData.name, "inspection_month": eventData.inspectionMonth })
 
             }).then(response => {
                 if (!response.ok) {
@@ -54,7 +50,10 @@ document.addEventListener('DOMContentLoaded', function (){
                 a.click();
                 a.remove();
             }).catch(error => console.error('Error fetching PDF:', error));
-
         };
     })
 })
+
+function pdfViewOrDownload(bodyData) {
+
+}

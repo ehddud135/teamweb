@@ -18,9 +18,9 @@ class Customer(models.Model):
 
 
 class InstallationRecord(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, to_field="name", on_delete=models.CASCADE)
     manager = models.ForeignKey(Manager, to_field="name", on_delete=models.SET_NULL, null=True)
-    installation_date = models.DateField(null=True)
+    installation_date = models.DateField(null=False)
     significant = models.TextField(null=True)
     created_at = models.DateField(auto_now_add=True)
 

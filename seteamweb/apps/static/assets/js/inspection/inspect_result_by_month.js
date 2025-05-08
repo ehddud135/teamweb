@@ -32,11 +32,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     month_picker.addEventListener('changeDate', (event) => {
         fetchAndRenderData(event.target.value)
+        viewSignificant(bodyDataFormat)
     });
-
 
     fetchAndRenderData(month_picker.value)
 });
+
+function bodyDataFormat(data) {
+    return {    
+        inspection_date: data.inspectionDate,
+        customer_name: data.customerName
+    }
+}
 
 
 async function fetchAndRenderData(month) {
@@ -57,6 +64,7 @@ async function fetchAndRenderData(month) {
         pageData.forEach(item => {
             significant_btn = ``;
             convert_date = convertToDMY(new Date(item.inspection_date).toLocaleDateString())
+            data = `data-name="${item.name}" data-inspection-month="${picked_date}"`
             item_id++;
             if (item.inspect_significant) {
                 significant_btn += `<button class="btn btn-info signifi-btn" url="/inspection/significant-per-monthly-result"
@@ -79,8 +87,8 @@ async function fetchAndRenderData(month) {
                     ${significant_btn}
                     </td>
                     <td>
-                        <button class="btn btn-info pdf-view-btn" data-name="${item.name}" pdf-view-url="/inspection/report/view">View</button>
-                        <button class="btn btn-info download-btn" data-name="${item.name}" pdf-download-url="/inspection/report/download">Download</button>
+                        <button class="btn btn-info pdf-view-btn" ${data} pdf-url="/inspection/report">View</button>
+                        <button class="btn btn-info download-btn" ${data}" pdf-url="/inspection/report">Download</button>
                     </td>
                 </tr>
             `;

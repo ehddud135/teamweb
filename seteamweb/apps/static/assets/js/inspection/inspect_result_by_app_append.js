@@ -8,13 +8,12 @@ const swalWithBootstrapButtons = Swal.mixin({
 
 
 document.addEventListener('DOMContentLoaded', function (){
-    const customerPicker = document.getElementById('inspection-customer-picker');
     const modalElement = document.getElementById('inspect-result-modal-form')
     let modal = new bootstrap.Modal(modalElement)
     let customer_name = ""
-    customerPicker.addEventListener('change', (event) => {
-        customer_name = event.target.value
-    });
+    $('#customer-picker').on('change', function() {
+        customer_name = $(this).val()
+    })
 
     document.querySelectorAll('.open-modal').forEach(btn =>{
         btn.addEventListener('click', function(){

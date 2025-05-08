@@ -7,20 +7,29 @@ let initialFormHTML = '';
 document.addEventListener('DOMContentLoaded', () => {
     loadCustomerList()
     cacheInitialFormState(formElement)
-    $('#inspection-customer-picker').select2({
+    $('#customer-picker').select2({
         theme: 'bootstrap-5',
         width: '240',
-        placeholder: $('#inspection-customer-picker').data('placeholder'),
+        placeholder: $('#customer-picker').data('placeholder'),
         dropdownCssClass: 'select2--small',
         containerCssClass: 'select2--small',
     });
 
-    $('#inspection-customer-picker').on('change', function() {
+    $('#customer-picker').on('change', function() {
         customer_name = $(this).val()
         fetchAndRenderData(customer_name)
+        viewSignificant(bodyDataFormat)
     })
 });
 
+function bodyDataFormat(data) {
+    return {
+        inspection_date: data.inspectionDate,
+        customer_name: data.customerName,
+        platform : data.platform,
+        package_name : data.packageName
+    }
+}
 
 // Modal 종료 시 폼 초기화
 
@@ -111,23 +120,4 @@ function renderTable(pageData) {
         `;
         tableBody.innerHTML += row;
     });
-}
-
-async function loadCustomerList(){
-    try {
-        const response = await fetch('/customer/name-list');
-        const customerList = await response.json();
-
-        const customerPicker = document.getElementById('inspection-customer-picker');
-        customerPicker.innerHTML = '<option></option>'; // 초기화
-
-        customerList.forEach(customer => {
-            const option = document.createElement('option');
-            option.value = customer.name; // 고객 ID
-            option.textContent = customer.name; // 고객 이름
-            customerPicker.appendChild(option);
-        });
-    } catch (e){
-        console.log(e.message)
-    }
 }

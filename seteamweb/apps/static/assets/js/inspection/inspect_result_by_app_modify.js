@@ -10,7 +10,7 @@ function convertToDMY(dateStr) {
 document.addEventListener('DOMContentLoaded', function (){
     const modalElement = document.getElementById('inspect-result-modal-form')
     const modal = new bootstrap.Modal(modalElement)
-    const customerPicker = document.getElementById('inspection-customer-picker');
+    const customerPicker = document.getElementById('customer-picker');
     const formElement =  modalElement.querySelector('#resultAppendForm');
 
     if (formElement) {
