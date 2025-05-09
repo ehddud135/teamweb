@@ -28,7 +28,7 @@
                                 <div class="text-center text-md-center mb-4 mt-md-0">
                                     <h1 class="mb-0 h4">Package 등록</h1>
                                 </div>
-                                <form id="appendForm" action="/package-append" class="mt-4" method="POST">
+                                <form id="appendForm" action="/package/append" class="mt-4" method="POST">
                                     {% csrf_token %}
                                     <div class="mb-4">
                                         <label for="package-name">Package Name</label>
@@ -111,7 +111,7 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script src="{% static 'assets/vendor/sweetalert2/sweetalert2.all.min.js'%}"></script>
-<script src="{% static 'assets/js/append.js' %}"></script>
-<script src="{% static 'assets/js/delete.js' %}"></script>
+<script src="{% static 'assets/js/utils/append.js' %}"></script>
+<script src="{% static 'assets/js/utils/delete.js' %}"></script>
 <script src="{% static 'assets/js/packages_list.js' %}"></script>
 {% endblock javascripts %}

@@ -15,7 +15,7 @@
     </div>
     <div class="btn-toolbar mb-2 mb-md-0 me-4">
     <!-- Button Modal -->
-    <button type="button" class="btn btn-block btn-gray-800 mb-3" data-bs-toggle="modal" data-bs-target="#append-modal-form">
+    <button type="button" id="append-modal-btn" class="btn btn-block btn-gray-800 mb-3" data-bs-toggle="modal" data-bs-target="#append-modal-form">
         + Customer 등록
     </button>
     <!-- Modal Content -->
@@ -28,7 +28,7 @@
                             <div class="text-center text-md-center mb-4 mt-md-0">
                                 <h1 class="mb-0 h4">고객사 등록</h1>
                             </div>
-                            <form id="appendForm" action="/customer-append" class="mt-4" method="POST">
+                            <form id="appendForm" action="/customer/append" class="mt-4" method="POST">
                                 {% csrf_token %}
                                 <div class="mb-4">
                                     <label for="customer-name">Customer Name</label>
@@ -38,6 +38,9 @@
                                     <label for="customer-manager">Manager</label>
                                     <input type="text" name="customer-manager" class="form-control" id="customer-manager" aria-describedby="textHelp">
                                     <small id="textHelp" class="form-text text-muted">고객사 담당자 이름 입력</small>
+                                </div>
+                                <div class="mb-4">
+                                    <input class="form-check-input" type="checkbox" name="inspection" id="inspection">정기 점검 진행 여부</input>
                                 </div>
                                 <div class="modal-footer d-flex justify-content-center pt-3 pb-0">
                                     <button type="submit" class="btn btn-gray-800">Append</button>
@@ -75,6 +78,7 @@
                 <th class="border-gray-200">담당자</th>
                 <th class="border-gray-200">패키지 수</th>
                 <th class="border-gray-200">등록일</th>
+                <th class="border-gray-200">점검 여부</th>
                 <th class="border-gray-200">점검 주기</th>
                 <th class="border-gray-200 rounded-end">삭제 / 수정</th>
             </tr>
@@ -100,7 +104,7 @@
                     <div class="text-center text-md-center mb-4 mt-md-0">
                         <h1 class="mb-0 h4">정기 점검 일정 변경</h1>
                     </div>
-                    <form id="modifyForm" action="/inspection-schedule-modify" class="mt-4" method="POST">
+                    <form id="modifyForm" action="/inspection/schedule-modify" class="mt-4" method="POST">
                         {% csrf_token %}
                         <div class="mb-1">
                             <label id="modify-customer-name-label" for="modify-customer-name-label">Customer Name : </label>
@@ -176,8 +180,9 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script src="{% static 'assets/vendor/sweetalert2/sweetalert2.all.min.js'%}"></script>
-<script src="{% static 'assets/js/append.js' %}"></script>
-<script src="{% static 'assets/js/delete.js' %}"></script>
+<script src="{% static 'assets/js/utils/fetch-and-render-data.js' %}"></script>
+<script src="{% static 'assets/js/utils/append.js' %}"></script>
+<script src="{% static 'assets/js/utils/delete.js' %}"></script>
 <script src="{% static 'assets/js/customer_list.js' %}"></script>
 <script src="{% static 'assets/js/schedule_edit.js' %}"></script>
 {% endblock javascripts %}
