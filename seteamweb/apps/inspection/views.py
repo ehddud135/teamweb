@@ -12,9 +12,6 @@ from django.shortcuts import get_object_or_404
 from django.core.files.storage import FileSystemStorage
 import traceback
 from datetime import datetime
-<< << << < HEAD
-== == == =
->>>>>> > 25.0.2
 
 # Create your views here.
 
