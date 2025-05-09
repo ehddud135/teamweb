@@ -173,6 +173,8 @@ def inspection_report_view_or_download(request):
                 return FileResponse(open(report.file.path, 'rb'), content_type='application/pdf')
             else:
                 return JsonResponse({"error": "Invaild Report File"}, status=405)
+        else:
+            return JsonResponse({"error": "Please check Method"}, status=405)
     except Exception as e:
         traceback.print_exc()
         print(e)
@@ -220,7 +222,8 @@ def inspect_significant_by_monthly_result(request):
             data = json.loads(request.body)
             print(data)
             customer = Customer.objects.get(name=data.get('customer_name'))
-            item = InspectionRecord.objects.get(customer=customer, inspection_date=data.get('inspection_date'))
+            inspection_month = convert_to_format(data['inspection_month'])
+            item = InspectionRecord.objects.get(customer=customer, inspection_month=inspection_month)
             return JsonResponse({"significant": item.details}, status=200, json_dumps_params={'ensure_ascii': False, "indent": 2})
         else:
             return JsonResponse({"error": "Please check Method"}, status=405)

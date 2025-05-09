@@ -14,6 +14,6 @@ urlpatterns = [
     path("installation-record-append", views.installation_record_append, name="installation_record_append"),
     path("record-list-api", views.record_list_api, name="certificate_list_api"),
     path("view-significant", views.installation_significant, name="installation_significant"),
-    path("installation-cert/<str:view_or_download>", views.installation_cert_view_or_download, name="installation_cert_view_or_download"),
+    path("installation-cert", views.installation_cert_view_or_download, name="installation_cert_view_or_download"),
 
 ]

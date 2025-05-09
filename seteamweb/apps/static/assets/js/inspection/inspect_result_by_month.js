@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
     month_picker.addEventListener('changeDate', (event) => {
         fetchAndRenderData(event.target.value)
         viewSignificant(bodyDataFormat)
+        pdfViewOrDownload(bodyDataFormat)
     });
 
     fetchAndRenderData(month_picker.value)
@@ -40,8 +41,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 function bodyDataFormat(data) {
     return {    
-        inspection_date: data.inspectionDate,
-        customer_name: data.customerName
+        inspection_month: data.inspectionMonth,
+        customer_name: data.name
     }
 }
 
@@ -68,7 +69,7 @@ async function fetchAndRenderData(month) {
             item_id++;
             if (item.inspect_significant) {
                 significant_btn += `<button class="btn btn-info signifi-btn" url="/inspection/significant-per-monthly-result"
-                                data-inspection-date="${item.inspection_date}" data-customer-name="${item.name}">View</button>`;
+                                ${data}">View</button>`;
             }
             const row = `
                 <tr>

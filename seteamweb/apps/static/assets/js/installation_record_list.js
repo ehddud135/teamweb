@@ -19,8 +19,8 @@ function dataRowFormat(item, item_id) {
                     <td>${new Date(item.installation_date).toLocaleDateString()}</td>
                     ${significant_btn}
                     <td>
-                        <button class="btn btn-info pdf-view-btn" ${data} pdf-view-url="/customer/installation-cert/view">View</button>
-                        <button class="btn btn-info download-btn" ${data} pdf-download-url="/customer/installation-cert/download">Download</button>
+                        <button class="btn btn-info pdf-view-btn" ${data} pdf-url="/customer/installation-cert">View</button>
+                        <button class="btn btn-info download-btn" ${data} pdf-url="/customer/installation-cert">Download</button>
                     </td>
                 </tr>
             `;
@@ -40,11 +40,13 @@ document.addEventListener('DOMContentLoaded', async () => {
     tbody = document.querySelectorAll('tbody[id="table-body"]')
     fetchAndRenderData(apiUrl, dataRowFormat);
     viewSignificant(bodyDataFormat, tbody);
+    pdfViewOrDownload(bodyDataFormat, tbody);
     const modalElement = document.getElementById('append-modal-form');
 
     modalElement.addEventListener('hidden.bs.modal', ()=> {
         fetchAndRenderData(apiUrl, dataRowFormat);
         viewSignificant(bodyDataFormat, tbody);
+        pdfViewOrDownload(bodyDataFormat, tbody);
     })
 
 })

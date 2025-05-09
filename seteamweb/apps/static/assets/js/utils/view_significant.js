@@ -5,7 +5,6 @@ function viewSignificant(bodyDataFormat, tableBody=null) {
     }
     tbodyList.forEach(tbody => {
         tbody.addEventListener('click', async function(event) {
-            tbodyId = tbody.id
             bodyData = bodyDataFormat(event.target.dataset)
             jsonData = JSON.stringify(bodyData)
             const modal = new bootstrap.Modal(document.getElementById('significantModal'))

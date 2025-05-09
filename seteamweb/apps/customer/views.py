@@ -127,7 +127,7 @@ def installation_significant(request):
         return JsonResponse({"error": e}, status=405)
 
 
-def installation_cert_view_or_download(request, view_or_download):
+def installation_cert_view_or_download(request):
     try:
         if request.method == 'POST':
             data = json.loads(request.body)
