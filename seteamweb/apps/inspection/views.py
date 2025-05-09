@@ -63,15 +63,15 @@ def inspection_result_append(request):
             if request.content_type == 'multipart/form-data':
                 customer_name = Customer.objects.get(name=request.POST.get('customer-name'))
                 inspection_month = convert_to_format(request.POST.get('inspect-month'))
-                customer = InspectionRecord.objects.get(customer=customer_name, inspection_month=inspection_month)
-                customer.result = 'complete'
-                customer.inspection_date = convert_datetime(request.POST.get('inspection_date'))
-                customer.details = request.POST.get('inspect_significant')
-                customer.save()
+                record = InspectionRecord.objects.get(customer=customer_name, inspection_month=inspection_month)
+                record.result = 'complete'
+                record.inspection_date = convert_datetime(request.POST.get('inspection_date'))
+                record.details = request.POST.get('inspect_significant')
+                record.save()
                 report_title = f"{request.POST.get('title')}.pdf"
                 report_file = request.FILES.get('inspection_result_file')
                 if report_file:
-                    insepction_report, is_create = InspectionResultFile.objects.get_or_create(inspectrecord=customer)
+                    insepction_report, is_create = InspectionResultFile.objects.get_or_create(inspectrecord=record)
                     insepction_report.title = report_title
                     insepction_report.file = report_file
                     insepction_report.save()
@@ -161,7 +161,7 @@ def inspection_result_by_app_delete(request):
         return JsonResponse({"error": "Please check your email and name"}, status=405)
 
 
-def inspection_report_view_or_download(request, view_or_download):
+def inspection_report_view_or_download(request):
     try:
         if request.method == 'POST':
             data = json.loads(request.body)
@@ -173,7 +173,10 @@ def inspection_report_view_or_download(request, view_or_download):
                 return FileResponse(open(report.file.path, 'rb'), content_type='application/pdf')
             else:
                 return JsonResponse({"error": "Invaild Report File"}, status=405)
+        else:
+            return JsonResponse({"error": "Please check Method"}, status=405)
     except Exception as e:
+        traceback.print_exc()
         print(e)
 
 
@@ -217,8 +220,10 @@ def inspect_significant_by_monthly_result(request):
     try:
         if request.method == 'POST':
             data = json.loads(request.body)
+            print(data)
             customer = Customer.objects.get(name=data.get('customer_name'))
-            item = InspectionRecord.objects.get(customer=customer, inspection_date=data.get('inspection_date'))
+            inspection_month = convert_to_format(data['inspection_month'])
+            item = InspectionRecord.objects.get(customer=customer, inspection_month=inspection_month)
             return JsonResponse({"significant": item.details}, status=200, json_dumps_params={'ensure_ascii': False, "indent": 2})
         else:
             return JsonResponse({"error": "Please check Method"}, status=405)

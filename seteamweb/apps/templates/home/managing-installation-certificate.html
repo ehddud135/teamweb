@@ -1,0 +1,151 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Managing-Cutstomer {% endblock %} 
+{% load static %}
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-2">
+    <div class="d-block mb-4 mb-md-0">
+        <h2 class="h4">설치 확인서</h2>
+        <p class="mb-0">고객사별 설치 확인서 관리.</p>
+    </div>
+    <div class="btn-toolbar mb-2 mb-md-0 me-4">
+    <!-- Button Modal -->
+    <button type="button" id="append-modal-btn" class="btn btn-block btn-gray-800 mb-3" data-bs-toggle="modal" data-bs-target="#append-modal-form">
+        + 등록
+    </button>
+    <!-- Modal Content -->
+        <div class="modal fade" id="append-modal-form" tabindex="-1" role="dialog" aria-labelledby="modal-form" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-body p-0">
+                        <div class="card p-3 p-lg-4">
+                            <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <div class="text-center text-md-center mb-4 mt-md-0">
+                                <h1 class="mb-0 h4">설치 확인서 등록</h1>
+                            </div>
+                            <form id="appendForm" action="/customer/installation-record-append" class="mt-4" method="POST">
+                                {% csrf_token %}
+                                <div class="mb-3">
+                                    <label for="customer-picker">고객사 명</label>
+                                    <div class="input-group">
+                                        <select class="form-select" id="customer-picker" name="customer-picker" data-placeholder="Choose customer" required></select>                                           
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="manager-picker">작업자 선택</label>
+                                    <div class="input-group">
+                                        <select class="form-select" id="manager-picker" name="manager-picker" data-placeholder="Choose manager" required></select>                                           
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="installation-date">설치 작업일</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">
+                                            <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                                        </span>
+                                        <input autocomplete="off" data-datepicker="" class="form-control datepicker-input" name="installation-date" id="installation-date" type="text" placeholder="dd/mm/yyyy" required>                                               
+                                    </div>
+                                </div>
+                                <div class="my-4">
+                                    <label for="installation-significant">특이사항</label>
+                                    <textarea class="form-control" name="installation-significant" id="installation-significant" rows="4"></textarea>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="installation-record-file" class="form-label">설치 확인서 업로드</label>
+                                    <input class="form-control" type="file" name="installation-record-file" id="installation-record-file" required>
+                                </div>
+                                <div class="modal-footer d-flex justify-content-center pt-3 pb-0">
+                                    <button type="submit" class="btn btn-gray-800">Append</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <!-- End of Modal Content -->
+    </div>
+</div>
+
+
+
+<div class="d-flex align-items-center">
+    <!-- Search form -->
+    <form class="navbar-search form-inline" id="navbar-search-main">
+      <div class="input-group input-group-merge search-bar mb-3">
+          <span class="input-group-text" id="topbar-addon">
+            <svg class="icon icon-xs" x-description="Heroicon name: solid/search" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+              <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"></path>
+            </svg>
+          </span>
+          <input type="text" class="form-control" id="search-input" placeholder="Search" aria-label="Search" aria-describedby="topbar-addon">
+      </div>
+    </form>
+    <!-- / Search form -->
+</div>
+
+<div class="card card-body border-0 shadow table-wrapper table-responsive">
+    <table class="table table-hover">
+        <thead class="thead-light">
+            <tr>
+                <th class="border-gray-200 rounded-start">#</th>
+                <th class="border-gray-200">Name</th>						
+                <th class="border-gray-200">담당자</th>
+                <th class="border-gray-200">설치일</th>
+                <th class="border-gray-200">특이사항</th>
+                <th class="border-gray-200 rounded-end">확인서 보기 / 다운로드</th>
+            </tr>
+        </thead>
+        <tbody id="table-body"></tbody>
+    </table>
+    <div class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination mb-0" id="pagination">
+            </ul>
+        </nav>
+        <div class="fw-normal small mt-4 mt-lg-0" id="pagination-info">
+        </div>
+    </div>
+</div>
+
+
+<!-- Modal Content -->
+<div class="modal fade" id="significantModal" tabindex="-1" role="dialog" aria-labelledby="modal-default" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="h6 modal-title" id="significantModalLabel">특이사항</h2>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="significantContent"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link text-gray-600 ms-auto" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+<script src="{% static 'assets/vendor/sweetalert2/sweetalert2.all.min.js'%}"></script>
+<script src="{% static 'assets/js/utils/loadcustomerlist.js'%}"></script>
+<script src="{% static 'assets/js/utils/loadmanagerlist.js'%}"></script>
+<script src="{% static 'assets/js/utils/delete.js' %}"></script>
+<script src="{% static 'assets/js/utils/append.js' %}"></script>
+<script src="{% static 'assets/js/utils/view_significant.js' %}"></script>
+<script src="{% static 'assets/js/utils/report_view_or_download.js' %}"></script>
+<script src="{% static 'assets/js/installation_record_list.js' %}"></script>
+<script src="{% static 'assets/js/installation_record_append.js' %}"></script>
+
+{% comment %} <script src="{% static 'assets/js/installation_record_append.js' %}"></script> {% endcomment %}
+{% endblock javascripts %}

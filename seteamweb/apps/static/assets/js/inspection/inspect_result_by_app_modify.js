@@ -10,11 +10,10 @@ function convertToDMY(dateStr) {
 document.addEventListener('DOMContentLoaded', function (){
     const modalElement = document.getElementById('inspect-result-modal-form')
     const modal = new bootstrap.Modal(modalElement)
-    const customerPicker = document.getElementById('inspection-customer-picker');
+    const customerPicker = document.getElementById('customer-picker');
     const formElement =  modalElement.querySelector('#resultAppendForm');
 
     if (formElement) {
-        console.log(formElement)
         document.addEventListener('click', function (event) {
             if (event.target.classList.contains('modify-btn')){
                 cells = event.target.closest('tr').querySelectorAll('td')

@@ -7,18 +7,15 @@
 
 {% block content %}
 
-
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center py-4">
     <div id="customer" class="d-block mb-4 mb-md-0">
         <h2 id="inspection-customer" class="h4"> 정기 점검 결과</h2>
         <p class="mb-0">고객사 앱별 점검 결과</p>
     </div>
     <div class="mb-3">
-        <label for="inspection-customer-picker">고객사</label>
+        <label for="customer-picker">고객사</label>
         <div class="input-group">
-            <select class="form-select" id="inspection-customer-picker" aria-label="Default select example">
-                <option selected="">Choose Customer</option>
-            </select>                                           
+            <select class="form-select" id="customer-picker" data-placeholder="Choose customer"></select>                                           
         </div>
     </div>
 </div>
@@ -147,8 +144,9 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script src="{% static 'assets/vendor/sweetalert2/sweetalert2.all.min.js'%}"></script>
-<script src="{% static 'assets/js/inspect_result_by_customer.js' %}"></script>
-<script src="{% static 'assets/js/inspect_result_by_app_append.js' %}"></script>
-<script src="{% static 'assets/js/inspect_result_by_app_modify.js' %}"></script>
-<script src="{% static 'assets/js/view_significant.js' %}"></script>
+<script src="{% static 'assets/js/utils/loadcustomerlist.js' %}"></script>
+<script src="{% static 'assets/js/inspection/inspect_result_by_customer.js' %}"></script>
+<script src="{% static 'assets/js/inspection/inspect_result_by_app_append.js' %}"></script>
+<script src="{% static 'assets/js/inspection/inspect_result_by_app_modify.js' %}"></script>
+<script src="{% static 'assets/js/utils/view_significant.js' %}"></script>
 {% endblock javascripts %}

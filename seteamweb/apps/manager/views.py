@@ -50,3 +50,8 @@ def manager_delete(request, item_name):
     except:
         html_template = loader.get_template('home/page-500.html')
         return HttpResponse(html_template.render(context, request))
+
+
+def manager_name_list(request):
+    items = Manager.objects.values('name')
+    return JsonResponse(list(items), safe=False)

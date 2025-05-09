@@ -15,7 +15,7 @@
     </div>
     <div class="btn-toolbar mb-2 mb-md-0 me-4">
     <!-- Button Modal -->
-    <button type="button" class="btn btn-block btn-gray-800 mb-3" data-bs-toggle="modal" data-bs-target="#append-modal-form">
+    <button type="button" id="append-modal-btn" class="btn btn-block btn-gray-800 mb-3" data-bs-toggle="modal" data-bs-target="#append-modal-form">
         + Customer 등록
     </button>
     <!-- Modal Content -->
@@ -180,8 +180,9 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script src="{% static 'assets/vendor/sweetalert2/sweetalert2.all.min.js'%}"></script>
-<script src="{% static 'assets/js/append.js' %}"></script>
-<script src="{% static 'assets/js/delete.js' %}"></script>
+<script src="{% static 'assets/js/utils/fetch-and-render-data.js' %}"></script>
+<script src="{% static 'assets/js/utils/append.js' %}"></script>
+<script src="{% static 'assets/js/utils/delete.js' %}"></script>
 <script src="{% static 'assets/js/customer_list.js' %}"></script>
 <script src="{% static 'assets/js/schedule_edit.js' %}"></script>
 {% endblock javascripts %}
