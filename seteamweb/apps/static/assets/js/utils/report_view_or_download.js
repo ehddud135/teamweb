@@ -10,6 +10,7 @@ function pdfViewOrDownload(bodyDataFormat, tableBody) {
         eventData = event.target.dataset
         bodyData = bodyDataFormat(eventData)
         jsonData = JSON.stringify(bodyData)
+        let filename = null
         fetch(url, {
             method: 'POST',
             headers:{
@@ -27,17 +28,18 @@ function pdfViewOrDownload(bodyDataFormat, tableBody) {
                     )
                     throw new Error('Failed to fetch the PDF');
                 }
+                const disposition = response.headers.get('Content-Disposition');
+                filename = getFileNameFromDisposition(disposition);
                 return response.blob(); // 서버로부터 받은 파일 데이터를 Blob으로 변환
             }).then(blob => {
                 if (event.target.classList.contains('pdf-view-btn')){ 
                     const pdfUrl = URL.createObjectURL(blob);
                     window.open(pdfUrl, '_blank'); // 새로운 탭에서 PDF 열기
                 } else if (event.target.classList.contains('download-btn')) {
-                    let downalod_file_name = `${eventData.inspectionMonth}_${eventData.dataset.name}_정기점검_확인서.pdf`
                     const pdfUrl = URL.createObjectURL(blob);
                     const a = document.createElement('a');
                     a.href = pdfUrl;
-                    a.download = downalod_file_name;
+                    a.download = filename;
                     document.body.appendChild(a);
                     a.click();
                     a.remove();
@@ -45,4 +47,19 @@ function pdfViewOrDownload(bodyDataFormat, tableBody) {
             }).catch(error => console.error('Error fetching PDF:', error));
         })    
     })
+}
+
+function getFileNameFromDisposition(headerValue) {
+    if (!headerValue) return null;
+
+    // filename*=utf-8''%EA%B0%80%EC%9E%A5.pdf 형식
+    const filenameStarMatch = headerValue.match(/filename\*\=([^;]+)/i);
+    if (filenameStarMatch) {
+        const encoded = filenameStarMatch[1].replace(/^UTF-8''/i, '');
+        return decodeURIComponent(encoded);
+    }
+
+    // fallback to regular filename=
+    const filenameMatch = headerValue.match(/filename=\"?([^\";]+)\"?/i);
+    return filenameMatch ? filenameMatch[1] : null;
 }

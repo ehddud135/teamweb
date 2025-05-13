@@ -142,7 +142,7 @@ def installation_cert_view_or_download(request):
             record = InstallationRecord.objects.get(customer=data.get("customer_name"), installation_date=data.get('installation_date'))
             report = InstallationCert.objects.get(record=record)
             if os.path.exists(report.file.path):
-                return FileResponse(open(report.file.path, 'rb'), content_type='application/pdf')
+                return FileResponse(open(report.file.path, 'rb'), content_type='application/pdf', filename=report.title)
             else:
                 return JsonResponse({"error": "Invaild Report File"}, status=405)
     except Exception as e:
