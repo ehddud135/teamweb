@@ -1,6 +1,12 @@
 const apiUrl = '/customer/list-api';
 function dataRowFormat(item, item_id) {
     inspection = item.inspection ? 'O': 'X'
+    if (item.manager == null) {
+        item.manager = '미정'
+    }
+    if (item.inspect_schedule == null) {
+        item.inspect_schedule = '미진행'
+    }
     row = `
             <tr>
                 <td>${item_id}</td>
@@ -19,11 +25,33 @@ function dataRowFormat(item, item_id) {
     return row
 }
 
-// 페이지 로드 시 데이터 가져오기
-window.onload = fetchAndRenderData(apiUrl, dataRowFormat);
+const isInsepctTrue = document.getElementById('inspection_modify_true') 
+const isInsepctFalse = document.getElementById('inspection_modify_false')
 
-const modalElement = document.getElementById('append-modal-form');
- 
- modalElement.addEventListener('submit', ()=> {
-     fetchAndRenderData(apiUrl, dataRowFormat);
- })
+isInsepctTrue.addEventListener('change', () => {
+    setDisabledState(false);
+});
+
+isInsepctFalse.addEventListener('change', () => {
+    setDisabledState(true);
+});
+
+function setDisabledState(disabled) {
+    document.getElementById('inspection-period').disabled = disabled;
+    document.querySelectorAll('.month-check').forEach(cb => {
+        cb.disabled = disabled;
+    });
+}
+
+const searchList = ['name', 'manager']
+// 페이지 로드 시 데이터 가져오기
+window.onload = fetchAndRenderData(apiUrl, dataRowFormat, searchList);
+document.addEventListener('', function () {})
+const appendFormElement = document.getElementById('appendForm');
+const modifyFormElement = document.getElementById('modifyForm');
+appendFormElement.addEventListener('submit', ()=> {
+    fetchAndRenderData(apiUrl, dataRowFormat, searchList);
+})
+modifyFormElement.addEventListener('submit', ()=> {
+    fetchAndRenderData(apiUrl, dataRowFormat, searchList);
+})

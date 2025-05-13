@@ -13,11 +13,12 @@ function dataRowFormat(item) {
             </tr> `
     return row
 }
+const searchList = ['name', 'version', 'architecture']
 // 페이지 로드 시 데이터 가져오기
-window.onload = fetchAndRenderData(apiUrl, dataRowFormat);
+window.onload = fetchAndRenderData(apiUrl, dataRowFormat, searchList);
 
 // 디바이스 리스트 OS 변경 시 데이터 가져오기
 document.getElementById('platform').addEventListener('change', () => {
     apiUrl = `/devices/list-api/${platform.value}`
-    fetchAndRenderData(apiUrl, dataRowFormat)
+    fetchAndRenderData(apiUrl, dataRowFormat, searchList)
 });

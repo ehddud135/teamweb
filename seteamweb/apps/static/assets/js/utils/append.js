@@ -6,13 +6,10 @@ const swalWithBootstrapButtons = Swal.mixin({
     buttonsStyling: false
 });
 
-let btn = document.getElementById('append-modal-btn')
-
-btn.addEventListener('click', function () {
+document.addEventListener('DOMContentLoaded', function () {
     const form = document.getElementById('appendForm');
     if (form) {
         form.addEventListener('submit', async function (e) {
-            console.log("submit event triggered")
             e.preventDefault();
             const formData = new FormData(form);
             try {
@@ -54,5 +51,5 @@ btn.addEventListener('click', function () {
     } else {
         console.error('Form not found!');
     }
+});
     
-})
