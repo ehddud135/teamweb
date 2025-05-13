@@ -1,4 +1,4 @@
-async function fetchAndRenderData(apiUrl, dataRowFormat) {
+async function fetchAndRenderData(apiUrl, dataRowFormat, searchList = null) {
     // API 호출
     const response = await fetch(apiUrl);
     const data = await response.json();
@@ -94,9 +94,10 @@ async function fetchAndRenderData(apiUrl, dataRowFormat) {
 
     function handleSearch(event) {
         const searchTerm = event.target.value.toLowerCase();
-        filteredData = filteredData.filter(item => 
-            item.name.toLowerCase().includes(searchTerm) ||
-            item.manager.toLowerCase().includes(searchTerm)
+        filteredData = filteredData.filter(item =>
+            searchList.some(key =>
+                item[key]?.toLowerCase().includes(searchTerm.toLowerCase())
+            )
         );
         currentPage = 1; // 검색 시 첫 페이지로 이동
         updateTableAndPagination();

@@ -15,12 +15,12 @@ function dataRowFormat(item, item_id) {
             `;
     return row
 }
-
+const searchList = ['name', 'customer', 'platform']
 // 페이지 로드 시 데이터 가져오기
-window.onload = fetchAndRenderData(apiUrl, dataRowFormat);
+window.onload = fetchAndRenderData(apiUrl, dataRowFormat, searchList);
 
-const modalElement = document.getElementById('append-modal-form');
+const formElement = document.getElementById('appendForm');
 
-modalElement.addEventListener('submit', ()=> {
-    fetchAndRenderData(apiUrl, dataRowFormat);
+formElement.addEventListener('submit', ()=> {
+    fetchAndRenderData(apiUrl, dataRowFormat, searchList);
 })

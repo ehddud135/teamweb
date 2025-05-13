@@ -35,16 +35,18 @@ function bodyDataFormat(data) {
     }
 }
 
+const searchList = ['customer', 'manager']
+
 // 페이지 로드 시 데이터 가져오기
 document.addEventListener('DOMContentLoaded', async () => {
     tbody = document.querySelectorAll('tbody[id="table-body"]')
-    fetchAndRenderData(apiUrl, dataRowFormat);
+    fetchAndRenderData(apiUrl, dataRowFormat, searchList);
     viewSignificant(bodyDataFormat, tbody);
     pdfViewOrDownload(bodyDataFormat, tbody);
     const modalElement = document.getElementById('append-modal-form');
 
     modalElement.addEventListener('hidden.bs.modal', ()=> {
-        fetchAndRenderData(apiUrl, dataRowFormat);
+        fetchAndRenderData(apiUrl, dataRowFormat, searchList);
         viewSignificant(bodyDataFormat, tbody);
         pdfViewOrDownload(bodyDataFormat, tbody);
     })

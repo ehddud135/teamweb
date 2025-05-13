@@ -1,6 +1,8 @@
 from datetime import datetime
+from distutils.util import strtobool
 import json
 import os
+from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from django.http import FileResponse, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
@@ -14,23 +16,28 @@ from ..utils.utils import convert_datetime, convert_to_format
 
 def customer_append(request):
     current_time = datetime.now().date()
-    inspection = False
+    print(request.POST)
+    manager = None
     context = {}
     try:
         if request.method == 'POST':
             if request.content_type == 'multipart/form-data':
                 customer_name = request.POST.get("customer-name")
                 customer_manager = request.POST.get("customer-manager")
-                if request.POST.get("inspection"):
-                    inspection = True
-                if customer_name and customer_manager:
+                is_inspection = bool(strtobool(request.POST.get("inspection_append")))
+                if customer_manager:
                     manager = Manager.objects.get(name=customer_manager)
-                    Customer.objects.create(name=customer_name, manager=manager, inspection=inspection)
-                    return JsonResponse({'status': 'success', "message": "Success"}, status=200)
-                else:
-                    return JsonResponse({"error": "Please check your email and name"}, status=405)
+                customer = Customer.objects.create(name=customer_name, manager=manager, inspection=is_inspection)
+                if is_inspection == True:
+                    InspectionSchedule.objects.create(name=customer)
+                return JsonResponse({'status': 'success', "message": "Success"}, status=200)
+            else:
+                return JsonResponse({"error": "Please check content type"}, status=405)
         return HttpResponse({"error": "Invalid request method"}, status=405)
-    except:
+    except IntegrityError as e:
+        return JsonResponse({"error": "Please check customer name<br>고객사명 중복"}, status=405)
+    except Exception as e:
+        print(e)
         html_template = loader.get_template('home/page-500.html')
         return HttpResponse(html_template.render(context, request))
 
@@ -46,8 +53,9 @@ def customer_list_api(_):
     for item in items:
         try:
             customer = Customer.objects.get(name=item.get('name'))
-            inspect_schedule, is_create = InspectionSchedule.objects.get_or_create(name=customer)
-            inspect_schedule = period_mapping.get(inspect_schedule.Period, "미정")
+            inspect_schedule = InspectionSchedule.objects.filter(name=customer).first()
+            if inspect_schedule is not None:
+                inspect_schedule = period_mapping.get(inspect_schedule.Period, "미정")
             package_count = Packages.objects.filter(customer_id=customer).count()
             item['package_count'] = package_count
             item['inspect_schedule'] = inspect_schedule
@@ -100,11 +108,11 @@ def installation_record_append(request):
                 significant = request.POST.get("installation-significant")
                 record, is_create = InstallationRecord.objects.get_or_create(customer=customer, manager=manager, installation_date=convert_datetime(installation_date), significant=significant)
                 file = request.FILES.get("installation-record-file")
+                file_name = f"{customer_name}_설치확인서.pdf"
                 if file is not None:
-                    file_name = file.name.split(".")[-1]
-                    if file_name not in ['pdf']:
-                        return JsonResponse({"error": "Invalid file type"}, status=405)
-                    InstallationCert.objects.create(record=record, title=file.name, file=file)
+                    if file.content_type != 'application/pdf':
+                        return JsonResponse({"error": "Please check file type<div> PDF 파일만 업로드 해주세요."}, status=405)
+                    InstallationCert.objects.create(record=record, title=file_name, file=file)
                 return JsonResponse({'status': 'success', "message": "Success"}, status=200)
             else:
                 return JsonResponse({"error": "Invalid request content type"}, status=405)

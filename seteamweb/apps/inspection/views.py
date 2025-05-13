@@ -1,17 +1,18 @@
-import os
-import json
-from ..utils.utils import edit_inspection_schedule, convertmonth, convert_to_format, convert_datetime, edit_inspection_options
-from .forms import FileUploadForm
-from .models import InspectionSchedule, InspectionRecord, InspectionResultFile, AndroidInspectResult, iOSInspectResult
-from ..packages.models import Packages
-from ..customer.models import Customer
-from core import settings
-from django.template import loader
-from django.http import HttpResponse, FileResponse, JsonResponse
-from django.shortcuts import get_object_or_404
-from django.core.files.storage import FileSystemStorage
-import traceback
 from datetime import datetime
+from distutils.util import strtobool
+import traceback
+from django.core.files.storage import FileSystemStorage
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponse, FileResponse, JsonResponse
+from django.template import loader
+from core import settings
+from ..customer.models import Customer
+from ..packages.models import Packages
+from .models import InspectionSchedule, InspectionRecord, InspectionResultFile, AndroidInspectResult, iOSInspectResult
+from .forms import FileUploadForm
+from ..utils.utils import edit_inspection_schedule, convertmonth, convert_to_format, convert_datetime, edit_inspection_options
+import json
+import os
 
 # Create your views here.
 
@@ -42,12 +43,19 @@ def inspection_schedule_edit(request):
         if request.method == 'POST':
             if request.content_type == 'multipart/form-data':
                 customer_name = request.POST.get('modify-customer-name')
-                month_list = request.POST.getlist('months')
-                inspect_period = request.POST.get('inspection-period')
+                is_inspection = bool(strtobool(request.POST.get('inspection_modify')))
                 customer = Customer.objects.get(name=customer_name)
-                schedule, _is_create = InspectionSchedule.objects.get_or_create(name=customer)
-                edit_inspection_schedule(schedule, month_list, inspect_period)
-
+                customer.inspection = is_inspection
+                customer.save()
+                if is_inspection == False:
+                    schedule = InspectionSchedule.objects.filter(name=customer).first()
+                    if schedule:
+                        schedule.delete()
+                elif is_inspection == True:
+                    month_list = request.POST.getlist('months')
+                    inspect_period = request.POST.get('inspection-period')
+                    schedule, _is_create = InspectionSchedule.objects.get_or_create(name=customer)
+                    edit_inspection_schedule(schedule, month_list, inspect_period)
                 return JsonResponse({'status': 'success', "message": "Success"}, status=200)
             else:
                 return JsonResponse({"error": "Please check your email and name"}, status=405)
@@ -71,6 +79,8 @@ def inspection_result_append(request):
                 report_title = f"{request.POST.get('title')}.pdf"
                 report_file = request.FILES.get('inspection_result_file')
                 if report_file:
+                    if report_file.content_type != 'application/pdf':
+                        return JsonResponse({"error": "Please check file type<div> PDF 파일만 업로드 해주세요."}, status=405)
                     insepction_report, is_create = InspectionResultFile.objects.get_or_create(inspectrecord=record)
                     insepction_report.title = report_title
                     insepction_report.file = report_file
