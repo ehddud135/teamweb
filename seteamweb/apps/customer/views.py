@@ -108,11 +108,11 @@ def installation_record_append(request):
                 significant = request.POST.get("installation-significant")
                 record, is_create = InstallationRecord.objects.get_or_create(customer=customer, manager=manager, installation_date=convert_datetime(installation_date), significant=significant)
                 file = request.FILES.get("installation-record-file")
+                file_name = f"{customer_name}_설치확인서.pdf"
                 if file is not None:
-                    file_name = file.name.split(".")[-1]
-                    if file_name not in ['pdf']:
-                        return JsonResponse({"error": "Invalid file type"}, status=405)
-                    InstallationCert.objects.create(record=record, title=file.name, file=file)
+                    if file.content_type != 'application/pdf':
+                        return JsonResponse({"error": "Please check file type<div> PDF 파일만 업로드 해주세요."}, status=405)
+                    InstallationCert.objects.create(record=record, title=file_name, file=file)
                 return JsonResponse({'status': 'success', "message": "Success"}, status=200)
             else:
                 return JsonResponse({"error": "Invalid request content type"}, status=405)

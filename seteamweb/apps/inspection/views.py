@@ -79,6 +79,8 @@ def inspection_result_append(request):
                 report_title = f"{request.POST.get('title')}.pdf"
                 report_file = request.FILES.get('inspection_result_file')
                 if report_file:
+                    if report_file.content_type != 'application/pdf':
+                        return JsonResponse({"error": "Please check file type<div> PDF 파일만 업로드 해주세요."}, status=405)
                     insepction_report, is_create = InspectionResultFile.objects.get_or_create(inspectrecord=record)
                     insepction_report.title = report_title
                     insepction_report.file = report_file
