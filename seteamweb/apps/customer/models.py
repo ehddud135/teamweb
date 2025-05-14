@@ -31,7 +31,7 @@ class InstallationRecord(models.Model):
 
 
 class InstallationCert(models.Model):
-    record = models.ForeignKey(InstallationRecord, on_delete=models.CASCADE)
+    record = models.OneToOneField(InstallationRecord, on_delete=models.CASCADE)
     title = models.CharField(max_length=100)
     file = models.FileField(upload_to='')
     uploaded_at = models.DateTimeField(auto_now_add=True)
