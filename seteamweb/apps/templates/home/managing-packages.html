@@ -41,9 +41,11 @@
                                             <option value="iOS">iOS</option>
                                         </select>
                                     </div>
-                                    <div class="mb-4">
-                                        <label for="customer-name">Customer Name</label>
-                                        <input type="text" name="customer-name" class="form-control" id="customer-name">
+                                    <div class="mb-3">
+                                        <label for="customer-picker">Customer Name</label>
+                                        <div class="input-group">
+                                            <select class="form-select" id="customer-picker" name="customer-picker" data-placeholder="Choose customer" required></select>                                           
+                                        </div>
                                     </div>
                                     <div class="mb-4">
                                         <label for="license_expire_date">License Expire Date</label>
@@ -111,6 +113,7 @@
 <!-- Specific Page JS goes HERE  -->
 {% block javascripts %}
 <script src="{% static 'assets/vendor/sweetalert2/sweetalert2.all.min.js'%}"></script>
+<script src="{% static 'assets/js/utils/loadcustomerlist.js'%}"></script>
 <script src="{% static 'assets/js/utils/append.js' %}"></script>
 <script src="{% static 'assets/js/utils/delete.js' %}"></script>
 <script src="{% static 'assets/js/packages_list.js' %}"></script>
