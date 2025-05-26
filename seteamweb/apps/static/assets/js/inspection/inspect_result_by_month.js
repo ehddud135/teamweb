@@ -37,6 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     fetchAndRenderData(month_picker.value)
+    pdfViewOrDownload(bodyDataFormat)
+    viewSignificant(bodyDataFormat)
 });
 
 function bodyDataFormat(data) {
