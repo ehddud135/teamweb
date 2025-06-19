@@ -27,5 +27,6 @@ urlpatterns = [
     path("package/", include('apps.packages.urls')),
     path("inspection/", include('apps.inspection.urls')),
     path("devices/", include('apps.devices.urls')),
+    path("dashboard/", include('apps.dashboard.urls')),
     path("", include("apps.home.urls"))             # UI Kits Html files
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
