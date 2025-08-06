@@ -16,7 +16,8 @@ def package_append(request):
                 package_name_list = request.POST.get("package-name").splitlines()
                 for package_name in package_name_list:
                     package_name = package_name.strip()
-                    customer_name = request.POST.get("customer-name")
+                    print(request.POST)
+                    customer_name = request.POST.get("customer-picker")
                     platform = request.POST.get("platform")
                     input_date = request.POST.get("license_expire_date")
                     license_expire_date = convert_datetime(input_date)

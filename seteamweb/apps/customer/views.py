@@ -112,7 +112,7 @@ def installation_record_append(request):
                 if file is not None:
                     if file.content_type != 'application/pdf':
                         return JsonResponse({"error": "Please check file type<div> PDF 파일만 업로드 해주세요."}, status=405)
-                    InstallationCert.objects.create(record=record, title=file_name, file=file)
+                    InstallationCert.objects.get_or_create(record=record, title=file_name, file=file)
                 return JsonResponse({'status': 'success', "message": "Success"}, status=200)
             else:
                 return JsonResponse({"error": "Invalid request content type"}, status=405)
@@ -142,7 +142,7 @@ def installation_cert_view_or_download(request):
             record = InstallationRecord.objects.get(customer=data.get("customer_name"), installation_date=data.get('installation_date'))
             report = InstallationCert.objects.get(record=record)
             if os.path.exists(report.file.path):
-                return FileResponse(open(report.file.path, 'rb'), content_type='application/pdf')
+                return FileResponse(open(report.file.path, 'rb'), content_type='application/pdf', filename=report.title)
             else:
                 return JsonResponse({"error": "Invaild Report File"}, status=405)
     except Exception as e:

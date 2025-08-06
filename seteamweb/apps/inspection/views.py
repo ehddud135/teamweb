@@ -180,7 +180,7 @@ def inspection_report_view_or_download(request):
             record = InspectionRecord.objects.get(customer=customer, inspection_month=inspection_month)
             report = InspectionResultFile.objects.get(inspectrecord=record)
             if os.path.exists(report.file.path):
-                return FileResponse(open(report.file.path, 'rb'), content_type='application/pdf')
+                return FileResponse(open(report.file.path, 'rb'), content_type='application/pdf', filename=report.title)
             else:
                 return JsonResponse({"error": "Invaild Report File"}, status=405)
         else:

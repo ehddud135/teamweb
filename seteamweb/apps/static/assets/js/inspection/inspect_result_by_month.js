@@ -32,11 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     month_picker.addEventListener('changeDate', (event) => {
         fetchAndRenderData(event.target.value)
-        viewSignificant(bodyDataFormat)
-        pdfViewOrDownload(bodyDataFormat)
     });
 
     fetchAndRenderData(month_picker.value)
+    pdfViewOrDownload(bodyDataFormat)
+    viewSignificant(bodyDataFormat)
 });
 
 function bodyDataFormat(data) {
