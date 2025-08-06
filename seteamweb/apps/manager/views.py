@@ -32,7 +32,7 @@ def manager_list_api(request):
     for item in items:
         try:
             manager = Manager.objects.get(name=item.get('name'))
-            custoemr_count = Customer.objects.filter(manager_id=manager).count()
+            custoemr_count = Customer.objects.filter(manager_id=manager, inspection=True).count()
             item['customer_count'] = custoemr_count
         except Exception as e:
             print(e)
