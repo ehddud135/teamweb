@@ -23,7 +23,7 @@ function dataRowFormat(item, item_id) {
                         <button class="btn btn-info download-btn" ${data} file-url="/customer/file-fetch/installation-cert">Download</button>
                     </td>
                     <td>
-                        <button class="btn btn-danger delete-btn" ${data} file-url="/customer/delete/installation-record/${item.id}">Delete</button>
+                        <button class="btn btn-danger delete-btn" ${data} data-delete-url="/customer/delete/installation-record/${item.id}">Delete</button>
                     </td>
                 </tr>
             `;
