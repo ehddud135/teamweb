@@ -17,23 +17,18 @@ def index(request):
 @login_required(login_url="/login/")
 def pages(request):
     context = {}
-    # All resource paths end in .html.
-    # Pick out the html file name from the url. And load that template.
-    if request.method == 'POST':
-        if request.content_type == 'application/json':
-            body_data = request.body.decode('utf-8')
-            payload = json.loads(body_data)
-        elif request.content_type == 'application/x-www-form-urlencoded':
-            body_data = request.POST.get('payload')
     try:
-
-        load_template = request.path.split('/')[-1]
-
+        
+        load_template = request.path.strip('/')
+        
         if load_template == 'admin':
             return HttpResponseRedirect(reverse('admin:index'))
         context['segment'] = load_template
 
-        html_template = loader.get_template('home/' + load_template)
+        if "/" in load_template:
+            html_template = loader.get_template(load_template)
+        else:
+            html_template = loader.get_template('home/' + load_template)
         return HttpResponse(html_template.render(context, request))
 
     except template.TemplateDoesNotExist:

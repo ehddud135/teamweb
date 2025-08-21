@@ -49,3 +49,25 @@ class InstallationCert(models.Model):
 
     def __str__(self):
         return self.title
+
+class CheckList(models.Model):
+    customer = models.ForeignKey(Customer, to_field="name", on_delete=models.CASCADE)
+    title = models.CharField(max_length=100)
+    file = models.FileField(upload_to='')
+    is_onpremise = models.BooleanField(default=False)
+    significant = models.TextField(null=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        managed = True
+        db_table = 'CheckList'
+
+    def save(self, *args, **kwargs):
+        if self.file:
+            ext = self.file.name.split('.')[-1]
+            new_name = f"{uuid.uuid4().hex}.{ext}"
+            self.file.name = new_name
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.title

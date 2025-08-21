@@ -2,10 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('table-body-by-customer').addEventListener('click', async function(event) {
         const modal = new bootstrap.Modal(document.getElementById('significantModal'))
         if (event.target.classList.contains('signifi-btn')) {
-            console.log(event.target.dataset);
             const url = event.target.getAttribute('url');
-            console.log(url);
-
             const response = await fetch(`${url}`, {
                 method: 'POST',
                 headers: {

@@ -1,4 +1,4 @@
-const apiUrl = '/customer/list-api';
+const apiUrl = '/customer/list-api/customer';
 function dataRowFormat(item, item_id) {
     inspection = item.inspection ? 'O': 'X'
     if (item.manager == null) {
@@ -17,7 +17,7 @@ function dataRowFormat(item, item_id) {
                 <td>${inspection}</td>
                 <td>${item.inspect_schedule}</td>
                 <td>
-                    <button class="btn btn-danger delete-btn" data-delete-url="/customer/delete/${item.name}">Delete</button>
+                    <button class="btn btn-danger delete-btn" data-delete-url="/customer/delete/customer/${item.name}">Delete</button>
                     <button class="btn btn-danger modify-btn" data-name="${item.name}">Modify</button>
                 </td>
             </tr>

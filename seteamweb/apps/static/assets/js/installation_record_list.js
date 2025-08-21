@@ -1,10 +1,10 @@
-let apiUrl = '/customer/record-list-api';
+let apiUrl = '/customer/list-api/record';
 function dataRowFormat(item, item_id) {
     significant_btn = '';
-    data = `data-installation-date="${item.installation_date}" data-customer-name="${item.customer}"`;
+    data = `data-model-id="${item.id}"`;
     if (item.significant) {
         significant_btn += `<td>
-                        <button class="btn btn-info signifi-btn" url="/customer/view-significant"
+                        <button class="btn btn-info signifi-btn" url="/customer/view-significant/installation-record"
                         ${data}>View</button>
                     </td>`;
     }
@@ -19,8 +19,11 @@ function dataRowFormat(item, item_id) {
                     <td>${new Date(item.installation_date).toLocaleDateString()}</td>
                     ${significant_btn}
                     <td>
-                        <button class="btn btn-info pdf-view-btn" ${data} pdf-url="/customer/installation-cert">View</button>
-                        <button class="btn btn-info download-btn" ${data} pdf-url="/customer/installation-cert">Download</button>
+                        <button class="btn btn-info pdf-view-btn" ${data} file-url="/customer/file-fetch/installation-cert">View</button>
+                        <button class="btn btn-info download-btn" ${data} file-url="/customer/file-fetch/installation-cert">Download</button>
+                    </td>
+                    <td>
+                        <button class="btn btn-danger delete-btn" ${data} file-url="/customer/delete/installation-record/${item.id}">Delete</button>
                     </td>
                 </tr>
             `;
@@ -30,8 +33,7 @@ function dataRowFormat(item, item_id) {
 
 function bodyDataFormat(data) {
     return {
-        installation_date: data.installationDate,
-        customer_name: data.customerName,
+        id: data.modelId,
     }
 }
 

@@ -6,7 +6,7 @@ from django.db import IntegrityError
 from django.shortcuts import get_object_or_404
 from django.http import FileResponse, HttpResponse, HttpResponseRedirect, JsonResponse
 from django.template import loader
-from .models import Customer, Manager, InstallationRecord, InstallationCert
+from .models import Customer, Manager, InstallationRecord, InstallationCert, CheckList
 from ..packages.models import Packages
 from ..inspection.models import InspectionSchedule
 from ..utils.utils import convert_datetime, convert_to_format
@@ -41,40 +41,22 @@ def customer_append(request):
         html_template = loader.get_template('home/page-500.html')
         return HttpResponse(html_template.render(context, request))
 
-
-def customer_list_api(_):
-    items = Customer.objects.values('name', 'manager', 'created_at', 'inspection')  # 필요한 필드만 추출
-    period_mapping = {
-        'monthly': '월',
-        'quarter': '분기',
-        'half': '반기',
-        'undecided': '미정'
-    }
-    for item in items:
-        try:
-            customer = Customer.objects.get(name=item.get('name'))
-            inspect_schedule = InspectionSchedule.objects.filter(name=customer).first()
-            if inspect_schedule is not None:
-                inspect_schedule = period_mapping.get(inspect_schedule.Period, "미정")
-            package_count = Packages.objects.filter(customer_id=customer).count()
-            item['package_count'] = package_count
-            item['inspect_schedule'] = inspect_schedule
-        except Exception as e:
-            print(e)
-
-    return JsonResponse(list(items), safe=False)
-
-
 def customer_name_list(request):
     items = Customer.objects.values('name')
     return JsonResponse(list(items), safe=False)
 
-
-def customer_delete(request, item_name):
+def delete(request, resource, pk):
     context = {}
     try:
         if request.method == "DELETE":
-            item = get_object_or_404(Customer, name=item_name)
+            if resource == "checklist":
+                item = get_object_or_404(CheckList, id=pk)
+            elif resource == "installation-record":
+                item = get_object_or_404(InstallationRecord, id=pk)
+            elif resource == "customer":
+                item = get_object_or_404(Customer, name=pk)
+            else:
+                return JsonResponse({"error": "Invalid resource"}, status=404)
             item.delete()
             return HttpResponse(status=204)  # 성공, 내용 없음 응답
         return HttpResponse("Invalid request method", status=400)
@@ -82,18 +64,6 @@ def customer_delete(request, item_name):
         html_template = loader.get_template('home/page-500.html')
         return HttpResponse(html_template.render(context, request))
 
-
-def record_list_api(request):
-    try:
-        items = InstallationRecord.objects.values('customer', 'manager', 'installation_date', 'significant')  # 필요한 필드만 추출
-        for item in items:
-            customer = Customer.objects.get(name=item.get('customer'))
-            manager = Manager.objects.get(name=item.get('manager'))
-            item['customer_name'] = customer.name
-            item['manager_name'] = manager.name
-        return JsonResponse(list(items), safe=False)
-    except Exception as e:
-        print(e)
 
 
 def installation_record_append(request):
@@ -122,11 +92,19 @@ def installation_record_append(request):
         return JsonResponse({"error": "Please check Server Log"}, status=405)
 
 
-def installation_significant(request):
+
+
+def view_significant(request, resource):
     try:
         if request.method == 'POST':
+            if resource == "checklist":
+                model = CheckList
+            elif resource == "installation-record":
+                model = InstallationRecord
+            else:
+                return JsonResponse({"error": "Invalid resource"}, status=404)
             data = json.loads(request.body)
-            item = InstallationRecord.objects.get(customer=data.get("customer_name"), installation_date=data.get('installation_date'))
+            item = model.objects.get(id=data.get("id"))
             return JsonResponse({"significant": item.significant}, status=200, json_dumps_params={'ensure_ascii': False, "indent": 2})
         else:
             return JsonResponse({"error": "Please check Method"}, status=405)
@@ -135,11 +113,25 @@ def installation_significant(request):
         return JsonResponse({"error": e}, status=405)
 
 
-def installation_cert_view_or_download(request):
+
+
+def file_fetch(request, resource):
+    try:
+        if request.method == 'POST':
+            if resource == "installation-cert":
+                return get_installation_cert(request)
+            elif resource == "checklist":
+                return get_checklist_file(request)
+            else:
+                return JsonResponse({"error": "Invaild Report File"}, status=405)
+    except Exception as e:
+        print(e)
+
+def get_installation_cert(request):
     try:
         if request.method == 'POST':
             data = json.loads(request.body)
-            record = InstallationRecord.objects.get(customer=data.get("customer_name"), installation_date=data.get('installation_date'))
+            record = InstallationRecord.objects.get(id=data.get("id"))
             report = InstallationCert.objects.get(record=record)
             if os.path.exists(report.file.path):
                 return FileResponse(open(report.file.path, 'rb'), content_type='application/pdf', filename=report.title)
@@ -147,3 +139,100 @@ def installation_cert_view_or_download(request):
                 return JsonResponse({"error": "Invaild Report File"}, status=405)
     except Exception as e:
         print(e)
+
+def get_checklist_file(request):
+    try:
+        if request.method == 'POST':
+            data = json.loads(request.body)
+            data = CheckList.objects.get(id=data.get("id"))
+            if os.path.exists(data.file.path):
+                return FileResponse(open(data.file.path, 'rb'), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", filename=data.title)
+            else:
+                return JsonResponse({"error": "Invaild CheckList File"}, status=405)
+    except Exception as e:
+        print(e)
+
+def checklist_append(request):
+    try:
+        if request.method == 'POST':
+            if request.content_type == 'multipart/form-data':
+                print(request.POST)
+                customer_name = request.POST.get("customer-picker")
+                file = request.FILES.get("checklist-file")
+                suffix = os.path.splitext(file.name)[1]
+                title = f"{customer_name}_체크리스트{suffix}"
+                is_onpremise = bool(strtobool(request.POST.get("isonpremise")))
+                significant = request.POST.get("checklist-significant")
+                customer = Customer.objects.get(name=customer_name)
+                CheckList.objects.create(customer=customer, title=title, file=file, is_onpremise=is_onpremise, significant=significant)
+                return JsonResponse({'status': 'success', "message": "Success"}, status=200)
+            else:
+                return JsonResponse({"error": "Invalid request content type"}, status=405)
+        return HttpResponse({"error": "Invalid request method"}, status=405)
+    except Exception as e:
+        print(e)
+        return JsonResponse({"error": "Please check Server Log"}, status=405)
+    
+
+def list_api(request, resource):
+    try:
+        if resource == "checklist":
+            return get_check_list(request)
+        elif resource == "record":
+            return get_record_list(request)
+        elif resource == "customer":
+            return get_customer_list(request)
+        else:
+            return JsonResponse({"error": "Invalid resource"}, status=404)
+    except Exception as e:
+        print(e)
+        return JsonResponse({"error": "Please check Server Log"}, status=405)
+
+
+def get_record_list(request):
+    try:
+        items = InstallationRecord.objects.values('id', 'customer', 'manager', 'installation_date', 'significant')
+        for item in items:
+            customer = Customer.objects.get(name=item.get('customer'))
+            manager = Manager.objects.get(name=item.get('manager'))
+            item['customer_name'] = customer.name
+            item['manager_name'] = manager.name
+        return JsonResponse(list(items), safe=False)
+    except Exception as e:
+        print(e)
+        return JsonResponse({"error": "Please check Server Log"}, status=405)
+
+
+def get_customer_list(request):
+    try:
+        items = Customer.objects.values('id', 'name', 'manager', 'created_at', 'inspection')  # 필요한 필드만 추출
+        period_mapping = {
+            'monthly': '월',
+            'quarter': '분기',
+            'half': '반기',
+            'undecided': '미정'
+        }
+        for item in items:
+            try:
+                customer = Customer.objects.get(name=item.get('name'))
+                inspect_schedule = InspectionSchedule.objects.filter(name=customer).first()
+                if inspect_schedule is not None:
+                    inspect_schedule = period_mapping.get(inspect_schedule.Period, "미정")
+                package_count = Packages.objects.filter(customer_id=customer).count()
+                item['package_count'] = package_count
+                item['inspect_schedule'] = inspect_schedule
+            except Exception as e:
+                print(e)
+        return JsonResponse(list(items), safe=False)
+    except Exception as e:
+        print(e)
+        return JsonResponse({"error": "Please check Server Log"}, status=405)
+    
+
+def get_check_list(request):
+    try:
+        items = CheckList.objects.values('id', 'customer', 'is_onpremise', 'uploaded_at', 'significant')
+        return JsonResponse(list(items), safe=False)
+    except Exception as e:
+        print(e)
+        return JsonResponse({"error": "Please check Server Log"}, status=405)
