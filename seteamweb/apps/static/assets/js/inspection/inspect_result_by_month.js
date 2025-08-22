@@ -88,8 +88,8 @@ async function fetchAndRenderData(month) {
                     ${significant_btn}
                     </td>
                     <td>
-                        <button class="btn btn-info pdf-view-btn" ${data} pdf-url="/inspection/report">View</button>
-                        <button class="btn btn-info download-btn" ${data}" pdf-url="/inspection/report">Download</button>
+                        <button class="btn btn-info pdf-view-btn" ${data} file-url="/inspection/report">View</button>
+                        <button class="btn btn-info download-btn" ${data}" file-url="/inspection/report">Download</button>
                     </td>
                 </tr>
             `;
