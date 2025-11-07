@@ -25,6 +25,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'report_save_path')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('django_secret_key')
+API_KEY = config('api_upload_key')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv("DEBUG", True)
 ALLOWED_HOSTS = ['*']
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     'apps.packages',
     'apps.devices',
     'apps.dashboard',
+    'apps.automation',
     'core'
 ]
 

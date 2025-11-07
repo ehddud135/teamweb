@@ -104,3 +104,15 @@ class InspectionResultFile(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        managed = True
+        db_table = 'InspectionResultFile'
+
+class AndroidObfuscateResult(models.Model):
+    result = models.ForeignKey(AndroidInspectResult, on_delete=models.CASCADE)
+    obfuscate = models.TextField(null=True, default="Unknown")
+    momo_size = models.TextField(null=True, default="Unknown")
+    class Meta:
+        managed = True
+        db_table = 'AndroidObfuscateResult'
