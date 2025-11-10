@@ -1,6 +1,5 @@
 let apiUrl = '/automation/list-api';
 function dataRowFormat(item, item_id) {
-    console.log(item)
     const asOX = (value) => value ? 'O' : 'X';
     data = `data-model-id="${item.id}"`;
     row =   `
@@ -29,7 +28,7 @@ function bodyDataFormat(data) {
     }
 }
 
-const searchList = ['customer', 'manager']
+const searchList = ['app_name']
 
 // 페이지 로드 시 데이터 가져오기
 document.addEventListener('DOMContentLoaded', async () => {

@@ -12,4 +12,5 @@ urlpatterns = [
     path("insert-result-api", views.insert_result_api, name="insert_result_api"),
     path("delete/<str:pk>", views.delete_api, name="delete_api"),
     path("upload/<str:pk>", views.upload_api, name="upload_api"),
+    path("inspection-request", views.single_inspection, name="single_inspection"),
 ]

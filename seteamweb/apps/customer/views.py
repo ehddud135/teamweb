@@ -9,7 +9,7 @@ from django.template import loader
 from .models import Customer, Manager, InstallationRecord, InstallationCert, CheckList
 from ..packages.models import Packages
 from ..inspection.models import InspectionSchedule
-from ..utils.utils import convert_datetime, convert_to_format
+from ..utils.utils import convert_datetime
 
 # Create your views here.
 

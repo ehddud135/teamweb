@@ -34,8 +34,6 @@ document.addEventListener('DOMContentLoaded', function (){
         form.addEventListener('submit', async function (e) {
             e.preventDefault();
             const formData = new FormData(form);
-            for (const [key, value] of formData) {
-              }
             const customer_name = document.getElementById('customer-name').value;
             const report_file_name = `${inspection_month}_${customer_name}_정기점검_확인서_STEALIEN`
             formData.append('title', report_file_name)
