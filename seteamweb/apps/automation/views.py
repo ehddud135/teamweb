@@ -144,3 +144,17 @@ def single_inspection(request):
             return JsonResponse({"status": "error", "message": "Invalid inspection mode"}, status=400)
     else:
         return JsonResponse({"status": "error", "message": "Invalid request method"}, status=400)
+
+@csrf_exempt
+def delete_previous_results(request):
+    if request.method == "POST":
+        token = request.headers.get("X-Api-Key")
+        if token != settings.API_KEY:
+            return HttpResponseForbidden("Invalid token")
+        try:
+            AndroidResult.objects.all().delete()
+            return JsonResponse({"status": "success", "message": "All previous results deleted"})
+        except Exception as e:
+            return JsonResponse({"status": "error", "message": str(e)}, status=400)
+    else:
+        return JsonResponse({"status": "error", "message": "Invalid request method"}, status=400)

@@ -13,4 +13,5 @@ urlpatterns = [
     path("delete/<str:pk>", views.delete_api, name="delete_api"),
     path("upload/<str:pk>", views.upload_api, name="upload_api"),
     path("inspection-request", views.single_inspection, name="single_inspection"),
+    path("delete-previous-results", views.delete_previous_results, name="delete_previous_results"),
 ]
