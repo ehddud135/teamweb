@@ -41,22 +41,23 @@ def edit_inspection_options(result, options_list, platform):
 
 
 def convertmonth(month_full_string):
-    year = str(datetime.today().year)
+    match = re.match(r'(\d{4})년\s(\d{1,2})월', month_full_string)
+    month = match.group(2)
     months = {
-        "January": '01',
-        "February": '02',
-        "March": '03',
-        "April": '04',
-        "May": '05',
-        "June": '06',
-        "July": '07',
-        "August": '08',
-        "September": '09',
-        "October": '10',
-        "November": '11',
-        "December": '12',
+        '01' : "January",
+        '02' : "February",
+        '03' : "March",
+        '04' : "April",
+        '05' : "May",
+        '06' : "June",
+        '07' : "July",
+        '08' : "August",
+        '09' : "September",
+        '10' : "October",
+        '11' : "November",
+        '12' : "December",
     }
-    return year + "-" + months[month_full_string]
+    return months[month]
 
 
 def validate_year_month(value):

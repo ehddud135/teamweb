@@ -18,8 +18,9 @@ import os
 
 
 def inspect_schedule_list_api(_, schedule, month):
-    items = InspectionSchedule.objects.filter(Period=schedule, **{month: True}).values("name")  # 필요한 필드만 추출
-    month_int = convertmonth(month)
+    month_string = convertmonth(month)
+    items = InspectionSchedule.objects.filter(Period=schedule, **{month_string: True}).values("name")  # 필요한 필드만 추출
+    month_int = convert_to_format(month)
     results = {"incomplete": "점검 전", "complete": "점검 완료"}
     for item in items:
         try:

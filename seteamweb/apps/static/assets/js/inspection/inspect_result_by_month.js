@@ -27,12 +27,14 @@ document.addEventListener('DOMContentLoaded', () => {
         startView: 1,
         minViewMode: 1,
         pickLevel: 1,
+        language: 'kr',
     });
     month_picker.value = year + "-" + month;
 
     month_picker.addEventListener('changeDate', (event) => {
         fetchAndRenderData(event.target.value)
     });
+
 
     fetchAndRenderData(month_picker.value)
     pdfViewOrDownload(bodyDataFormat)
@@ -100,7 +102,7 @@ async function fetchAndRenderData(month) {
     const period_list = ['monthly', 'quarter', 'half']
     
     for (let period of period_list){
-        let data_response = await fetch(`/inspection/list-api/${period}/${picked_month}`)
+        let data_response = await fetch(`/inspection/list-api/${period}/${picked_date}`)
         let data = await data_response.json();
         renderTable(data, `${period}-table-body`)
     }
