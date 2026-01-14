@@ -7,6 +7,7 @@ from django.http import HttpResponse, FileResponse, JsonResponse
 from django.template import loader
 from core import settings
 from ..customer.models import Customer
+from ..manager.models import Manager
 from ..packages.models import Packages
 from .models import InspectionSchedule, InspectionRecord, InspectionResultFile, AndroidInspectResult, iOSInspectResult
 from .forms import FileUploadForm
@@ -43,10 +44,13 @@ def inspection_schedule_edit(request):
     try:
         if request.method == 'POST':
             if request.content_type == 'multipart/form-data':
+                manager_name = request.POST.get("manager-picker")
                 customer_name = request.POST.get('modify-customer-name')
                 is_inspection = bool(strtobool(request.POST.get('inspection_modify')))
                 customer = Customer.objects.get(name=customer_name)
                 customer.inspection = is_inspection
+                manager = Manager.objects.get(name=manager_name)
+                customer.manager = manager
                 customer.save()
                 if is_inspection == False:
                     schedule = InspectionSchedule.objects.filter(name=customer).first()

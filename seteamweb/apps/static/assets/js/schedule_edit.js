@@ -3,7 +3,21 @@ document.addEventListener('DOMContentLoaded', function (){
     const modal = new bootstrap.Modal(document.getElementById('modify-modal-form'))
     const form = document.getElementById('modifyForm');
     const period = document.getElementById('inspection-period')
-    const checkboxes = document.querySelectorAll('input[name="months"]');
+    const checkboxes = document.querySelectorAll('input[name="months"]');                
+
+    loadManagerList()
+    let manager_name = ""
+    $('#manager-picker').select2({
+        theme: 'bootstrap-5',
+        width: '240',
+        placeholder: $('#manager-picker').data('placeholder'),
+        dropdownParent: $('#modify-modal-form'),
+        dropdownCssClass: 'select2--small',
+        containerCssClass: 'select2--small',
+    });
+    $('#manager-picker').on('change', function() {
+        manager_name = $(this).val()
+    })
 
     if (form) {
         document.addEventListener('click', function (event) {
@@ -14,7 +28,7 @@ document.addEventListener('DOMContentLoaded', function (){
                 modal.show();
             }
         })
-
+        
         period.addEventListener("change", (e) => {
             const selected = e.target.value
 
@@ -73,3 +87,4 @@ document.addEventListener('DOMContentLoaded', function (){
     }
 
 })
+

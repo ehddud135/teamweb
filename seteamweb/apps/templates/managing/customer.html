@@ -116,13 +116,20 @@
                 <div class="card p-3 p-lg-4">
                     <button type="button" class="btn-close ms-auto" data-bs-dismiss="modal" aria-label="Close"></button>
                     <div class="text-center text-md-center mb-4 mt-md-0">
-                        <h1 class="mb-0 h4">정기 점검 일정 변경</h1>
+                        <h1 class="mb-0 h4">고객사 정보 수정</h1>
                     </div>
                     <form id="modifyForm" action="/inspection/schedule-modify" class="mt-4" method="POST">
                         {% csrf_token %}
                         <div class="mb-2">
                             <label id="modify-customer-name-label" for="modify-customer-name-label">Customer Name : </label>
                             <input type="hidden" name="modify-customer-name" id="modify-customer-name" value="">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="manager-picker">작업자 선택</label>
+                            <div class="input-group">
+                                <select class="form-select" id="manager-picker" name="manager-picker" data-placeholder="Choose manager" required></select>                                           
+                            </div>
                         </div>
                         <div class="row mb-2">
                             <div class="mb-2">
@@ -214,5 +221,6 @@
 <script src="{% static 'assets/js/utils/append.js' %}"></script>
 <script src="{% static 'assets/js/utils/delete.js' %}"></script>
 <script src="{% static 'assets/js/customer_list.js' %}"></script>
+<script src="{% static 'assets/js/utils/loadmanagerlist.js'%}"></script>
 <script src="{% static 'assets/js/schedule_edit.js' %}"></script>
 {% endblock javascripts %}
